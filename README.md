@@ -4,4 +4,7 @@ Meta Modeler is a 3D modeling web application based off of [MolView](http://molv
 ### Setup Virtual Environment
 Make sure to set up a virtual environment with package `Flask` and activate it.
 ### How to Run
-cd into the app directory and run `python3 __init__.py`
+1. cd into the app directory 
+2. export the Flask app --> `export FLASK_APP=app.py`
+3. export the environment variable --> `export FLASK_ENV=development`
+4. run the app --> `flask run`
