@@ -19,13 +19,11 @@
 @import (reference) "vars";
 @import (reference) "global";
 
-html
-{
+html {
 	overflow: hidden;
 }
 
-body
-{
+body {
 	position: absolute;
 	margin: 0;
 	padding: 0;
@@ -38,8 +36,7 @@ body
 	overflow: hidden;
 }
 
-#progress
-{
+#progress {
 	z-index: 2;
 	position: absolute;
 	top: 0;
@@ -48,13 +45,11 @@ body
 	height: 3px;
 }
 
-#progress-canvas
-{
+#progress-canvas {
 	position: absolute;
 }
 
-#menu
-{
+#menu {
 	z-index: 1;
 	position: absolute;
 	top: 0;
@@ -63,23 +58,19 @@ body
 	height: @menubar-height;
 }
 
-.no-menu > #menu
-{
+.no-menu>#menu {
 	display: none;
 }
 
-.no-menu > #progress
-{
+.no-menu>#progress {
 	top: 0;
 }
 
-.no-menu > #content
-{
+.no-menu>#content {
 	top: 0;
 }
 
-#content
-{
+#content {
 	position: absolute;
 	top: @menubar-height + 1;
 	left: 0;
@@ -87,8 +78,7 @@ body
 	bottom: 0;
 }
 
-.layer
-{
+.layer {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -96,8 +86,7 @@ body
 	bottom: 0;
 }
 
-#sketcher
-{
+#sketcher {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -106,17 +95,20 @@ body
 	background: #eee;
 }
 
-.layout-sketcher > #sketcher, .layout-hsplit > #sketcher
-{ right: 0; }
+.layout-sketcher>#sketcher,
+.layout-hsplit>#sketcher {
+	right: 0;
+}
 
-.layout-hsplit > #sketcher
-{ bottom: 50%; }
+.layout-hsplit>#sketcher {
+	bottom: 50%;
+}
 
-.layout-model > #sketcher
-{ visibility: hidden; }
+.layout-model>#sketcher {
+	visibility: hidden;
+}
 
-#model
-{
+#model {
 	position: absolute;
 	top: 0;
 	left: 50%;
@@ -126,34 +118,34 @@ body
 	overflow: hidden;
 }
 
-.layout-model > #model, .layout-hsplit > #model
-{ left: 0; }
+.layout-model>#model,
+.layout-hsplit>#model {
+	left: 0;
+}
 
-.layout-hsplit > #model
-{ top: 50%; }
+.layout-hsplit>#model {
+	top: 50%;
+}
 
-.layout-sketcher > #model
-{ visibility: hidden; }
+.layout-sketcher>#model {
+	visibility: hidden;
+}
 
-#messages
-{
+#messages {
 	z-index: 3;
 }
 
-#dialog-overlay
-{
+#dialog-overlay {
 	z-index: 4;
 }
 
-#about-links
-{
+#about-links {
 	margin-top: 50px;
 	text-align: center;
 	line-height: 2;
 	color: @foreground-light;
 }
 
-#share-dialog-social
-{
+#share-dialog-social {
 	margin: 5px 0 5px -5px;
 }

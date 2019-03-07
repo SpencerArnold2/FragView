@@ -18,8 +18,7 @@
 
 @import (reference) "vars";
 
-#autocomplete-dropdown-wrapper
-{
+#autocomplete-dropdown-wrapper {
 	position: absolute;
 	top: @menubar-height + 1;
 	left: 0;
@@ -27,8 +26,7 @@
 	bottom: 0;
 }
 
-#autocomplete-dropdown
-{
+#autocomplete-dropdown {
 	z-index: 1;
 	position: absolute;
 	top: 0;
@@ -42,15 +40,13 @@
 	direction: rtl;
 }
 
-#autocomplete-dropdown > ul
-{
+#autocomplete-dropdown>ul {
 	margin: 0;
 	padding: 0;
 	direction: ltr;
 }
 
-.autocomplete-item
-{
+.autocomplete-item {
 	cursor: pointer;
 	list-style: none;
 	margin: 0;
@@ -59,25 +55,36 @@
 	color: #111;
 }
 
-.autocomplete-pubchem { color: #3c763d; background: #dff0d8; border-right: 2px solid #0a0; }
-.autocomplete-macromolecule { color: #a94442; background: #f2dede; border-right: 2px solid #f10; }
-.autocomplete-mineral { color: #31708f; background: #d9edf7; border-right: 2px solid #07f; }
+.autocomplete-pubchem {
+	color: #3c763d;
+	background: #dff0d8;
+	border-right: 2px solid #0a0;
+}
 
-.autocomplete-item-hover
-{
+.autocomplete-macromolecule {
+	color: #a94442;
+	background: #f2dede;
+	border-right: 2px solid #f10;
+}
+
+.autocomplete-mineral {
+	color: #31708f;
+	background: #d9edf7;
+	border-right: 2px solid #07f;
+}
+
+.autocomplete-item-hover {
 	border-width: 3px;
 }
 
-.autocomplete-item-active
-{
+.autocomplete-item-active {
 	color: @foreground;
 	background: @highlight-light;
-	border-color: @highlight !important;
+	border-color: @highlight  !important;
 	border-width: 3px;
 }
 
-.autocomplete-type
-{
+.autocomplete-type {
 	float: right;
 	margin: 0 10px;
 	font-style: italic;

@@ -30,9 +30,10 @@ var PubChemProps = {
 };
 
 //array containing all requested PubChem props
-var PubChemPropNames = [ "MolecularFormula", "MolecularWeight",
+var PubChemPropNames = ["MolecularFormula", "MolecularWeight",
 	"HBondDonorCount", "HBondAcceptorCount", "IUPACName",
-	"CanonicalSMILES", "IsomericSMILES", "InChIKey", "InChI" ];
+	"CanonicalSMILES", "IsomericSMILES", "InChIKey", "InChI"
+];
 
 //array containing properties supported by the Chemical Identifier Resolver
 var CIRProps = {
@@ -91,10 +92,8 @@ var InfoCard = {
 	 * @param  {String}  smiles SMILES string
 	 * @return {Boolean}        Indicates if content should be reloaded
 	 */
-	update: function(smiles)
-	{
-		if(this.data["smiles"] !== smiles && smiles !== "")
-		{
+	update: function (smiles) {
+		if (this.data["smiles"] !== smiles && smiles !== "") {
 			$(".chemprop").html("").val("").addClass("chemprop-loading");
 			$("#molecule-image").css("filter", "url('#pubchemImageFilter'");
 			$("#molecule-image").attr("src", emptyImage);
@@ -117,9 +116,7 @@ var InfoCard = {
 			this.updated = false;
 
 			return true;
-		}
-		else
-		{
+		} else {
 			return false;
 		}
 	},
@@ -127,18 +124,15 @@ var InfoCard = {
 	/**
 	 * Loads content of InfoCard card using InfoCard.data.smiles
 	 */
-	load: function()
-	{
-		if(this.updated) return;
+	load: function () {
+		if (this.updated) return;
 		else this.updated = true;
 
 		this.updateImage();
 
 		//load CID (required for PubChem property loading)
-		this.loadProperty("cid", function(cid)
-		{
-			if(cid)
-			{
+		this.loadProperty("cid", function (cid) {
+			if (cid) {
 				$("#pubchem-link").attr("href", Request.PubChem.staticURL(cid)).show();
 			}
 
@@ -149,8 +143,7 @@ var InfoCard = {
 			InfoCard.loadProperty("acceptors");
 			InfoCard.loadProperty("sysname");
 			InfoCard.loadProperty("canonicalsmiles");
-			InfoCard.loadProperty("isomericsmiles", function(smiles)
-			{
+			InfoCard.loadProperty("isomericsmiles", function (smiles) {
 				/* if(smiles)
 				{
 					$("#chemicalize-link").attr("href",
@@ -158,8 +151,7 @@ var InfoCard = {
 				} */
 			});
 			InfoCard.loadProperty("inchikey");
-			InfoCard.loadProperty("inchi", function(inchi)
-			{
+			InfoCard.loadProperty("inchi", function (inchi) {
 				/* if(inchi)
 				{
 					$("#google-link").attr("href",
@@ -167,27 +159,22 @@ var InfoCard = {
 				} */
 			});
 			InfoCard.loadProperty("cas");
-			InfoCard.loadProperty("csid", function(csid)
-			{
-				if(csid)
-				{
+			InfoCard.loadProperty("csid", function (csid) {
+				if (csid) {
 					$("#chemspider-link").attr("href",
-						"http://www.chemspider.com/Chemical-Structure."
-						+ csid + ".html").show();
+						"http://www.chemspider.com/Chemical-Structure." +
+						csid + ".html").show();
 				}
 			});
 
 			//load description
-			if(cid)
-			{
-				Request.PubChem.description(cid, function(data)
-				{
+			if (cid) {
+				Request.PubChem.description(cid, function (data) {
 					var title, desc;
-					for(var i = 0; i < data.InformationList.Information.length; i++)
-					{
-						if(title === undefined && data.InformationList.Information[i].Title !== undefined)
+					for (var i = 0; i < data.InformationList.Information.length; i++) {
+						if (title === undefined && data.InformationList.Information[i].Title !== undefined)
 							title = ucfirst(humanize(data.InformationList.Information[i].Title));
-						if(desc === undefined && data.InformationList.Information[i].Description !== undefined)
+						if (desc === undefined && data.InformationList.Information[i].Description !== undefined)
 							desc = data.InformationList.Information[i].Description;
 					}
 
@@ -205,33 +192,29 @@ var InfoCard = {
 	 * @param  {String} formula Molecular formula
 	 * @return {String} formatted molecular formula
 	 */
-	processFormula: function(formula)
-	{
+	processFormula: function (formula) {
 		//parse molecule
 		this.data.molecule = {};
 		regex = /((?:[A-Z][a-z]?))([\d,.]*)/g;
 		var match;
-		while((match = regex.exec(formula)) !== null)
-		{
-		    this.data.molecule[match[1]] = parseFloat(match[2]) || 1;
+		while ((match = regex.exec(formula)) !== null) {
+			this.data.molecule[match[1]] = parseFloat(match[2]) || 1;
 		}
 
 		//fill percent composition table
 		$("#percent-composition-title").show();
 		$("#percent-composition-table").empty().show();
 		var totalMass = 0;
-		jQuery.each(this.data.molecule, function(key, value)
-		{
+		jQuery.each(this.data.molecule, function (key, value) {
 			totalMass += ElementsMolarTable[key] * value;
 		});
 
-		jQuery.each(this.data.molecule, function(key, value)
-		{
+		jQuery.each(this.data.molecule, function (key, value) {
 			$("#percent-composition-table").append("<tr>\
 				<td>" + key + "</td>\
 				<td>" + ElementsMolarTable[key] + " u &times; " + value + "</td>\
 				<td>" + (ElementsMolarTable[key] * value / totalMass * 100)
-					.toPrecision(InfoCard.percentCompositionPrecision) + " %</td>\
+				.toPrecision(InfoCard.percentCompositionPrecision) + " %</td>\
 			</tr>");
 		});
 
@@ -241,24 +224,21 @@ var InfoCard = {
 	/**
 	 * Updates InfoCard card image
 	 */
-	updateImage: function()
-	{
-		if(InfoCard["smiles"] === "") return;
+	updateImage: function () {
+		if (InfoCard["smiles"] === "") return;
 
 		var img = new Image();
-		img.onload = function()
-		{
+		img.onload = function () {
 			$("#molecule-image").attr("src", img.src);
 			$("#molecule-image").css("width", 300 / MolView.devicePixelRatio);
 			$("#molecule-image-wrapper").show();
 		}
-		img.onerror = function()
-		{
+		img.onerror = function () {
 			$("#molecule-image").attr("src", emptyImage);
 			$("#molecule-image-wrapper").hide();
 		}
 
-		if(Sketcher.metadata.cid) img.src = Request.PubChem.image(Sketcher.metadata.cid);
+		if (Sketcher.metadata.cid) img.src = Request.PubChem.image(Sketcher.metadata.cid);
 		else img.src = Request.PubChem.smilesToImage(InfoCard.data["smiles"]);
 	},
 
@@ -268,21 +248,18 @@ var InfoCard = {
 	 * @param {String}   id Property name
 	 * @param {Function} cb Optional callback for custom code (passes undefined if request failed)
 	 */
-	loadProperty: function(id, cb)
-	{
-		InfoCard.getProperty(id, function(prop)
-		{
-			if(id === "mw") prop += " u";//append Units unit (u)
+	loadProperty: function (id, cb) {
+		InfoCard.getProperty(id, function (prop) {
+			if (id === "mw") prop += " u"; //append Units unit (u)
 			var out = $("#prop-" + id);
-			if(out.is("input")) out.val(prop).removeClass("chemprop-loading");
+			if (out.is("input")) out.val(prop).removeClass("chemprop-loading");
 			else out.html(prop).removeClass("chemprop-loading");
 
-			if(cb) cb(prop);
-		}, function()
-		{
+			if (cb) cb(prop);
+		}, function () {
 			$("#prop-" + id + "-wrapper").hide();
 
-			if(cb) cb();
+			if (cb) cb();
 		})
 	},
 
@@ -310,136 +287,102 @@ var InfoCard = {
 	 * @param {Function} success Called when property is retrieved
 	 * @param {Function} fail    Called when property cannot be retrieved
 	 */
-	getProperty: function(id, success, fail)
-	{
-		function _fail()
-		{
-			if(id === "isomericsmiles")
-			{
+	getProperty: function (id, success, fail) {
+		function _fail() {
+			if (id === "isomericsmiles") {
 				InfoCard.data["isomericsmiles"] = InfoCard.data["smiles"];
 				success(InfoCard.data["isomericsmiles"]);
-			}
-			else if(fail)
-			{
+			} else if (fail) {
 				fail();
 			}
 		}
 
-		if(InfoCard.data[id])
-		{
+		if (InfoCard.data[id]) {
 			success(InfoCard.data[id]);
-		}
-		else//retrieve property
+		} else //retrieve property
 		{
-			if(id === "cid")
-			{
-				Request.PubChem.smilesToCID(InfoCard.data["smiles"], function(cid)
-				{
+			if (id === "cid") {
+				Request.PubChem.smilesToCID(InfoCard.data["smiles"], function (cid) {
 					InfoCard.data["cid"] = cid;
 					success(InfoCard.data["cid"]);
-				}, function()
-				{
+				}, function () {
 					InfoCard.data["cid"] = -1;
 					_fail();
 				});
-			}
-			else
-			{
+			} else {
 				InfoCard.getPropertyFromPubChem(id, success, _fail);
 			}
 		}
 	},
 
-	getPropertyFromPubChem: function(id, success, fail)
-	{
-		if(InfoCard.data["cid"] === -1)
-		{
+	getPropertyFromPubChem: function (id, success, fail) {
+		if (InfoCard.data["cid"] === -1) {
 			InfoCard.getPropertyFromCIR(id, success, fail);
-		}
-		else if(InfoCard.data["cid"] && id === "cas")
-		{
-			Request.PubChem.casNumber(InfoCard.data["cid"], function(cas)
-			{
-				InfoCard.data["cas"] = cas;
-				success(InfoCard.data["cas"]);
-			},
-			function()
-			{
-				InfoCard.getPropertyFromCIR(id, success, fail);
-			});
-		}
-		else if(PubChemProps[id])
-		{
-			if(InfoCard.PubChem_cache)
-			{
-				InfoCard.loadFrom_PubChem_cache(id, success, function()
-				{
+		} else if (InfoCard.data["cid"] && id === "cas") {
+			Request.PubChem.casNumber(InfoCard.data["cid"], function (cas) {
+					InfoCard.data["cas"] = cas;
+					success(InfoCard.data["cas"]);
+				},
+				function () {
 					InfoCard.getPropertyFromCIR(id, success, fail);
 				});
-			}
-			else if(InfoCard.data["cid"])
-			{
-				InfoCard.PubChem_cache = { loading: true };
+		} else if (PubChemProps[id]) {
+			if (InfoCard.PubChem_cache) {
+				InfoCard.loadFrom_PubChem_cache(id, success, function () {
+					InfoCard.getPropertyFromCIR(id, success, fail);
+				});
+			} else if (InfoCard.data["cid"]) {
+				InfoCard.PubChem_cache = {
+					loading: true
+				};
 
 				Request.PubChem.properties(InfoCard.data["cid"], PubChemPropNames,
-				function(data)
-				{
-					InfoCard.PubChem_cache = data.PropertyTable.Properties[0] || { failed: true };
+					function (data) {
+						InfoCard.PubChem_cache = data.PropertyTable.Properties[0] || {
+							failed: true
+						};
 
-					for(var i = 0; i < InfoCard.PubChem_queue.length; i++)
-					{
-						InfoCard.PubChem_queue[i].success();
-					}
-					InfoCard.PubChem_queue = [];
-					InfoCard.loadFrom_PubChem_cache(id, success, function()
-					{
+						for (var i = 0; i < InfoCard.PubChem_queue.length; i++) {
+							InfoCard.PubChem_queue[i].success();
+						}
+						InfoCard.PubChem_queue = [];
+						InfoCard.loadFrom_PubChem_cache(id, success, function () {
+							InfoCard.getPropertyFromCIR(id, success, fail);
+						});
+					},
+					function () {
+						for (var i = 0; i < InfoCard.PubChem_queue.length; i++) {
+							InfoCard.PubChem_queue[i].fail();
+						}
+						InfoCard.PubChem_queue = [];
+						InfoCard.PubChem_cache = {
+							failed: true
+						};
 						InfoCard.getPropertyFromCIR(id, success, fail);
 					});
-				},
-				function()
-				{
-					for(var i = 0; i < InfoCard.PubChem_queue.length; i++)
-					{
-						InfoCard.PubChem_queue[i].fail();
-					}
-					InfoCard.PubChem_queue = [];
-					InfoCard.PubChem_cache = { failed: true };
-					InfoCard.getPropertyFromCIR(id, success, fail);
-				});
 			}
-		}
-		else
-		{
+		} else {
 			InfoCard.getPropertyFromCIR(id, success, fail);
 		}
 	},
 
-	getPropertyFromCIR: function(id, success, fail)
-	{
-		if(InfoCard.data["smiles"] && CIRProps[id] !== undefined)
-		{
+	getPropertyFromCIR: function (id, success, fail) {
+		if (InfoCard.data["smiles"] && CIRProps[id] !== undefined) {
 			Request.CIR.property(
 				InfoCard.data["isomericsmiles"] || InfoCard.data["smiles"],
-				CIRProps[id], function(data)
-			{
-				if(id === "formula")
-				{
-					InfoCard.data["formula"] = InfoCard.processFormula(data);
-				}
-				else if(id === "sysname")
-				{
-					InfoCard.data["sysname"] = humanize(data);
-				}
-				else
-				{
-					InfoCard.data[id] = data;
-				}
+				CIRProps[id],
+				function (data) {
+					if (id === "formula") {
+						InfoCard.data["formula"] = InfoCard.processFormula(data);
+					} else if (id === "sysname") {
+						InfoCard.data["sysname"] = humanize(data);
+					} else {
+						InfoCard.data[id] = data;
+					}
 
-				success(InfoCard.data[id]);
-			}, fail);
-		}
-		else
-		{
+					success(InfoCard.data[id]);
+				}, fail);
+		} else {
 			fail();
 		}
 	},
@@ -452,44 +395,31 @@ var InfoCard = {
 	 * @param  {Function} fail     Called when property cannot be loaded
 	 * @return {Boolean}           Indicates if property is loaded successfully
 	 */
-	loadFrom_PubChem_cache: function(id, success, fail)
-	{
-		function _load(id)
-		{
-			if(InfoCard.PubChem_cache[PubChemProps[id]] !== undefined)
-			{
-				if(id === "formula")
-				{
+	loadFrom_PubChem_cache: function (id, success, fail) {
+		function _load(id) {
+			if (InfoCard.PubChem_cache[PubChemProps[id]] !== undefined) {
+				if (id === "formula") {
 					InfoCard.data[id] = InfoCard.processFormula(
 						InfoCard.PubChem_cache[PubChemProps[id]]);
-				}
-				else
-				{
+				} else {
 					InfoCard.data[id] = InfoCard.PubChem_cache[PubChemProps[id]];
 				}
 				return true;
-			}
-			else return false;
+			} else return false;
 		}
 
-		if(!InfoCard.PubChem_cache || InfoCard.PubChem_cache.failed)
-		{
+		if (!InfoCard.PubChem_cache || InfoCard.PubChem_cache.failed) {
 			fail();
-		}
-		else if(InfoCard.PubChem_cache.loading)
-		{
+		} else if (InfoCard.PubChem_cache.loading) {
 			InfoCard.PubChem_queue.push({
-				success: function()
-				{
-					if(_load(id)) success(InfoCard.data[id]);
+				success: function () {
+					if (_load(id)) success(InfoCard.data[id]);
 					else fail();
 				},
 				fail: fail
 			});
-		}
-		else
-		{
-			if(_load(id)) success(InfoCard.data[id]);
+		} else {
+			if (_load(id)) success(InfoCard.data[id]);
 			else fail();
 		}
 	}

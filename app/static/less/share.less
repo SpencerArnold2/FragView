@@ -18,8 +18,7 @@
 
 @import (reference) "global";
 
-.share
-{
+.share {
 	cursor: pointer;
 	display: inline-block;
 	position: relative;
@@ -29,13 +28,11 @@
 	.no-select;
 }
 
-.share:hover > span:after
-{
+.share:hover>span:after {
 	opacity: 1;
 }
 
-.share > span
-{
+.share>span {
 	display: inline-block;
 	position: relative;
 	padding: 10px;
@@ -49,15 +46,22 @@
 	border-radius: 0 4px 4px 0;
 }
 
-.share-twitter, .share-twitter > span:after
-{ background: #55acee; }
-.share-facebook, .share-facebook > span:after
-{ background: #3b5999; }
-.share-googleplus, .share-googleplus > span:after
-{ background: #d34836; }
+.share-twitter,
+.share-twitter>span:after {
+	background: #55acee;
+}
 
-.share:before
-{
+.share-facebook,
+.share-facebook>span:after {
+	background: #3b5999;
+}
+
+.share-googleplus,
+.share-googleplus>span:after {
+	background: #d34836;
+}
+
+.share:before {
 	display: inline-block;
 	left: 0;
 	width: 48px;
@@ -69,8 +73,7 @@
 	color: #fff;
 }
 
-.share > span:after
-{
+.share>span:after {
 	display: block;
 	position: absolute;
 	top: 0;
@@ -87,16 +90,26 @@
 	border-radius: 0 4px 4px 0;
 }
 
-.share-facebook:before
-{ content: '\f09a'; }
-.share-twitter:before
-{ content: '\f099'; }
-.share-googleplus:before
-{ content: '\f0d5'; }
+.share-facebook:before {
+	content: '\f09a';
+}
 
-.share-facebook span:after
-{ content: 'Share'; }
-.share-twitter span:after
-{ content: 'Tweet'; }
-.share-googleplus span:after
-{ content: '+1'; }
+.share-twitter:before {
+	content: '\f099';
+}
+
+.share-googleplus:before {
+	content: '\f0d5';
+}
+
+.share-facebook span:after {
+	content: 'Share';
+}
+
+.share-twitter span:after {
+	content: 'Tweet';
+}
+
+.share-googleplus span:after {
+	content: '+1';
+}

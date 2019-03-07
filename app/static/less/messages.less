@@ -18,16 +18,14 @@
 
 @import (reference) "vars";
 
-#messages
-{
+#messages {
 	position: absolute;
 	left: 0;
 	bottom: 0;
 	padding: 10px;
 }
 
-.message
-{
+.message {
 	margin-top: 10px;
 	min-height: @message-bar-height;
 	float: left;
@@ -38,33 +36,28 @@
 	overflow: hidden;
 }
 
-.alert-message
-{
+.alert-message {
 	background: @error;
 }
 
-.message-text
-{
+.message-text {
 	display: inline-block;
 	padding: 10px @message-bar-vpad;
 	line-height: @message-bar-height - 20px;
 }
 
-.error-message
-{
+.error-message {
 	padding-left: 5px;
 	font-style: italic;
 	font-weight: bold;
 }
 
-.alert-message > .message-text > a
-{
+.alert-message>.message-text>a {
 	font-weight: bold;
 	color: @light;
 }
 
-.message-close-btn
-{
+.message-close-btn {
 	cursor: pointer;
 	margin: 0;
 	padding: 0 @message-bar-vpad;
@@ -78,7 +71,6 @@
 	border: 0;
 }
 
-.message-close-btn:focus
-{
+.message-close-btn:focus {
 	outline: none;
 }

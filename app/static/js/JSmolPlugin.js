@@ -89,23 +89,20 @@ var JSmolPlugin = {
 	picking: "OFF",
 
 	/**
-	* Saves current containing model data in order to prevent loading the
-	* same structure multiple times while switching between render engines
-	* @type {String}
-	*/
+	 * Saves current containing model data in order to prevent loading the
+	 * same structure multiple times while switching between render engines
+	 * @type {String}
+	 */
 	currentModel: "",
 
-	init: function(cb)
-	{
-		if(Jmol === undefined) return;
+	init: function (cb) {
+		if (Jmol === undefined) return;
 		delete Jmol._tracker;
 
-		if(Detector.canvas)
-		{
+		if (Detector.canvas) {
 			this.readyCB = cb;
 
-			Messages.process(function()
-			{
+			Messages.process(function () {
 				Jmol.setDocument(false);
 				Jmol.getApplet("JSmol", {
 					width: $("#model").width(),
@@ -132,9 +129,7 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 			}, "init_jmol");
 
 			return true;
-		}
-		else
-		{
+		} else {
 			Messages.alert("no_canvas_support");
 			return false;
 		}
@@ -143,24 +138,21 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 	/**
 	 * Called by JSmol when initialization is ready
 	 */
-	ReadyCallback: function()
-	{
+	ReadyCallback: function () {
 		this.ready = true;
 		this.setQuality(this.hq);
 
 		Model._setRenderEngine("JSmol");
 		Messages.clear();
-		if(this.readyCB) this.readyCB();
+		if (this.readyCB) this.readyCB();
 	},
 
 	/**
-	* JSmol message callback
-	*/
-	MessageCallback: function(jsmolObject, message)
-	{
-		if(message.toLowerCase().indexOf("initial mmff e") > -1
-		&& message.toLowerCase().indexOf("max steps = 0") > -1)
-		{
+	 * JSmol message callback
+	 */
+	MessageCallback: function (jsmolObject, message) {
+		if (message.toLowerCase().indexOf("initial mmff e") > -1 &&
+			message.toLowerCase().indexOf("max steps = 0") > -1) {
 			var array = message.split(/ +/);
 			Model.JSmol.print("Energy = " + array[5] + " kJ");
 		}
@@ -169,10 +161,8 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 	/**
 	 * JSmol minimization callback
 	 */
-	MinimizationCallback: function(jsmolObject, message)
-	{
-		if(message === "done")
-		{
+	MinimizationCallback: function (jsmolObject, message) {
+		if (message === "done") {
 			//restore quality settings
 			Model.JSmol._setQuality(Model.JSmol.hq);
 			Messages.clear();
@@ -184,10 +174,8 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 	 * Updates render output live
 	 * @param  {String} script Jmol commands
 	 */
-	script: function(script)
-	{
-		if(this.ready)
-		{
+	script: function (script) {
+		if (this.ready) {
 			Jmol.script(JSmol, script);
 		}
 	},
@@ -197,10 +185,8 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 	 * Updates render output once scrit is ready
 	 * @param  {String} script Jmol commands
 	 */
-	scriptWaitOutput: function(script)
-	{
-		if(this.ready)
-		{
+	scriptWaitOutput: function (script) {
+		if (this.ready) {
 			Jmol.scriptWaitOutput(JSmol, script);
 		}
 	},
@@ -209,57 +195,46 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 	 * Prints $msg to the top-left corner of the render output
 	 * @param  {String} msg Message
 	 */
-	print: function(msg)
-	{
-		if(this.ready)
-		{
+	print: function (msg) {
+		if (this.ready) {
 			Model.JSmol.script('echo "' + msg + '";');
 		}
 	},
 
-	resize: function()
-	{
-		if(this.ready && $("#jsmol").sizeChanged())
-		{
+	resize: function () {
+		if (this.ready && $("#jsmol").sizeChanged()) {
 			$("#jsmol").saveSize();
-			Jmol.resizeApplet(JSmol, [ $("#model").width(), $("#model").height() ]);
+			Jmol.resizeApplet(JSmol, [$("#model").width(), $("#model").height()]);
 		}
 	},
 
-	reset: function()
-	{
-		if(this.ready)
-		{
+	reset: function () {
+		if (this.ready) {
 			Model.JSmol.clean();
 			Model.JSmol.scriptWaitOutput("reset;");
 
-			if(Model.isCIF())
-			{
+			if (Model.isCIF()) {
 				Model.JSmol.scriptWaitOutput("rotate best;");
 			}
 		}
 	},
 
-	setRepresentation: function()
-	{
-		if(this.ready)
-		{
+	setRepresentation: function () {
+		if (this.ready) {
 			this.scriptWaitOutput(JmolScripts.select.molecules);
 			this.scriptWaitOutput(JmolScripts.mol[Model.representation]);
 
-			if(Model.isPDB())
-			{
+			if (Model.isPDB()) {
 				var chainType = Model.chain.type;
 
-				if(!oneOf(chainType, ["ribbon", "ctrace", "none"]))
-				{
-					chainType = "ribbon";//fallback type
+				if (!oneOf(chainType, ["ribbon", "ctrace", "none"])) {
+					chainType = "ribbon"; //fallback type
 					Messages.alert("no_jmol_chain_type");
 				}
 
 				this.scriptWaitOutput(JmolScripts.select.macromolecules);
 				this.scriptWaitOutput(JmolScripts.pdb[chainType]);
-				if(Model.chain.bonds) this.scriptWaitOutput(JmolScripts.pdb.bonds);
+				if (Model.chain.bonds) this.scriptWaitOutput(JmolScripts.pdb.bonds);
 				this.scriptWaitOutput(JmolScripts.pdb[Model.chain.color]);
 				this.scriptWaitOutput(JmolScripts.pdb.hideSolvents);
 			}
@@ -268,10 +243,8 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 		}
 	},
 
-	setBackground: function(color)
-	{
-		if(this.ready)
-		{
+	setBackground: function (color) {
+		if (this.ready) {
 			Model.JSmol.scriptWaitOutput("\
 				background " + color + "; color label " + color + ";\
 				background echo " + color + "; color echo " + color + ";\
@@ -279,12 +252,10 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 		}
 	},
 
-	loadMOL: function(mol)
-	{
-		if(this.currentModel === mol) return false;
+	loadMOL: function (mol) {
+		if (this.currentModel === mol) return false;
 
-		if(this.ready)
-		{
+		if (this.ready) {
 			this.currentModel = mol;
 
 			this._setMeasure("OFF");
@@ -296,12 +267,10 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 		}
 	},
 
-	loadPDB: function(pdb)
-	{
-		if(this.currentModel === pdb) return false;
+	loadPDB: function (pdb) {
+		if (this.currentModel === pdb) return false;
 
-		if(this.ready)
-		{
+		if (this.ready) {
 			this.currentModel = pdb;
 
 			this._setMeasure("OFF");
@@ -316,12 +285,10 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 		}
 	},
 
-	loadCIF: function(cif, cell)
-	{
-		if(this.currentModel === cif + cell) return false;
+	loadCIF: function (cif, cell) {
+		if (this.currentModel === cif + cell) return false;
 
-		if(this.ready)
-		{
+		if (this.ready) {
 			this.currentModel = cif + cell;
 
 			this._setMeasure("OFF");
@@ -330,7 +297,9 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 			this.scriptWaitOutput("set defaultLattice {" + cell.join(" ") + "};");
 
 			JSmol.__loadModel(cif);
-			this.scriptWaitOutput("set showUnitcell " + (cell.reduce(function(a, b){ return a * b; }) > 1 ? "false" : "true"));
+			this.scriptWaitOutput("set showUnitcell " + (cell.reduce(function (a, b) {
+				return a * b;
+			}) > 1 ? "false" : "true"));
 
 			this.setRepresentation(Model.representation);
 			this.scriptWaitOutput("rotate best;");
@@ -345,10 +314,9 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 	 * @param {Boolean} hq      Enable High Quality
 	 * @param {Boolean} measure Enable Measurement Quality [optional]
 	 */
-	setQuality: function(hq, measure)
-	{
+	setQuality: function (hq, measure) {
 		$("#action-jmol-hq").removeClass("checked");
-		if(hq) $("#action-jmol-hq").addClass("checked");
+		if (hq) $("#action-jmol-hq").addClass("checked");
 
 		this.hq = hq;
 		this._setMeasure("OFF", true);
@@ -360,12 +328,11 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 	 * @param {Boolean} hq      Enable High Quality
 	 * @param {Boolean} measure Enable Measurement Quality [optional]
 	 */
-	_setQuality: function(hq, measure)
-	{
+	_setQuality: function (hq, measure) {
 		this.scriptWaitOutput("set antialiasDisplay " +
-				(hq && !measure ? "true" : "false") + "; set platformSpeed "
-				+ (measure && hq ? 2 : hq ? 4 : 1) + "; set ribbonBorder "
-				+ (hq && !measure ? "on" : "off"));
+			(hq && !measure ? "true" : "false") + "; set platformSpeed " +
+			(measure && hq ? 2 : hq ? 4 : 1) + "; set ribbonBorder " +
+			(hq && !measure ? "on" : "off"));
 	},
 
 	/**
@@ -376,15 +343,11 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 	 * @param {String}   what Message id
 	 * @param {Boolean}  repressMessageClear
 	 */
-	safeCallback: function(cb, what, repressMessageClear)
-	{
-		Model.setRenderEngine("JSmol", function()
-		{
-			Messages.process(function()
-			{
+	safeCallback: function (cb, what, repressMessageClear) {
+		Model.setRenderEngine("JSmol", function () {
+			Messages.process(function () {
 				cb();
-				if(!repressMessageClear)
-				{
+				if (!repressMessageClear) {
 					Messages.clear();
 				}
 			}, what);
@@ -394,24 +357,20 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 	/**
 	 * Restores the initial 3D model
 	 */
-	clean: function()
-	{
+	clean: function () {
 		this.script(JmolScripts.clearMeasures);
 		this.script(JmolScripts.clearMolecule);
 		this.script(JmolScripts.resetLabels);
 		this.setMeasure("OFF");
 	},
 
-	calculatePartialCharge: function()
-	{
-		if(this.ready)
-		{
-			if(!(parseFloat("" + Jmol.evaluate(JSmol, "{*}.partialcharge.max")) > 0))
-			{
+	calculatePartialCharge: function () {
+		if (this.ready) {
+			if (!(parseFloat("" + Jmol.evaluate(JSmol, "{*}.partialcharge.max")) > 0)) {
 				var info = Jmol.getPropertyAsArray(JSmol, "moleculeInfo.mf")[0];
-				if(info.indexOf("H 1 F 1") > -1)
+				if (info.indexOf("H 1 F 1") > -1)
 					this.scriptWaitOutput("{fluorine and connected(1,hydrogen)}.partialCharge = '-0.47';{hydrogen and connected(1,fluorine)}.partialCharge = '0.47';");
-				if(info.indexOf("H 1 Cl 1") > -1)
+				if (info.indexOf("H 1 Cl 1") > -1)
 					this.scriptWaitOutput("{chlorine and connected(1,hydrogen)}.partialCharge = '-0.46';{hydrogen and connected(1,chlorine)}.partialCharge = '0.46';");
 				if (info.indexOf("H 1 Br 1") > -1)
 					this.scriptWaitOutput("{bromine and connected(1,hydrogen)}.partialCharge = '-0.42';{hydrogen and connected(1,bromine)}.partialCharge = '0.42';");
@@ -423,14 +382,12 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 		}
 	},
 
-	loadMEPSurface: function(translucent)
-	{
+	loadMEPSurface: function (translucent) {
 		//exit when macromolecule
-		if(Model.isPDB()) return;
+		if (Model.isPDB()) return;
 
 		MolView.makeModelVisible();
-		Model.JSmol.safeCallback(function()
-		{
+		Model.JSmol.safeCallback(function () {
 			Model.JSmol._setMeasure("OFF");
 			Model.JSmol.calculatePartialCharge();
 			Model.JSmol.script("isosurface vdw resolution 0 color range -.07 .07 map mep " + (translucent ? "translucent" : "opaque") + ";");
@@ -438,57 +395,49 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 		}, "jmol_calculation");
 	},
 
-	displayCharge: function()
-	{
+	displayCharge: function () {
 		//exit when macromolecule
-		if(Model.isPDB()) return;
+		if (Model.isPDB()) return;
 
 		MolView.makeModelVisible();
-		Model.JSmol.safeCallback(function()
-		{
+		Model.JSmol.safeCallback(function () {
 			Model.JSmol._setMeasure("OFF");
 			Model.JSmol.calculatePartialCharge();
 			Model.JSmol.script("font label 18; color label magenta; label %-8.4[partialcharge]; hover off;");
 		}, "jmol_calculation");
 	},
 
-	displayDipoles: function()
-	{
+	displayDipoles: function () {
 		//exit when macromolecule
-		if(Model.isPDB()) return;
+		if (Model.isPDB()) return;
 
 		MolView.makeModelVisible();
-		Model.JSmol.safeCallback(function()
-		{
+		Model.JSmol.safeCallback(function () {
 			Model.JSmol._setMeasure("OFF");
 			Model.JSmol.calculatePartialCharge();
 			Model.JSmol.script("dipole bonds on; dipole calculate bonds; hover off;");
 		}, "jmol_calculation");
 	},
 
-	displayNetDipole: function()
-	{
+	displayNetDipole: function () {
 		//exit when macromolecule
-		if(Model.isPDB()) return;
+		if (Model.isPDB()) return;
 
 		MolView.makeModelVisible();
-		Model.JSmol.safeCallback(function()
-		{
+		Model.JSmol.safeCallback(function () {
 			Model.JSmol._setMeasure("OFF");
 			Model.JSmol.calculatePartialCharge();
 			Model.JSmol.script("dipole molecular on; dipole calculate molecular; hover off;");
 		}, "jmol_calculation");
 	},
 
-	calculateEnergyMinimization: function()
-	{
+	calculateEnergyMinimization: function () {
 		//exit when macromolecule
-		if(Model.isPDB()) return;
+		if (Model.isPDB()) return;
 
 		MolView.makeModelVisible();
-		Model.JSmol.safeCallback(function()
-		{
-			Model.JSmol.setQuality(Model.JSmol.hq, true);//calls setMeasure("OFF")
+		Model.JSmol.safeCallback(function () {
+			Model.JSmol.setQuality(Model.JSmol.hq, true); //calls setMeasure("OFF")
 			Model.JSmol.script(JmolScripts.clearMolecule);
 			Model.JSmol.script(JmolScripts.resetLabels);
 			Model.JSmol.script("minimize;");
@@ -501,12 +450,10 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 	 *                       or OFF to disable picking
 	 * @param {Boolean} noQualityRestore
 	 */
-	setMeasure: function(type, noQualityRestore)
-	{
-		if(this.picking === type.toLowerCase()) return;
+	setMeasure: function (type, noQualityRestore) {
+		if (this.picking === type.toLowerCase()) return;
 
-		Model.JSmol.safeCallback(function()
-		{
+		Model.JSmol.safeCallback(function () {
 			Model.JSmol._setMeasure(type, noQualityRestore)
 		});
 	},
@@ -517,24 +464,19 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 	 *                       or off to disable picking
 	 * @param {Boolean} noQualityRestore
 	 */
-	_setMeasure: function(type, noQualityRestore)
-	{
-		if(this.picking === type.toLowerCase()) return;
+	_setMeasure: function (type, noQualityRestore) {
+		if (this.picking === type.toLowerCase()) return;
 
 		this.picking = type.toLowerCase();
 		$(".jmol-picking").removeClass("checked");
 
-		if(this.picking === "off")
-		{
+		if (this.picking === "off") {
 			Model.JSmol.scriptWaitOutput("set picking off;");
 
-			if(!noQualityRestore)
-			{
+			if (!noQualityRestore) {
 				Model.JSmol._setQuality(Model.JSmol.hq);
 			}
-		}
-		else
-		{
+		} else {
 			$("#action-jmol-measure-" + this.picking).addClass("checked");
 
 			//JSmol.setQuality will disable picking again
@@ -543,12 +485,9 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 		}
 	},
 
-	toDataURL: function()
-	{
-		if(this.ready)
-		{
+	toDataURL: function () {
+		if (this.ready) {
 			return document.getElementById("JSmol_canvas2d").toDataURL("image/png");
-		}
-		else return "";
+		} else return "";
 	}
 };

@@ -19,13 +19,11 @@
 @import (reference) "form";
 @import (reference) "global";
 
-.expandable
-{
+.expandable {
 	margin: 10px 0;
 }
 
-.expandable-title
-{
+.expandable-title {
 	cursor: pointer;
 	position: relative;
 	padding: 7px 15px;
@@ -38,8 +36,7 @@
 	.no-select;
 }
 
-.expandable-title:before
-{
+.expandable-title:before {
 	display: block;
 	position: absolute;
 	top: 0;
@@ -55,18 +52,15 @@
 	content: '\f107';
 }
 
-.expandable.open > .expandable-title:before
-{
+.expandable.open>.expandable-title:before {
 	content: '\f106';
 }
 
-.expandable-content
-{
+.expandable-content {
 	display: none;
 	padding: 10px 10px;
 }
 
-.expandable.open > .expandable-content
-{
+.expandable.open>.expandable-content {
 	display: block;
 }

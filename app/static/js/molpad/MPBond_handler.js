@@ -16,46 +16,34 @@
  * along with MolView.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-MPBond.prototype.getHandler = function()
-{
-	if(this.mp.tool.type === "bond")
-	{
+MPBond.prototype.getHandler = function () {
+	if (this.mp.tool.type === "bond") {
 		return {
 			scope: this,
-			onPointerDown: function(e, mp)
-			{
-				if(mp.tool.data.type)
-				{
+			onPointerDown: function (e, mp) {
+				if (mp.tool.data.type) {
 					this.scope.setType(mp.tool.data.type === MP_BOND_TRIPLE ? MP_BOND_TRIPLE :
 						(this.scope.type === MP_BOND_TRIPLE || this.scope.stereo !== MP_STEREO_NONE) ? mp.tool.data.type :
-							this.scope.type === MP_BOND_SINGLE ? MP_BOND_DOUBLE : MP_BOND_SINGLE);
+						this.scope.type === MP_BOND_SINGLE ? MP_BOND_DOUBLE : MP_BOND_SINGLE);
 					this.scope.setStereo(MP_STEREO_NONE);
-				}
-				else if(mp.tool.data.stereo)
-				{
+				} else if (mp.tool.data.stereo) {
 					this.scope.setType(MP_BOND_SINGLE);
 
-					if(this.scope.stereo === mp.tool.data.stereo)
-					{
+					if (this.scope.stereo === mp.tool.data.stereo) {
 						var f = this.scope.from;
 						this.scope.setFrom(this.scope.to);
 						this.scope.setTo(f);
-					}
-					else
-					{
+					} else {
 						this.scope.setStereo(mp.tool.data.stereo);
 					}
 				}
 			}
 		};
-	}
-	else if(this.mp.tool.type === "fragment" && this.mp.tool.data.frag.toBond !== undefined)
-	{
+	} else if (this.mp.tool.type === "fragment" && this.mp.tool.data.frag.toBond !== undefined) {
 		return {
 			scope: this,
 			data: {},
-			onPointerDown: function(e, mp)
-			{
+			onPointerDown: function (e, mp) {
 				var p = new MPPoint().fromRelativePointer(e, mp);
 				var f = mp.mol.atoms[this.scope.from].center;
 				var t = mp.mol.atoms[this.scope.to].center;
@@ -78,8 +66,7 @@ MPBond.prototype.getHandler = function()
 
 				//resolve selection.mirrorSide
 				var s = 0;
-				for(var i = 0; i < frag.atoms.length; i++)
-				{
+				for (var i = 0; i < frag.atoms.length; i++) {
 					s += mp.mol.atoms[frag.atoms[i]].center.lineSide(this.scope.getLine());
 				}
 				mp.sel.mirrorSide = s > 0 ? 1 : -1;
@@ -88,18 +75,16 @@ MPBond.prototype.getHandler = function()
 				var collA = mp.mol.countCollapses(frag.atoms);
 
 				//mirror fragment
-				for(var i = 0; i < frag.atoms.length; i++)
-				{
+				for (var i = 0; i < frag.atoms.length; i++) {
 					mp.mol.atoms[frag.atoms[i]].center.mirror(
-							this.scope.getLine(), -mp.sel.mirrorSide);
+						this.scope.getLine(), -mp.sel.mirrorSide);
 				}
 
 				//get new number collapsing atoms
 				var collB = mp.mol.countCollapses(frag.atoms);
 
 				//check if new fragment is already added
-				if(collA === frag.atoms.length && collB === frag.atoms.length)
-				{
+				if (collA === frag.atoms.length && collB === frag.atoms.length) {
 					this.data.lock = true;
 
 					//deselect this
@@ -112,71 +97,56 @@ MPBond.prototype.getHandler = function()
 				}
 
 				//mirror back if old number of collapsing atoms is lower
-				if(collA < collB)
-				{
-					for(var i = 0; i < frag.atoms.length; i++)
-					{
+				if (collA < collB) {
+					for (var i = 0; i < frag.atoms.length; i++) {
 						mp.mol.atoms[frag.atoms[i]].center.mirror(
-								this.scope.getLine(), mp.sel.mirrorSide);
+							this.scope.getLine(), mp.sel.mirrorSide);
 					}
 
 					this.data.lock = collB === frag.atoms.length;
-				}
-				else
-				{
+				} else {
 					mp.sel.mirrorSide = -mp.sel.mirrorSide;
 					this.data.lock = collA === frag.atoms.length;
 				}
 			},
-			onPointerMove: function(e, mp)
-			{
-				if(this.data.lock) return;//do not mirror fragment if mirror is useless
+			onPointerMove: function (e, mp) {
+				if (this.data.lock) return; //do not mirror fragment if mirror is useless
 				var p = new MPPoint().fromRelativePointer(e, mp);
 				mp.sel.mirror(this.scope.getLine(), p);
 			},
-			onPointerUp: function(e, mp)
-			{
+			onPointerUp: function (e, mp) {
 				mp.sel.collapse();
 				mp.sel.clear();
 			}
 		};
-	}
-	else if(this.mp.tool.type === "erase")
-	{
+	} else if (this.mp.tool.type === "erase") {
 		return {
 			scope: this,
-			onPointerDown: function(e, mp)
-			{
-				if(this.scope.isSelected()) mp.sel.remove();
+			onPointerDown: function (e, mp) {
+				if (this.scope.isSelected()) mp.sel.remove();
 				else mp.mol.removeBond(this.scope.index);
 
 				//dismiss all further calls to this handler
 				mp.pointer.handler = undefined;
 			}
 		};
-	}
-	else//drag, fallback
+	} else //drag, fallback
 	{
 		return {
 			scope: this,
 			data: {},
-			onPointerMove: function(e, mp)
-			{
+			onPointerMove: function (e, mp) {
 				mp.setCursor("move");
 				var p = new MPPoint().fromRelativePointer(e, mp);
 				var dx = p.x - mp.pointer.old.r.x;
 				var dy = p.y - mp.pointer.old.r.y;
 
-				if(Math.sqrt(dx * dx + dy * dy) > mp.s.draggingThreshold || this.data.moved)
-				{
+				if (Math.sqrt(dx * dx + dy * dy) > mp.s.draggingThreshold || this.data.moved) {
 					this.data.moved = true;
 
-					if(this.scope.isSelected() && mp.sel.cache.atoms.length > 0)
-					{
+					if (this.scope.isSelected() && mp.sel.cache.atoms.length > 0) {
 						mp.sel.translate(dx, dy);
-					}
-					else
-					{
+					} else {
 						mp.mol.atoms[this.scope.from].translate(dx, dy);
 						mp.mol.atoms[this.scope.to].translate(dx, dy);
 					}
@@ -184,24 +154,19 @@ MPBond.prototype.getHandler = function()
 					mp.pointer.old.r = p;
 				}
 			},
-			onPointerUp: function(e, mp)
-			{
-				if(!this.data.moved && oneOf(mp.tool.type, ["select", "drag"]))
-				{
+			onPointerUp: function (e, mp) {
+				if (!this.data.moved && oneOf(mp.tool.type, ["select", "drag"])) {
 					var s = !this.scope.isSelected();
 					this.scope.select(s);
 
-					if(mp.sel.cache.atoms.length === 0)
-					{
+					if (mp.sel.cache.atoms.length === 0) {
 						mp.mol.atoms[this.scope.from].select(s);
 						mp.mol.atoms[this.scope.to].select(s);
 					}
 
 					mp.sel.updateRotationCenter();
-				}
-				else
-				{
-					if(this.scope.isSelected()) mp.sel.collapse();
+				} else {
+					if (this.scope.isSelected()) mp.sel.collapse();
 					else mp.mol.collapseAtoms([this.scope.from, this.scope.to], true);
 
 					/* process possible changes to
@@ -219,16 +184,13 @@ MPBond.prototype.getHandler = function()
  * @param  {String}  type  Event type (hover || active)
  * @return {Boolean}       Indicates if event is handled by this MPBond
  */
-MPBond.prototype.handle = function(point, type)
-{
-	if(this.line === undefined) return false;
+MPBond.prototype.handle = function (point, type) {
+	if (this.line === undefined) return false;
 
 	var r = this.mp.s.bond.radiusScaled;
 
-	if(point.inLineBox(this.line.from, this.line.to, r))
-	{
-		if(point.lineDistance(this.line.from, this.line.to) <= r)
-		{
+	if (point.inLineBox(this.line.from, this.line.to, r)) {
+		if (point.lineDistance(this.line.from, this.line.to) <= r) {
 			this.setDisplay(type);
 			return true;
 		}
@@ -238,14 +200,12 @@ MPBond.prototype.handle = function(point, type)
 	return false;
 }
 
-MPBond.prototype.handleRectSelect = function(rect)
-{
-	if(this.line === undefined) return;
+MPBond.prototype.handleRectSelect = function (rect) {
+	if (this.line === undefined) return;
 	this.select(this.line.center.inRect(rect));
 }
 
-MPBond.prototype.handlePolygonSelect = function(polygon)
-{
-	if(this.line === undefined) return;
+MPBond.prototype.handlePolygonSelect = function (polygon) {
+	if (this.line === undefined) return;
 	this.select(this.line.center.inPolygon(polygon));
 }

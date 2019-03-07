@@ -19,9 +19,9 @@
 @import (reference) "vars";
 @import (reference) "global";
 
-.form-box
-{
-	margin-bottom: 1px;/* to fill :hover border-bottom-width */
+.form-box {
+	margin-bottom: 1px;
+	/* to fill :hover border-bottom-width */
 
 	color: @foreground;
 	font-size: 12pt;
@@ -31,15 +31,13 @@
 	border: 0;
 	border-bottom: 2px solid @foreground-less;
 
-	&:focus
-	{
+	&:focus {
 		outline: none;
-		border-color: @highlight !important;
+		border-color: @highlight  !important;
 	}
 }
 
-.form-box-hover
-{
+.form-box-hover {
 	margin-bottom: 0;
 	border-width: 3px;
 	border-color: @foreground-less;
@@ -47,26 +45,24 @@
 	background: @light2;
 }
 
-.form-box-active
-{
+.form-box-active {
 	margin-bottom: 0;
 	border-width: 3px;
 
 	background: @highlight-light;
-	border-color: @highlight !important;
+	border-color: @highlight  !important;
 }
 
 /* input */
-.input-wrapper
-{
+.input-wrapper {
 	position: relative;
 	height: 40px;
 	font-size: 0 !important;
 	white-space: nowrap;
 }
 
-.input-wrapper > input, .input-wrapper > button
-{
+.input-wrapper>input,
+.input-wrapper>button {
 	display: inline-block;
 	padding: 0;
 	margin: 0;
@@ -80,13 +76,11 @@
 	border: 0;
 }
 
-.input-wrapper > button:focus
-{
+.input-wrapper>button:focus {
 	outline: none;
 }
 
-.input-focus
-{
+.input-focus {
 	display: block;
 	position: absolute;
 	top: 35px;
@@ -97,36 +91,31 @@
 	background: @contrast;
 }
 
-input[type="text"]
-{
+input[type="text"] {
 	cursor: text;
 	margin: 0;
 
 	-webkit-box-sizing: border-box;
-	   -moz-box-sizing: border-box;
-	        box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 
 	font-family: monospace;
 }
 
-input:focus
-{
+input:focus {
 	outline: none;
 }
 
-input[type="text"]:focus + .input-focus
-{
-	background: @highlight !important;
+input[type="text"]:focus+.input-focus {
+	background: @highlight  !important;
 	height: 2px;
 }
 
-input[type="text"].alert + .input-focus
-{
-	background: @error !important;
+input[type="text"].alert+.input-focus {
+	background: @error  !important;
 }
 
-.input
-{
+.input {
 	width: 100%;
 	height: 30px;
 	padding: 8px 10px 5px 10px;
@@ -135,9 +124,8 @@ input[type="text"].alert + .input-focus
 	border-bottom: 1px solid @foreground-light;
 }
 
-.input:focus
-{
-	border-bottom: 2px solid @highlight !important;
+.input:focus {
+	border-bottom: 2px solid @highlight  !important;
 
 	//border compensation trick
 	height: 31px;
@@ -145,8 +133,7 @@ input[type="text"].alert + .input-focus
 }
 
 /* select */
-select
-{
+select {
 	cursor: pointer;
 	margin-top: 10px;
 	margin-left: 10px;
@@ -159,19 +146,16 @@ select
 	text-decoration: none;
 }
 
-select:focus
-{
+select:focus {
 	outline: none;
 }
 
-option
-{
+option {
 	background: @light;
 }
 
 /* checkbox */
-input[type="checkbox"]
-{
+input[type="checkbox"] {
 	cursor: pointer;
 	margin-bottom: 8px;
 	vertical-align: middle;
@@ -180,14 +164,13 @@ input[type="checkbox"]
 }
 
 /* button */
-button, input[type="submit"]
-{
+button,
+input[type="submit"] {
 	cursor: pointer;
 	display: inline-block;
 }
 
-.btn
-{
+.btn {
 	.form-box;
 
 	display: inline-block;
@@ -196,14 +179,12 @@ button, input[type="submit"]
 	padding: 5px 15px;
 }
 
-.btn-large
-{
+.btn-large {
 	padding: 10px 20px;
 	font-size: 18pt;
 }
 
-.close-btn
-{
+.close-btn {
 	cursor: pointer;
 	position: absolute;
 	top: 0;
@@ -215,57 +196,49 @@ button, input[type="submit"]
 	color: #eee;
 }
 
-.close-btn:after
-{
+.close-btn:after {
 	content: '\00D7';
 }
 
-.btn-group
-{
+.btn-group {
 	display: block;
 	padding-bottom: 10px;
 }
 
-.btn-group-bar
-{
+.btn-group-bar {
 	display: block;
 	padding-bottom: 10px;
 	text-align: left;
 }
 
 /* table styling */
-table
-{
+table {
 	position: relative;
 	color: #111;
 	border-collapse: collapse;
 }
 
-td, th
-{
+td,
+th {
 	padding: 5px 20px 5px 5px;
 	min-width: 32px;
 	border: 1px solid @contrast;
 }
 
-td
-{
+td {
 	background-color: @light2;
 }
 
-tr:nth-child(even) > td
-{
+tr:nth-child(even)>td {
 	background-color: @light3;
 }
 
-th
-{
+th {
 	background: @light;
 	font-weight: bold;
 	text-align: center;
 }
 
-td:first-child
-{
+td:first-child {
 	font-weight: bold;
 }

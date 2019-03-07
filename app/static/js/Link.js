@@ -23,66 +23,55 @@
 var Link = {
 	embedHTML: "",
 
-	init: function()
-	{
+	init: function () {
 		$("#embed-width, #embed-height").on("keyup", this.updateEmbedDialog);
 	},
 
-	updateShareDialog: function()
-	{
-		if($("#action-resolve").hasClass("resolve-outdated") && MolView.layout !== "model") $("#share-2d-not-3d").show();
+	updateShareDialog: function () {
+		if ($("#action-resolve").hasClass("resolve-outdated") && MolView.layout !== "model") $("#share-2d-not-3d").show();
 		else $("#share-2d-not-3d").hide();
 
 		var url = window.location.origin + window.location.pathname;
 		var msg = "";
 
-		if(Loader.lastQuery.type !== "")
-		{
+		if (Loader.lastQuery.type !== "") {
 			msg = "Cool structure on MolView!";
 			url += "?" + Loader.lastQuery.type + "=" + specialEncodeURIComponent(Loader.lastQuery.content.replace(/^ /, ""));
 		}
 
 		$("#share-link").val(url);
-		$("#share-dialog .social").share({ all: url }, false, msg);
+		$("#share-dialog .social").share({
+			all: url
+		}, false, msg);
 	},
 
-	updateEmbedDialog: function()
-	{
-		if($("#action-resolve").hasClass("resolve-outdated") && MolView.layout !== "model") $("#embed-2d-not-3d").show();
+	updateEmbedDialog: function () {
+		if ($("#action-resolve").hasClass("resolve-outdated") && MolView.layout !== "model") $("#embed-2d-not-3d").show();
 		else $("#embed-2d-not-3d").hide();
 
 		var url = "https://embed.molview.org/v1/?mode=" + Model.representation;
 
-		if(oneOf(Loader.lastQuery.type, ["smiles", "cid", "pdbid", "codid"]))
-		{
+		if (oneOf(Loader.lastQuery.type, ["smiles", "cid", "pdbid", "codid"])) {
 			url += "&" + Loader.lastQuery.type + "=" + specialEncodeURIComponent(Loader.lastQuery.content.replace(/^ /, ""));
 		}
 
-		if(Model.bg.colorName !== "black")
-		{
+		if (Model.bg.colorName !== "black") {
 			url += "&bg=" + Model.bg.colorName;
 		}
 
-		if(Model.isPDB())
-		{
-			if(Model.chain.type === "ribbon" || Model.chain.type === "cylinders"
-			|| Model.chain.type === "btube" || Model.chain.type === "ctrace")
-			{
+		if (Model.isPDB()) {
+			if (Model.chain.type === "ribbon" || Model.chain.type === "cylinders" ||
+				Model.chain.type === "btube" || Model.chain.type === "ctrace") {
 				url += "&chainType=" + Model.chain.type;
 			}
-			if(Model.chain.bonds)
-			{
-				if(Model.chain.type === "none")
-				{
+			if (Model.chain.bonds) {
+				if (Model.chain.type === "none") {
 					url += "&chainType=bonds";
-				}
-				else
-				{
+				} else {
 					url += "&chainBonds=true"
 				}
 			}
-			if(Model.chain.color)
-			{
+			if (Model.chain.color) {
 				url += "&chainColor=" + Model.chain.color;
 			}
 		}

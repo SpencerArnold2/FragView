@@ -10,14 +10,13 @@
  * WARRANTY OF DESIGN, MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.
  ***************************************************************************/
 
-if(!window.util || !util.Vec2)
+if (!window.util || !util.Vec2)
 	throw new Error("Vec2 should be defined first");
 
-if(!window.chem)
+if (!window.chem)
 	chem = {};
 
-function hexToRGB(hex)
-{
+function hexToRGB(hex) {
 	return {
 		'r': parseInt(hex.substring(1, 3), 16),
 		'g': parseInt(hex.substring(3, 5), 16),
@@ -25,28 +24,25 @@ function hexToRGB(hex)
 	};
 }
 
-function rgbCompToHex(c)
-{
+function rgbCompToHex(c) {
 	c = c.toFixed();
 	c = Math.max(Math.min(c, 255), 0);
 	var hex = c.toString(16);
-	if(hex.length < 2)
+	if (hex.length < 2)
 		hex = '0' + hex;
 	return hex;
 }
 
-function rgbToHex(rgb)
-{
+function rgbToHex(rgb) {
 	return '#' +
 		rgbCompToHex(rgb.r) +
 		rgbCompToHex(rgb.g) +
 		rgbCompToHex(rgb.b);
 }
 
-function rgbRescale(rgb, maxNorm)
-{
+function rgbRescale(rgb, maxNorm) {
 	var norm = 0.21 * rgb.r + 0.72 * rgb.g + 0.07 * rgb.b;
-	if(norm <= maxNorm)
+	if (norm <= maxNorm)
 		return rgb;
 	return {
 		'r': (rgb.r * maxNorm / norm).toFixed() - 0,
@@ -56,8 +52,7 @@ function rgbRescale(rgb, maxNorm)
 }
 
 // element table and utilities
-chem.Element = function (label, period, group, putHydrogenOnTheLeft, color, ypos, xpos)
-{
+chem.Element = function (label, period, group, putHydrogenOnTheLeft, color, ypos, xpos) {
 	this.label = label;
 	this.period = period;
 	this.group = group;
@@ -71,8 +66,7 @@ chem.Element = function (label, period, group, putHydrogenOnTheLeft, color, ypos
 	var g = (("0x" + this.color.substring(3, 5)) - 0) / 255;
 	var b = (("0x" + this.color.substring(5, 7)) - 0) / 255;
 	var luminance = 0.299 * r + 0.587 * g + 0.114 * b;
-	if(luminance > 0.6)
-	{
+	if (luminance > 0.6) {
 		r *= 0.6 / luminance;
 		g *= 0.6 / luminance;
 		b *= 0.6 / luminance;
@@ -87,8 +81,7 @@ chem.Element = function (label, period, group, putHydrogenOnTheLeft, color, ypos
 
 };
 
-chem.Element.elements = new util.Map(
-{
+chem.Element.elements = new util.Map({
 	//common elements
 	1: new chem.Element('H', 1, 1, false, '#000000', 1, 1),
 	2: new chem.Element('He', 1, 8, false, '#d9ffff', 1, 18),
@@ -206,17 +199,14 @@ chem.Element.elements = new util.Map(
 
 chem.Element.labelMap = null;
 
-chem.Element.getElementByLabel = function (label)
-{
-	if(!this.labelMap)
-	{
+chem.Element.getElementByLabel = function (label) {
+	if (!this.labelMap) {
 		this.labelMap = {};
-		this.elements.each(function (key, value)
-		{
+		this.elements.each(function (key, value) {
 			this.labelMap[value.label] = key - 0;
 		}, this);
 	}
-	if(!this.labelMap.hasOwnProperty(label))
+	if (!this.labelMap.hasOwnProperty(label))
 		return null;
 	return this.labelMap[label];
 };

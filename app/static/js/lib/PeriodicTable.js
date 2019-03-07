@@ -2,13 +2,10 @@
 From: https://github.com/diniska/chemistry/blob/master/PeriodicalTable/periodicTable.json
 */
 
-var PeriodicTable =
-{
-	"table": [
-		{
+var PeriodicTable = {
+	"table": [{
 			"wiki": "http://en.wikipedia.org/wiki/Period%201%20element",
-			"elements": [
-				{
+			"elements": [{
 					"group": "",
 					"position": 0,
 					"name": "Hydrogen",
@@ -34,8 +31,7 @@ var PeriodicTable =
 		},
 		{
 			"wiki": "http://en.wikipedia.org/wiki/Period%202%20element",
-			"elements": [
-				{
+			"elements": [{
 					"group": "Element Alkali s",
 					"position": 0,
 					"name": "Lithium",
@@ -135,8 +131,7 @@ var PeriodicTable =
 		},
 		{
 			"wiki": "http://en.wikipedia.org/wiki/Period%203%20element",
-			"elements": [
-				{
+			"elements": [{
 					"group": "Element Alkali s",
 					"position": 0,
 					"name": "Sodium",
@@ -244,8 +239,7 @@ var PeriodicTable =
 		},
 		{
 			"wiki": "http://en.wikipedia.org/wiki/Period%204%20element",
-			"elements": [
-				{
+			"elements": [{
 					"group": "Element Alkali s",
 					"position": 0,
 					"name": "Potassium",
@@ -501,8 +495,7 @@ var PeriodicTable =
 		},
 		{
 			"wiki": "http://en.wikipedia.org/wiki/Period%205%20element",
-			"elements": [
-				{
+			"elements": [{
 					"group": "Element Alkali s",
 					"position": 0,
 					"name": "Rubidium",
@@ -775,8 +768,7 @@ var PeriodicTable =
 		},
 		{
 			"wiki": "http://en.wikipedia.org/wiki/Period%206%20element",
-			"elements": [
-				{
+			"elements": [{
 					"group": "Element Alkali s",
 					"position": 0,
 					"name": "Caesium",
@@ -1059,8 +1051,7 @@ var PeriodicTable =
 		},
 		{
 			"wiki": "http://en.wikipedia.org/wiki/Period%207%20element",
-			"elements": [
-				{
+			"elements": [{
 					"group": "Element Alkali s",
 					"position": 0,
 					"name": "Francium",
@@ -1359,8 +1350,7 @@ var PeriodicTable =
 			]
 		}
 	],
-	"lanthanoids": [
-		{
+	"lanthanoids": [{
 			"group": "Element Lanthanoid f",
 			"position": 2,
 			"name": "Lanthanum",
@@ -1601,8 +1591,7 @@ var PeriodicTable =
 			]
 		}
 	],
-	"actinoids": [
-		{
+	"actinoids": [{
 			"group": "Element Actinoid f",
 			"position": 2,
 			"name": "Actinium",
@@ -1861,12 +1850,10 @@ var PeriodicTable =
 };
 
 var ElementsMolarTable = {};
-for(var group = 0; group < PeriodicTable.table.length; group++)
-{
-	for(var i = 0; i < PeriodicTable.table[group].elements.length; i++)
-	{
+for (var group = 0; group < PeriodicTable.table.length; group++) {
+	for (var i = 0; i < PeriodicTable.table[group].elements.length; i++) {
 		var element = PeriodicTable.table[group].elements[i];
-		if(element.name == "") continue;
+		if (element.name == "") continue;
 		ElementsMolarTable[element.small] = element.molar;
 	}
 }

@@ -58,9 +58,9 @@ var Progress = {
 	valueAnimDev: 0.2,
 
 	/**
-	* Progress bar opacity, used for fade-out animation
-	* @type {Float}
-	*/
+	 * Progress bar opacity, used for fade-out animation
+	 * @type {Float}
+	 */
 	opacity: 0.0,
 
 	/**
@@ -104,12 +104,10 @@ var Progress = {
 	 * Initializes the Progress bar
 	 * Fires redraw cycle
 	 */
-	init: function()
-	{
+	init: function () {
 		this.canvas = document.getElementById("progress-canvas");
 
-		if(this.canvas)
-		{
+		if (this.canvas) {
 			this.ctx = this.canvas.getContext('2d');
 			this.resize();
 			this.draw();
@@ -120,10 +118,8 @@ var Progress = {
 	 * Resizes Progress.canvas to fit the new window.width
 	 * Resets Progress.ctx
 	 */
-	resize: function()
-	{
-		if(Progress.canvas)
-		{
+	resize: function () {
+		if (Progress.canvas) {
 			Progress.canvas.width = $(window).width();
 			Progress.canvas.height = 3;
 		}
@@ -134,12 +130,9 @@ var Progress = {
 	 * Reset animation values if Progress.resetAnim
 	 * @param {Float} time Unix time
 	 */
-	draw: function(time)
-	{
-    	if(Progress.canvas)
-		{
-			if(Progress.resetAnim)
-			{
+	draw: function (time) {
+		if (Progress.canvas) {
+			if (Progress.resetAnim) {
 				Progress.resetAnim = false;
 				Progress.animReady = false;
 				Progress.oldTime = time;
@@ -148,33 +141,26 @@ var Progress = {
 				Progress.ctx.clearRect(0, 0, Progress.canvas.width, Progress.canvas.height);
 			}
 
-			if(!Progress.animReady)
-			{
+			if (!Progress.animReady) {
 				var delta = ((time - Progress.oldTime) / 1000) || 0.001;
-				if(delta > 0.1) delta = 0.1;//clamp animation speed
+				if (delta > 0.1) delta = 0.1; //clamp animation speed
 				Progress.oldTime = time;
 				Progress.animValue += (Progress.value - Progress.animValue) / (Progress.valueAnimDev / delta);
-				if(Progress.animValue > Progress.value) Progress.animValue = Progress.value;
+				if (Progress.animValue > Progress.value) Progress.animValue = Progress.value;
 
 				Progress.ctx.beginPath();
 
-				if(Progress.ready)
-				{
+				if (Progress.ready) {
 					Progress.opacity -= Progress.opacityAnimSpeed * delta;
 					Progress.ctx.clearRect(0, 0, Progress.canvas.width, Progress.canvas.height);
 
-					if(Progress.opacity <= 0)
-					{
+					if (Progress.opacity <= 0) {
 						Progress.animReady = true;
-					}
-					else
-					{
+					} else {
 						Progress.ctx.fillStyle = "rgba(255,0,0," + Progress.opacity + ")";
 						Progress.ctx.fillRect(0, 0, Progress.canvas.width * Progress.animValue, Progress.canvas.height);
 					}
-				}
-				else
-				{
+				} else {
 					Progress.ctx.fillStyle = "rgb(255,0,0)";
 					Progress.ctx.fillRect(0, 0, Progress.canvas.width * Progress.animValue, Progress.canvas.height);
 				}
@@ -189,15 +175,13 @@ var Progress = {
 	 * @param {Integer} steps       New ammount of increment steps
 	 * @param {Boolean} retainTitle Do not add " [loading]" to document.title
 	 */
-	reset: function(steps, retainTitle)
-	{
+	reset: function (steps, retainTitle) {
 		this.steps = steps + 1;
 		this.value = 0;
 		this.increment();
 		this.ready = false;
 
-		if(!retainTitle)
-		{
+		if (!retainTitle) {
 			document.title = document.title.replace(/ \[loading\]/g, "");
 			document.title += " [loading]";
 		}
@@ -208,16 +192,14 @@ var Progress = {
 	/**
 	 * Increment Progress bar one step
 	 */
-	increment: function()
-	{
+	increment: function () {
 		this.value += 1.0 / this.steps;
 	},
 
 	/**
 	 * Complete Progress bar animation
 	 */
-	complete: function()
-	{
+	complete: function () {
 		this.value = 1;
 		this.ready = true;
 		document.title = document.title.replace(/ \[loading\]/g, "");

@@ -18,22 +18,19 @@
 
 @import (reference) "vars";
 
-#search-layer
-{
+#search-layer {
 	margin: 0;
 	text-align: center;
 	background: @pubchem-pngbg;
 	overflow: auto;
 }
 
-#search-layer > .container
-{
+#search-layer>.container {
 	font-size: 0;
 	padding: 0 20px;
 }
 
-.load-more
-{
+.load-more {
 	cursor: pointer;
 	margin: 10px;
 	padding: 10px;
@@ -41,21 +38,18 @@
 	border: 1px solid @pubchem-pngbg;
 }
 
-.load-more:before
-{
+.load-more:before {
 	content: "Load more";
 }
 
-.load-more-progress
-{
+.load-more-progress {
 	cursor: default !important;
-	background: @pubchem-pngbg !important;
-	border-color: @pubchem-pngbg !important;
+	background: @pubchem-pngbg  !important;
+	border-color: @pubchem-pngbg  !important;
 	box-shadow: none !important;
 }
 
-.load-more-progress:before
-{
+.load-more-progress:before {
 	content: "Loading...";
 }
 
@@ -67,8 +61,7 @@ Search output:
 </div>
 */
 
-.search-result
-{
+.search-result {
 	position: relative;
 	display: inline-block;
 	margin: 20px 0;
@@ -86,20 +79,17 @@ Search output:
 	box-shadow: 0 3px 7px rgba(0, 0, 0, 0.4);
 }
 
-.search-result-pubchem
-{
+.search-result-pubchem {
 	cursor: pointer;
 }
 
-.search-result-codid
-{
+.search-result-codid {
 	line-height: 20px;
 	color: @foreground-light;
 	margin-bottom: 5px;
 }
 
-.search-result-title
-{
+.search-result-title {
 	cursor: pointer;
 	display: block;
 	height: 30px;
@@ -114,14 +104,12 @@ Search output:
 	overflow: hidden;
 }
 
-.search-result-title > span
-{
+.search-result-title>span {
 	white-space: nowrap;
 	text-decoration: none;
 }
 
-.search-result-description
-{
+.search-result-description {
 	padding: 20px;
 	font-size: 11pt;
 
@@ -132,29 +120,24 @@ Search output:
 	overflow-y: auto;
 }
 
-.search-result-description > .expandable
-{
+.search-result-description>.expandable {
 	margin: 0;
 }
 
-.search-result-description > .expandable > .expandable-title
-{
+.search-result-description>.expandable>.expandable-title {
 	border-width: 1px 0 1px 0;
 }
 
-.search-result-description > p
-{
+.search-result-description>p {
 	margin: 10px;
 }
 
-.search-result-description-cod
-{
+.search-result-description-cod {
 	padding: 0;
 	background: @light;
 }
 
-.search-result-img-wrap
-{
+.search-result-img-wrap {
 	font-size: 0;
 	text-align: center;
 	background-image: url(../../img/misc/spinner.svg);
@@ -162,8 +145,7 @@ Search output:
 	background-position: center;
 }
 
-.search-result-img
-{
+.search-result-img {
 	display: inline-block;
 	width: 300px;
 	height: 300px;
@@ -175,15 +157,12 @@ Search output:
 
 }
 
-@media all and (min-width: 420px)
-{
-	#search-layer
-	{
+@media all and (min-width: 420px) {
+	#search-layer {
 		padding: 20px 20px 0 20px;
 	}
 
-	.search-result
-	{
+	.search-result {
 		width: 300px;
 		margin: 20px;
 	}

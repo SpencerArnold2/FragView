@@ -19,8 +19,7 @@
 @import (reference) "vars";
 @import (reference) "global";
 
-#menu
-{
+#menu {
 	display: block;
 	position: absolute;
 	margin: 0;
@@ -33,8 +32,7 @@
 	.no-select;
 }
 
-#menu-bar
-{
+#menu-bar {
 	position: absolute;
 	top: 0;
 	min-width: 100%;
@@ -43,32 +41,32 @@
 	overflow: hidden;
 }
 
-.menu-open
-{
+.menu-open {
 	height: 100% !important;
 }
 
-.menu-open > #menu-bar
-{
+.menu-open>#menu-bar {
 	overflow: visible;
 }
 
-#main-menu, #layout-menu, .dropdown, .menu-item, .menu-header, .menu-divider
-{
+#main-menu,
+#layout-menu,
+.dropdown,
+.menu-item,
+.menu-header,
+.menu-divider {
 	margin: 0;
 	padding: 0;
 	list-style: none;
 }
 
-.dropdown
-{
+.dropdown {
 	position: relative;
 	margin: 0;
 	padding: 0;
 }
 
-.dropdown-toggle
-{
+.dropdown-toggle {
 	z-index: 1;
 	position: relative;
 	display: block;
@@ -78,8 +76,7 @@
 	line-height: 20px;
 }
 
-.dropdown-menu
-{
+.dropdown-menu {
 	visibility: hidden;
 	position: absolute;
 	margin: -1px 0 0 0;
@@ -90,23 +87,19 @@
 	overflow-y: auto;
 }
 
-.dropdown-left
-{
+.dropdown-left {
 	right: 0;
 }
 
-.dropdown-compact > .menu-item > a
-{
+.dropdown-compact>.menu-item>a {
 	padding: 5px 15px;
 }
 
-.dropdown-compact > .menu-item > a:before
-{
+.dropdown-compact>.menu-item>a:before {
 	display: none;
 }
 
-.menu-header
-{
+.menu-header {
 	display: block;
 	cursor: default;
 	margin-top: 10px;
@@ -116,15 +109,13 @@
 	white-space: nowrap;
 }
 
-.menu-item > a
-{
+.menu-item>a {
 	display: block;
 	line-height: 20px;
 	white-space: nowrap;
 }
 
-.dropdown.open
-{
+.dropdown.open {
 	z-index: 2;
 }
 
@@ -134,60 +125,51 @@ at least one other dropdown in order to:
 - prevent persistent hover style after all dropdowns are dismissed
 - hide scrollbar for hidden dropdown-menus
 */
-.menu.open .dropdown:not(.open) > .dropdown-menu
-{
+.menu.open .dropdown:not(.open)>.dropdown-menu {
 	display: none;
 }
 
-.dropdown.open > .dropdown-menu
-{
+.dropdown.open>.dropdown-menu {
 	visibility: visible;
 }
 
 /* search form */
-#search
-{
+#search {
 	margin: 0 5px;
 	background: @search-bar-bg;
 }
 
 
-#search > .input-wrapper > input, #search > .input-wrapper > button
-{
+#search>.input-wrapper>input,
+#search>.input-wrapper>button {
 	background: @search-bar-bg;
 }
 
-#search-input
-{
+#search-input {
 	width: 300px;
 	font-family: 'Open Sans', sans-serif;
 }
 
-#search-dropdown
-{
+#search-dropdown {
 	display: inline-block;
 }
 
-#search-dropdown > .dropdown-toggle
-{
+#search-dropdown>.dropdown-toggle {
 	border-color: transparent;
 }
 
-#search-dropdown > .dropdown-toggle:after
-{
+#search-dropdown>.dropdown-toggle:after {
 	margin: 0;
 	color: @foreground;
 	content: '\f0d7';
 }
 
 /* layout menu */
-#layout-menu
-{
+#layout-menu {
 	font-size: 0;
 }
 
-#layout-menu > a
-{
+#layout-menu>a {
 	display: inline-block;
 	margin: 0;
 	padding: 0;
@@ -200,16 +182,25 @@ at least one other dropdown in order to:
 	background-size: cover;
 }
 
-@media all and (min-width: 720px)
-{
-	#layout-menu > a
-	{
+@media all and (min-width: 720px) {
+	#layout-menu>a {
 		width: 160px;
 		height: 90px;
 	}
 }
 
-#action-layout-model { background-image: url(../img/layout/model.svg); }
-#action-layout-sketcher { background-image: url(../img/layout/sketcher.svg); }
-#action-layout-vsplit { background-image: url(../img/layout/vsplit.svg); }
-#action-layout-hsplit { background-image: url(../img/layout/hsplit.svg); }
+#action-layout-model {
+	background-image: url(../img/layout/model.svg);
+}
+
+#action-layout-sketcher {
+	background-image: url(../img/layout/sketcher.svg);
+}
+
+#action-layout-vsplit {
+	background-image: url(../img/layout/vsplit.svg);
+}
+
+#action-layout-hsplit {
+	background-image: url(../img/layout/hsplit.svg);
+}

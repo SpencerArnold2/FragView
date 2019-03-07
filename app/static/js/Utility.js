@@ -26,8 +26,7 @@ var ChemIdentifiers = {
 		formula: /^((?:[A-Z][a-z]?)+[\d,.]*)*/
 	},
 
-	isFormula: function(str)
-	{
+	isFormula: function (str) {
 		return this.regex.formula.exec(str)[0] === str;
 	}
 }
@@ -37,9 +36,8 @@ var ChemIdentifiers = {
  * @param  {String} str Input
  * @return {String}     Output
  */
-function ucfirst(str)
-{
-	if(str === undefined) return str;
+function ucfirst(str) {
+	if (str === undefined) return str;
 	else return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -48,12 +46,10 @@ function ucfirst(str)
  * @param  {String} str Input
  * @return {String}     Output
  */
-function humanize(str)
-{
-	if(str === undefined) return str;
+function humanize(str) {
+	if (str === undefined) return str;
 	//reverse case for all words with uppercase characters only
-	else return str.replace(/(\b[A-Z]+\b)/g, function(word)
-	{
+	else return str.replace(/(\b[A-Z]+\b)/g, function (word) {
 		return word.toLowerCase();
 	});
 }
@@ -63,20 +59,14 @@ function humanize(str)
  * @param  {String} str Input
  * @return {String}     Output
  */
-function formatMFormula(str)
-{
-	if(str)
-	{
-		return str.replace(/[a-zA-Z0-9.,]+/g, function(word)
-		{
-			if(ChemIdentifiers.isFormula(word))
-			{
+function formatMFormula(str) {
+	if (str) {
+		return str.replace(/[a-zA-Z0-9.,]+/g, function (word) {
+			if (ChemIdentifiers.isFormula(word)) {
 				return word.replace(/[\d,.]*/g, "<sub>$&</sub>");
-			}
-			else return word;
+			} else return word;
 		});
-	}
-	else return undefined;
+	} else return undefined;
 }
 
 /**
@@ -84,10 +74,8 @@ function formatMFormula(str)
  * @param  {String} str Input
  * @return {String}     Output
  */
-function formatHTMLLinks(str)
-{
-	return str.replace(/(http|https):\/\/[^\s]+/g, function(link)
-	{
+function formatHTMLLinks(str) {
+	return str.replace(/(http|https):\/\/[^\s]+/g, function (link) {
 		return '<a class="link" href="' + link + '" target="_blank">' + link + "</a>";
 	});
 }
@@ -95,23 +83,20 @@ function formatHTMLLinks(str)
 /**
  * @return {Boolean} Tests wether this device supports touch
  */
-function isTouchDevice()
-{
-	return !!('ontouchstart' in window) || (!!('onmsgesturechange' in window)
-			&& !!window.navigator.maxTouchPoints);
+function isTouchDevice() {
+	return !!('ontouchstart' in window) || (!!('onmsgesturechange' in window) &&
+		!!window.navigator.maxTouchPoints);
 }
 
 /**
  * @return {Object} JS object containing current query parameters
  */
-function getQuery()
-{
-	if(location.search === "") return {};
+function getQuery() {
+	if (location.search === "") return {};
 
 	var pairs = location.search.slice(1).split("&");
 	var result = {};
-	pairs.forEach(function(pair)
-	{
+	pairs.forEach(function (pair) {
 		pair = pair.split(/=(.+)?/);
 		result[pair[0]] = decodeURIComponent(pair[1] || "");
 	});
@@ -119,8 +104,7 @@ function getQuery()
 	return result;
 }
 
-function oneOf(nail, haystack)
-{
+function oneOf(nail, haystack) {
 	return haystack.indexOf(nail) !== -1;
 }
 
@@ -132,8 +116,7 @@ function oneOf(nail, haystack)
  *
  * @param {[type]} str [description]
  */
-function specialEncodeURIComponent(str)
-{
+function specialEncodeURIComponent(str) {
 	return str.replace(/&/g, "%26").replace(/#/g, "%23");
 }
 
@@ -141,24 +124,21 @@ function specialEncodeURIComponent(str)
  * jQuery Textfill plugin
  * https://github.com/jquery-textfill/jquery-textfill
  */
-(function (jQuery)
-{
-	jQuery.fn.textfill = function (options)
-	{
+(function (jQuery) {
+	jQuery.fn.textfill = function (options) {
 		var fontSize = options.maxFontPoints;
 		var text = this.children();
 		var maxHeight = jQuery(this).height();
 		var maxWidth = jQuery(this).width();
 		var textHeight;
 		var textWidth;
-		do
-		{
+		do {
 			text.css("font-size", "" + fontSize + "pt");
 			textHeight = text.outerHeight();
 			textWidth = text.outerWidth();
 			fontSize = fontSize - 1;
 		}
-		while((textHeight > maxHeight || textWidth > maxWidth) && fontSize > 6);
+		while ((textHeight > maxHeight || textWidth > maxWidth) && fontSize > 6);
 		return this;
 	}
 })(jQuery);
@@ -166,16 +146,13 @@ function specialEncodeURIComponent(str)
 /**
  * jQuery plugin which tests if DOM Element dimensions have changed
  */
-(function (jQuery)
-{
-	$.fn.sizeChanged = function()
-	{
-		return !(this.data("savedWidth") === this.width()
-			  && this.data("savedHeight") === this.height());
+(function (jQuery) {
+	$.fn.sizeChanged = function () {
+		return !(this.data("savedWidth") === this.width() &&
+			this.data("savedHeight") === this.height());
 	}
 
-	$.fn.saveSize = function()
-	{
+	$.fn.saveSize = function () {
 		this.data("savedWidth", this.width());
 		this.data("savedHeight", this.height());
 	}
@@ -186,10 +163,8 @@ function specialEncodeURIComponent(str)
  * @param {String} dataURI
  * @return {Blob}
  */
-function dataURItoBlob(dataURI)
-{
-	try
-	{
+function dataURItoBlob(dataURI) {
+	try {
 		//convert base64 to raw binary data held in a string
 		var byteString = atob(dataURI.split(',')[1]);
 
@@ -199,20 +174,16 @@ function dataURItoBlob(dataURI)
 		//write the bytes of the string to an ArrayBuffer
 		var arrayBuffer = new ArrayBuffer(byteString.length);
 		var _ia = new Uint8Array(arrayBuffer);
-		for(var i = 0; i < byteString.length; i++)
-		{
+		for (var i = 0; i < byteString.length; i++) {
 			_ia[i] = byteString.charCodeAt(i);
 		}
 
 		var dataView = new DataView(arrayBuffer);
-		var blob = new Blob([dataView],
-		{
+		var blob = new Blob([dataView], {
 			type: mimeString
 		});
 		return blob;
-	}
-	catch(e)
-	{
+	} catch (e) {
 		console.error(e);
 		return null;
 	}
@@ -222,15 +193,12 @@ function dataURItoBlob(dataURI)
  * Open dataURI in new tab
  * @param {String} dataURI
  */
-function openDataURI(dataURI)
-{
+function openDataURI(dataURI) {
 	var blob = dataURItoBlob(dataURI);
 	var windowURL = window.URL || window.webkitURL || undefined;
-	if(blob !== null && windowURL !== undefined)
-	{
+	if (blob !== null && windowURL !== undefined) {
 		window.open(windowURL.createObjectURL(blob));
-	}
-	else window.open(dataURI);
+	} else window.open(dataURI);
 }
 
 /**
@@ -239,30 +207,23 @@ function openDataURI(dataURI)
  * @param {Boolean}  obj.primary      Mark as primary AJAX call; aborts other primary AJAX calls
  * @param {Function} obj.defaultError Use default error handler with $defaultError as callback
  */
-var xhr;//store primary AJAX call
-function AJAX(obj)
-{
-	if(obj.primary && xhr !== undefined)
-	{
+var xhr; //store primary AJAX call
+function AJAX(obj) {
+	if (obj.primary && xhr !== undefined) {
 		xhr.abort();
 	}
 
-	if(obj.defaultError !== undefined)
-	{
-		obj.error = function(jqXHR, textStatus)
-		{
-			if(textStatus !== "error") return;
+	if (obj.defaultError !== undefined) {
+		obj.error = function (jqXHR, textStatus) {
+			if (textStatus !== "error") return;
 			obj.defaultError(jqXHR.status);
 		}
 	}
 
-	if(obj.primary)
-	{
+	if (obj.primary) {
 		xhr = $.ajax(obj);
 		return xhr;
-	}
-	else
-	{
+	} else {
 		return $.ajax(obj);
 	}
 }
@@ -276,8 +237,7 @@ function AJAX(obj)
  * @param  {Boolean} percent Indicates whether similairity percentage should be returned
  * @return {Float}           [description]
  */
-function similar_text(first, second, percent)
-{
+function similar_text(first, second, percent) {
 	//  discuss at: http://phpjs.org/functions/similar_text/
 	// original by: Rafał Kukawski (http://blog.kukawski.pl)
 	// bugfixed by: Chris McMacken
@@ -288,8 +248,7 @@ function similar_text(first, second, percent)
 	//   example 2: similar_text('Hello World!', null);
 	//   returns 2: 0
 
-	if(first === null || second === null || typeof first === 'undefined' || typeof second === 'undefined')
-	{
+	if (first === null || second === null || typeof first === 'undefined' || typeof second === 'undefined') {
 		return 0;
 	}
 
@@ -305,15 +264,12 @@ function similar_text(first, second, percent)
 
 	max = 0;
 
-	for(p = 0; p < firstLength; p++)
-	{
-		for(q = 0; q < secondLength; q++)
-		{
-			for(l = 0;
+	for (p = 0; p < firstLength; p++) {
+		for (q = 0; q < secondLength; q++) {
+			for (l = 0;
 				(p + l < firstLength) && (q + l < secondLength) && (first.charAt(p + l) === second.charAt(q + l)); l++)
 			;
-			if(l > max)
-			{
+			if (l > max) {
 				max = l;
 				pos1 = p;
 				pos2 = q;
@@ -323,26 +279,20 @@ function similar_text(first, second, percent)
 
 	sum = max;
 
-	if(sum)
-	{
-		if(pos1 && pos2)
-		{
+	if (sum) {
+		if (pos1 && pos2) {
 			sum += this.similar_text(first.substr(0, pos1), second.substr(0, pos2));
 		}
 
-		if((pos1 + max < firstLength) && (pos2 + max < secondLength))
-		{
+		if ((pos1 + max < firstLength) && (pos2 + max < secondLength)) {
 			sum += this.similar_text(first.substr(pos1 + max, firstLength - pos1 - max), second.substr(pos2 + max,
 				secondLength - pos2 - max));
 		}
 	}
 
-	if(!percent)
-	{
+	if (!percent) {
 		return sum;
-	}
-	else
-	{
+	} else {
 		return (sum * 200) / (firstLength + secondLength);
 	}
 }

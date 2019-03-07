@@ -21,31 +21,33 @@
  * @param {MolPad} mp
  * @param {Object} obj Configuration
  */
-function MPAtom(mp, obj)
-{
+function MPAtom(mp, obj) {
 	this.mp = mp;
 	this.index = obj.i;
 	this.center = new MPPoint(obj.x || 0, obj.y || 0);
 	this.element = obj.element || "C";
 	this.charge = obj.charge || 0;
 	this.isotope = obj.isotope || 0;
-	this.bonds = obj.bonds !== undefined ? obj.bonds.slice() : [];//deep copy
+	this.bonds = obj.bonds !== undefined ? obj.bonds.slice() : []; //deep copy
 	this.selected = obj.selected || false;
 	this.display = "normal";
 	this.valid = false;
 	this.mp.requestRedraw();
 }
 
-MPAtom.prototype.getX = function() { return this.center.x; }
-MPAtom.prototype.getY = function() { return this.center.y; }
+MPAtom.prototype.getX = function () {
+	return this.center.x;
+}
+MPAtom.prototype.getY = function () {
+	return this.center.y;
+}
 
 /**
  * Retruns data which can be used as input by the Ketcher fork
  * @param {Object} mp
  * @return {Object}
  */
-MPAtom.prototype.getKetcherData = function()
-{
+MPAtom.prototype.getKetcherData = function () {
 	return new chem.Struct.Atom({
 		pp: {
 			x: this.center.x / this.mp.s.bond.length,
@@ -61,8 +63,7 @@ MPAtom.prototype.getKetcherData = function()
  * Retruns config data which can be used to reconstruct this object
  * @return {Object}
  */
-MPAtom.prototype.getConfig = function()
-{
+MPAtom.prototype.getConfig = function () {
 	return {
 		i: this.index,
 		x: this.center.x,
@@ -78,16 +79,14 @@ MPAtom.prototype.getConfig = function()
  * Retruns MPAtom string which can be compared to other MPAtom strings
  * @return {String}
  */
-MPAtom.prototype.toString = function()
-{
-	var str = this.center.x.toString() + ","
-		+ this.center.y.toString() + ","
-		+ this.element.toString() + ","
-		+ this.charge.toString() + ","
-		+ this.isotope.toString();
+MPAtom.prototype.toString = function () {
+	var str = this.center.x.toString() + "," +
+		this.center.y.toString() + "," +
+		this.element.toString() + "," +
+		this.charge.toString() + "," +
+		this.isotope.toString();
 
-	for(var i = 0; i < this.bonds.length; i++)
-	{
+	for (var i = 0; i < this.bonds.length; i++) {
 		str += "," + this.mp.mol.bonds[this.bonds[i]].toString();
 	}
 
@@ -98,36 +97,33 @@ MPAtom.prototype.toString = function()
  * Generates charge label for this atom
  * @return {String} Charge label as string
  */
-MPAtom.prototype.getChargeLabel = function()
-{
+MPAtom.prototype.getChargeLabel = function () {
 	return this.charge === 0 ? "" :
 		this.charge === -1 ? "\u2212" :
-		this.charge ===  1 ? "+" :
-			(this.charge > 1 ? "+" : "-") + Math.abs(this.charge);
+		this.charge === 1 ? "+" :
+		(this.charge > 1 ? "+" : "-") + Math.abs(this.charge);
 }
 
-MPAtom.prototype.setIndex = function(index) { this.index = index; }
+MPAtom.prototype.setIndex = function (index) {
+	this.index = index;
+}
 
-MPAtom.prototype.setCenter = function(x, y)
-{
+MPAtom.prototype.setCenter = function (x, y) {
 	this.center.replace(x, y);
 	this.centerChanged();
 }
 
-MPAtom.prototype.setElement = function(element)
-{
+MPAtom.prototype.setElement = function (element) {
 	this.element = element === "D" ? "H" : element;
 	this.labelChanged();
 }
 
-MPAtom.prototype.setCharge = function(charge)
-{
+MPAtom.prototype.setCharge = function (charge) {
 	this.charge = charge;
 	this.labelChanged();
 }
 
-MPAtom.prototype.setIsotope = function(isotope)
-{
+MPAtom.prototype.setIsotope = function (isotope) {
 	this.isotope = isotope;
 	this.labelChanged();
 }
@@ -136,10 +132,8 @@ MPAtom.prototype.setIsotope = function(isotope)
  * Sets display type
  * @param {String} type
  */
-MPAtom.prototype.setDisplay = function(type)
-{
-	if(type !== this.display)
-	{
+MPAtom.prototype.setDisplay = function (type) {
+	if (type !== this.display) {
 		this.display = type;
 		this.mp.requestRedraw();
 	}
@@ -150,8 +144,7 @@ MPAtom.prototype.setDisplay = function(type)
  * @param  {MPAtom} atom
  * @return {Booelan}
  */
-MPAtom.prototype.equals = function(atom)
-{
+MPAtom.prototype.equals = function (atom) {
 	return this.index === atom.index;
 }
 
@@ -159,13 +152,10 @@ MPAtom.prototype.equals = function(atom)
  * Returns number of selected bonds
  * @return {Integer}
  */
-MPAtom.prototype.getSelectedBonds = function()
-{
+MPAtom.prototype.getSelectedBonds = function () {
 	var ret = 0;
-	for(var i = 0; i < this.bonds.length; i++)
-	{
-		if(this.mp.mol.bonds[this.bonds[i]].isSelected())
-		{
+	for (var i = 0; i < this.bonds.length; i++) {
+		if (this.mp.mol.bonds[this.bonds[i]].isSelected()) {
 			ret++;
 		}
 	}
@@ -177,12 +167,9 @@ MPAtom.prototype.getSelectedBonds = function()
  * @param  {Integer} idx
  * @return {Integer} Bond index or -1
  */
-MPAtom.prototype.getNeighborBond = function(idx)
-{
-	for(var i = 0; i < this.bonds.length; i++)
-	{
-		if(this.mp.mol.bonds[this.bonds[i]].getOppositeAtom(this.index) === idx)
-		{
+MPAtom.prototype.getNeighborBond = function (idx) {
+	for (var i = 0; i < this.bonds.length; i++) {
+		if (this.mp.mol.bonds[this.bonds[i]].getOppositeAtom(this.index) === idx) {
 			return this.bonds[i];
 		}
 	}
@@ -192,13 +179,10 @@ MPAtom.prototype.getNeighborBond = function(idx)
 /**
  * Returns if this atom has any neighbor atoms which are not selected
  */
-MPAtom.prototype.hasUnselectedNeighbors = function()
-{
-	for(var i = 0; i < this.bonds.length; i++)
-	{
-		if(!this.mp.mol.atoms[this.mp.mol.bonds[this.bonds[i]]
-			.getOppositeAtom(this.index)].isSelected())
-		{
+MPAtom.prototype.hasUnselectedNeighbors = function () {
+	for (var i = 0; i < this.bonds.length; i++) {
+		if (!this.mp.mol.atoms[this.mp.mol.bonds[this.bonds[i]]
+				.getOppositeAtom(this.index)].isSelected()) {
 			return true;
 		}
 	}
@@ -208,8 +192,7 @@ MPAtom.prototype.hasUnselectedNeighbors = function()
 /**
  * Wrapper for MPAtom.selected (for maintainability)
  */
-MPAtom.prototype.isSelected = function()
-{
+MPAtom.prototype.isSelected = function () {
 	return this.selected;
 }
 
@@ -218,15 +201,12 @@ MPAtom.prototype.isSelected = function()
  * All H atoms bonded to a C atom without stereo information are considered implicit
  * @return {Boolean}    Indicates if this atom is implicit
  */
-MPAtom.prototype.isImplicit = function()
-{
-	if(this.element === "H" && this.isotope === 0 &&
-			this.charge === 0 && this.bonds.length === 1)
-	{
+MPAtom.prototype.isImplicit = function () {
+	if (this.element === "H" && this.isotope === 0 &&
+		this.charge === 0 && this.bonds.length === 1) {
 		var bond = this.mp.mol.bonds[this.bonds[0]];
-		if(bond.type === MP_BOND_SINGLE && bond.stereo === MP_STEREO_NONE &&
-			bond.isPair("C", "H"))
-		{
+		if (bond.type === MP_BOND_SINGLE && bond.stereo === MP_STEREO_NONE &&
+			bond.isPair("C", "H")) {
 			return true;
 		}
 	}
@@ -236,16 +216,14 @@ MPAtom.prototype.isImplicit = function()
 /**
  * Checks is this MPAtom is hidden (not the same as invisible)
  */
-MPAtom.prototype.isHidden = function()
-{
+MPAtom.prototype.isHidden = function () {
 	return this.display === "hidden";
 }
 
 /**
  * Checks if this MPAtom is visible in the drawing based on MolPad display settings
  */
-MPAtom.prototype.isVisible = function()
-{
+MPAtom.prototype.isVisible = function () {
 	return this.wasVisible === true;
 }
 
@@ -253,10 +231,8 @@ MPAtom.prototype.isVisible = function()
  * Selects or deselects this MPAtom
  * @param {Boolean} select
  */
-MPAtom.prototype.select = function(select)
-{
-	if(this.isSelected() !== select)
-	{
+MPAtom.prototype.select = function (select) {
+	if (this.isSelected() !== select) {
 		this.selected = select;
 		this.mp.sel.update();
 		this.mp.requestRedraw();
@@ -266,10 +242,8 @@ MPAtom.prototype.select = function(select)
 /**
  * MPPoint.translate wrapper of atom center point
  */
-MPAtom.prototype.translate = function(dx, dy)
-{
-	if(Math.abs(dx) + Math.abs(dy) > 0)
-	{
+MPAtom.prototype.translate = function (dx, dy) {
+	if (Math.abs(dx) + Math.abs(dy) > 0) {
 		this.center.translate(dx, dy);
 		this.centerChanged();
 	}
@@ -278,10 +252,8 @@ MPAtom.prototype.translate = function(dx, dy)
 /**
  * MPPoint.mirror wrapper of atom center point
  */
-MPAtom.prototype.mirror = function(line, s)
-{
-	if(this.center.mirror(line, s))
-	{
+MPAtom.prototype.mirror = function (line, s) {
+	if (this.center.mirror(line, s)) {
 		this.centerChanged();
 	}
 }
@@ -289,8 +261,7 @@ MPAtom.prototype.mirror = function(line, s)
 /**
  * MPPoint.rotateAroundCenter wrapper of atom center point
  */
-MPAtom.prototype.rotateAroundCenter = function(c, a)
-{
+MPAtom.prototype.rotateAroundCenter = function (c, a) {
 	this.center.rotateAroundCenter(c, a);
 	this.centerChanged();
 }
@@ -298,11 +269,9 @@ MPAtom.prototype.rotateAroundCenter = function(c, a)
 /**
  * Returns total bond count
  */
-MPAtom.prototype.getBondCount = function()
-{
+MPAtom.prototype.getBondCount = function () {
 	var ret = 0;
-	for(var i = 0; i < this.bonds.length; i++)
-	{
+	for (var i = 0; i < this.bonds.length; i++) {
 		ret += this.mp.mol.bonds[this.bonds[i]].type;
 	}
 	return ret;
@@ -312,10 +281,8 @@ MPAtom.prototype.getBondCount = function()
  * Add bond index to this atom
  * @param {Integer} bond Bond index
  */
-MPAtom.prototype.addBond = function(bond)
-{
-	if(this.bonds.indexOf(bond) === -1)
-	{
+MPAtom.prototype.addBond = function (bond) {
+	if (this.bonds.indexOf(bond) === -1) {
 		this.bonds.push(bond);
 		this.bondsChanged();
 	}
@@ -325,11 +292,9 @@ MPAtom.prototype.addBond = function(bond)
  * Remove bond index from this atom
  * @param {Integer} bond Bond index
  */
-MPAtom.prototype.removeBond = function(bond)
-{
+MPAtom.prototype.removeBond = function (bond) {
 	var i = this.bonds.indexOf(bond);
-	if(i !== -1)
-	{
+	if (i !== -1) {
 		this.bonds.splice(i, 1);
 		this.bondsChanged();
 	}
@@ -342,13 +307,11 @@ MPAtom.prototype.removeBond = function(bond)
  *
  * @param {Array}   map
  */
-MPAtom.prototype.mapBonds = function(map)
-{
+MPAtom.prototype.mapBonds = function (map) {
 	var length = this.bonds.length;
 	this.bonds = mapArray(this.bonds, map);
 
-	if(this.bonds.length !== length)
-	{
+	if (this.bonds.length !== length) {
 		this.bondsChanged();
 	}
 
@@ -361,14 +324,12 @@ MPAtom.prototype.mapBonds = function(map)
  * @param {Integer} o Old bond index
  * @param {Integer} n New bond index
  */
-MPAtom.prototype.replaceBond = function(o, n)
-{
+MPAtom.prototype.replaceBond = function (o, n) {
 	var idx = this.bonds.indexOf(o);
 	var nidx = this.bonds.indexOf(n);
 
-	if(idx !== -1)
-	{
-		if(nidx !== -1) this.bonds.splice(o, 1);
+	if (idx !== -1) {
+		if (nidx !== -1) this.bonds.splice(o, 1);
 		else this.bonds[idx] = n;
 	}
 
@@ -381,12 +342,11 @@ MPAtom.prototype.replaceBond = function(o, n)
  * @param  {Object} config { element, a, type, stereo }
  * @return {Object}        Tool data for this bond
  */
-MPAtom.prototype.addNewBond = function(config)
-{
+MPAtom.prototype.addNewBond = function (config) {
 	var atom = new MPAtom(this.mp, {
 		i: this.mp.mol.atoms.length,
 		x: this.getX() + (config.length || this.mp.s.bond.length) * Math.cos(config.a),
-		y: this.getY() - (config.length || this.mp.s.bond.length) * Math.sin(config.a),//y axis is flipped
+		y: this.getY() - (config.length || this.mp.s.bond.length) * Math.sin(config.a), //y axis is flipped
 		element: config.element || "C"
 	});
 
@@ -416,21 +376,17 @@ MPAtom.prototype.addNewBond = function(config)
  * Saturate atom with hydrogens
  * C atoms are saturated using their four binding sites
  */
-MPAtom.prototype.addImplicitHydrogen = function()
-{
-	if(this.element === "C")
-	{
-		if(this.getBondCount() === 2 && this.bonds.length === 2)
-		{
+MPAtom.prototype.addImplicitHydrogen = function () {
+	if (this.element === "C") {
+		if (this.getBondCount() === 2 && this.bonds.length === 2) {
 			var af = this.mp.mol.bonds[this.bonds[0]].getAngle(this);
 			var at = this.mp.mol.bonds[this.bonds[1]].getAngle(this);
 			var da = Math.max(af, at) - Math.min(af, at);
 
 			//do only display 2 Hydrogens on one side if the bonds are not straight
-			if(indev(da, Math.PI, this.mp.s.bond.angleDev))
-			{
+			if (indev(da, Math.PI, this.mp.s.bond.angleDev)) {
 				var a = this.calculateNewBondAngle(2);
-				if(a === 0) return;
+				if (a === 0) return;
 
 				this.addNewBond({
 					a: a[0],
@@ -447,8 +403,7 @@ MPAtom.prototype.addImplicitHydrogen = function()
 			}
 		}
 
-		while(this.getBondCount() < 4)
-		{
+		while (this.getBondCount() < 4) {
 			this.cmap = this.calculateConnectionMap();
 			var a = this.calculateNewBondAngle();
 			this.addNewBond({
@@ -463,8 +418,7 @@ MPAtom.prototype.addImplicitHydrogen = function()
 /**
  * Invalidate cached render data
  */
-MPAtom.prototype.invalidate = function()
-{
+MPAtom.prototype.invalidate = function () {
 	this.valid = false;
 	this.mp.requestRedraw();
 }
@@ -472,11 +426,9 @@ MPAtom.prototype.invalidate = function()
 /**
  * Invalidation helper called when MPAtom.center has changed
  */
-MPAtom.prototype.centerChanged = function()
-{
+MPAtom.prototype.centerChanged = function () {
 	this.invalidate();
-	for(var i = 0; i < this.bonds.length; i++)
-	{
+	for (var i = 0; i < this.bonds.length; i++) {
 		this.mp.mol.bonds[this.bonds[i]].invalidate();
 		this.mp.mol.atoms[this.mp.mol.bonds[this.bonds[i]].getOppositeAtom(this.index)].bondsChanged(true);
 	}
@@ -486,12 +438,10 @@ MPAtom.prototype.centerChanged = function()
 /**
  * Invalidation helper called when MPAtom label has changed
  */
-MPAtom.prototype.labelChanged = function()
-{
+MPAtom.prototype.labelChanged = function () {
 	this.invalidate();
 	this.line = undefined;
-	for(var i = 0; i < this.bonds.length; i++)
-	{
+	for (var i = 0; i < this.bonds.length; i++) {
 		this.mp.mol.bonds[this.bonds[i]].invalidate();
 		this.mp.mol.atoms[this.mp.mol.bonds[this.bonds[i]].getOppositeAtom(this.index)].bondsChanged();
 	}
@@ -500,13 +450,10 @@ MPAtom.prototype.labelChanged = function()
 /**
  * Invalidation helper called when connected bonds are changed
  */
-MPAtom.prototype.bondsChanged = function(moved)
-{
+MPAtom.prototype.bondsChanged = function (moved) {
 	this.invalidate();
-	if(this.mp.s.skeletalDisplay)
-	{
-		for(var i = 0; i < this.bonds.length; i++)
-		{
+	if (this.mp.s.skeletalDisplay) {
+		for (var i = 0; i < this.bonds.length; i++) {
 			this.mp.mol.bonds[this.bonds[i]].invalidate();
 		}
 	}
@@ -515,9 +462,8 @@ MPAtom.prototype.bondsChanged = function(moved)
 /**
  * Validate this MPAtom by updating all its drawing data
  */
-MPAtom.prototype.validate = function()
-{
-	if(this.valid) return;
+MPAtom.prototype.validate = function () {
+	if (this.valid) return;
 	this.valid = true;
 	this.wasVisible = this.calculateVisibility();
 	this.cmap = this.calculateConnectionMap();
@@ -526,7 +472,7 @@ MPAtom.prototype.validate = function()
 	line object undefined in order to recalculate it. This is a trick
 	to increase efficiency as the atom label line does not have to be
 	recalculated after each invalidation */
-	if(this.line === undefined) this.line = this.calculateCenterLine();
+	if (this.line === undefined) this.line = this.calculateCenterLine();
 }
 
 /**
@@ -536,30 +482,25 @@ MPAtom.prototype.validate = function()
 /**
  * Draw additional MPAtom background based on MPAtom.display
  */
-MPAtom.prototype.drawStateColor = function()
-{
-	if(this.isHidden() || this.line === undefined) return;
+MPAtom.prototype.drawStateColor = function () {
+	if (this.isHidden() || this.line === undefined) return;
 
-	var incorrect = false;//this.element == "C" && this.getBondCount() > 4;
+	var incorrect = false; //this.element == "C" && this.getBondCount() > 4;
 	/* incorrect is currently not really working since the red is sometimes
 	draw between other green selection areas and because the invalidation is not
 	working correctly when adding fragments which are not yet collapsed */
 
-	if(this.display === "hover" || this.display === "active" ||
-			(this.display === "normal" && this.isSelected()) || incorrect)
-	{
+	if (this.display === "hover" || this.display === "active" ||
+		(this.display === "normal" && this.isSelected()) || incorrect) {
 		var d = incorrect ? "incorrect" : (this.isSelected() ? "selected" : this.display);
 
 		this.mp.ctx.beginPath();
-		if(this.line.area.point)
-		{
+		if (this.line.area.point) {
 			this.mp.ctx.arc(this.center.x, this.center.y,
-					this.mp.s.atom.selectionRadiusScaled, 0, PI2);
+				this.mp.s.atom.selectionRadiusScaled, 0, PI2);
 			this.mp.ctx.fillStyle = this.mp.s.atom[d].color;
 			this.mp.ctx.fill();
-		}
-		else
-		{
+		} else {
 			this.mp.ctx.moveTo(this.center.x + this.line.area.left, this.center.y);
 			this.mp.ctx.lineTo(this.center.x + this.line.area.right, this.center.y);
 			this.mp.ctx.strokeStyle = this.mp.s.atom[d].color;
@@ -571,33 +512,26 @@ MPAtom.prototype.drawStateColor = function()
 /**
  * Draw actual atom label
  */
-MPAtom.prototype.drawLabel = function()
-{
+MPAtom.prototype.drawLabel = function () {
 	//TODO: add support for collapsed groups (CH2- to H2C-, OH- to HO-, etc.)
 
-	if(this.isHidden() || this.line === undefined) return;
+	if (this.isHidden() || this.line === undefined) return;
 
-	if(this.isVisible())
-	{
-		if(this.mp.s.atom.colored)
-		{
+	if (this.isVisible()) {
+		if (this.mp.s.atom.colored) {
 			this.mp.ctx.fillStyle = JmolAtomColorsHashHex[this.element] || JmolAtomColorsHashHex["C"];
 		}
 
-		if(this.mp.s.atom.miniLabel)
-		{
+		if (this.mp.s.atom.miniLabel) {
 			var s = this.mp.s.atom.miniLabelSize;
 			this.mp.ctx.fillRect(this.center.x - s / 2, this.center.y - s / 2, s, s);
-		}
-		else
-		{
+		} else {
 			var x = this.center.x + this.line.text.offsetLeft;
 
-			if(this.isotope > 0)
-			{
+			if (this.isotope > 0) {
 				this.mp.setFont("isotope");
 				this.mp.ctx.fillText("" + this.isotope, x, this.center.y +
-						this.line.text.offsetTop - this.line.text.isotopeHeight);
+					this.line.text.offsetTop - this.line.text.isotopeHeight);
 				x += this.line.text.isotopeWidth;
 			}
 
@@ -605,11 +539,10 @@ MPAtom.prototype.drawLabel = function()
 			this.mp.ctx.fillText("" + this.element, x, this.center.y + this.line.text.offsetTop);
 			x += this.line.text.labelWidth;
 
-			if(this.charge !== 0)
-			{
+			if (this.charge !== 0) {
 				this.mp.setFont("charge");
 				this.mp.ctx.fillText(this.getChargeLabel(), x, this.center.y +
-						this.line.text.offsetTop - this.line.text.chargeHeight);
+					this.line.text.offsetTop - this.line.text.chargeHeight);
 			}
 		}
 	}

@@ -1,30 +1,28 @@
 /**
-* This file is part of MolView (http://molview.org)
-* Copyright (c) 2014, 2015 Herman Bergwerf
-*
-* MolView is free software: you can redistribute it and/or modify
-* it under the terms of the GNU Affero General Public License as published by
-* the Free Software Foundation, either version 3 of the License, or
-* (at your option) any later version.
-*
-* MolView is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-* GNU Affero General Public License for more details.
-*
-* You should have received a copy of the GNU Affero General Public License
-* along with MolView.  If not, see <http://www.gnu.org/licenses/>.
-*/
+ * This file is part of MolView (http://molview.org)
+ * Copyright (c) 2014, 2015 Herman Bergwerf
+ *
+ * MolView is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * MolView is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ *
+ * You should have received a copy of the GNU Affero General Public License
+ * along with MolView.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
 
-MPAtom.prototype.calculateConnectionMap = function()
-{
-	if(this.bonds.length === 0) return 0;
+MPAtom.prototype.calculateConnectionMap = function () {
+	if (this.bonds.length === 0) return 0;
 
 	//create bond map with bond angles
 	var bondMap = [];
-	for(var i = 0; i < this.bonds.length; i++)
-	{
+	for (var i = 0; i < this.bonds.length; i++) {
 		bondMap.push({
 			i: this.bonds[i],
 			a: this.mp.mol.bonds[this.bonds[i]].getAngle(this)
@@ -32,15 +30,13 @@ MPAtom.prototype.calculateConnectionMap = function()
 	}
 
 	//sort bondMap in ascending bond angle order
-	bondMap.sort(function(a, b)
-	{
+	bondMap.sort(function (a, b) {
 		return a.a - b.a;
 	});
 
 	//convert bondMap to sections
 	var sections = [];
-	for(var i = 0; i < bondMap.length; i++)
-	{
+	for (var i = 0; i < bondMap.length; i++) {
 		var from = i === 0 ? bondMap.length - 1 : i - 1;
 		var to = i;
 		sections.push({
@@ -61,12 +57,9 @@ MPAtom.prototype.calculateConnectionMap = function()
  * @param  {Integer} index
  * @return {Object}
  */
-MPAtom.prototype.calculateClosestBonds = function(index)
-{
-	for(var i = 0; i < this.cmap.bondMap.length; i++)
-	{
-		if(this.cmap.bondMap[i].i === index)
-		{
+MPAtom.prototype.calculateClosestBonds = function (index) {
+	for (var i = 0; i < this.cmap.bondMap.length; i++) {
+		if (this.cmap.bondMap[i].i === index) {
 			var upper = i + 1 < this.cmap.bondMap.length ? i + 1 : 0;
 			var lower = i - 1 >= 0 ? i - 1 : this.cmap.bondMap.length - 1;
 			return {
@@ -80,7 +73,9 @@ MPAtom.prototype.calculateClosestBonds = function(index)
 			};
 		}
 	}
-	return { none: true };
+	return {
+		none: true
+	};
 }
 
 /**
@@ -91,32 +86,25 @@ MPAtom.prototype.calculateClosestBonds = function(index)
  *                     should be divided in
  * @return {Float} (if n === undefined) or {Array}
  */
-MPAtom.prototype.calculateNewBondAngle = function(n)
-{
-	if(this.bonds.length === 0 || this.cmap === undefined) return 0;
+MPAtom.prototype.calculateNewBondAngle = function (n) {
+	if (this.bonds.length === 0 || this.cmap === undefined) return 0;
 
 	//find larges section
-	var largest = 0;//skip i = 0 since it is already used for the first comparison
-	for(var i = 1; i < this.cmap.sections.length; i++)
-	{
-		if(this.cmap.sections[i].a > this.cmap.sections[largest].a)
-		{
+	var largest = 0; //skip i = 0 since it is already used for the first comparison
+	for (var i = 1; i < this.cmap.sections.length; i++) {
+		if (this.cmap.sections[i].a > this.cmap.sections[largest].a) {
 			largest = i;
 		}
 	}
 
 	//find new bond angle
-	if(n === undefined)
-	{
+	if (n === undefined) {
 		return this.cmap.bondMap[this.cmap.sections[largest].from].a + this.cmap.sections[largest].a / 2;
-	}
-	else
-	{
+	} else {
 		var p = n !== undefined ? n + 1 : 2;
 		var a = this.cmap.sections[largest].a / (n + 1);
 		var ret = [];
-		for(var i = 1; i <= n; i++)
-		{
+		for (var i = 1; i <= n; i++) {
 			ret.push(this.cmap.bondMap[this.cmap.sections[largest].from].a + i * a);
 		}
 		return ret;
@@ -133,13 +121,16 @@ MPAtom.prototype.calculateNewBondAngle = function(n)
  *                  Label drawing box:
  *                  { offsetLeft: 0, offsetTop: 0 }
  */
-MPAtom.prototype.calculateCenterLine = function()
-{
-	if(this.mp.s.atom.miniLabel)
-	{
+MPAtom.prototype.calculateCenterLine = function () {
+	if (this.mp.s.atom.miniLabel) {
 		return {
-			text: { offsetLeft: 0, offsetTop: 0 },
-			area: { point: true }
+			text: {
+				offsetLeft: 0,
+				offsetTop: 0
+			},
+			area: {
+				point: true
+			}
 		};
 	}
 
@@ -150,17 +141,15 @@ MPAtom.prototype.calculateCenterLine = function()
 	text.labelWidth = this.mp.ctx.measureText("" + this.element).width;
 	var w = text.labelWidth;
 
-	if(this.isotope > 0)
-	{
+	if (this.isotope > 0) {
 		this.mp.setFont("isotope");
 		text.isotopeHeight = this.mp.s.fonts.isotope.fontSize * scale;
 		text.isotopeWidth = this.mp.ctx.measureText("" + this.isotope).width +
-				this.mp.s.atom.isotope.padding * scale;//padding before element label
+			this.mp.s.atom.isotope.padding * scale; //padding before element label
 		w += text.isotopeWidth;
 	}
 
-	if(this.charge !== 0)
-	{
+	if (this.charge !== 0) {
 		this.mp.setFont("charge");
 		text.chargeHeight = this.mp.s.fonts.charge.fontSize * scale;
 		text.chargeWidth = this.mp.ctx.measureText("" + this.getChargeLabel()).width;
@@ -177,8 +166,7 @@ MPAtom.prototype.calculateCenterLine = function()
 	text.offsetLeft = -halfw;
 	text.offsetTop = h / 2;
 
-	if(w > this.mp.s.atom.circleClamp)
-	{
+	if (w > this.mp.s.atom.circleClamp) {
 		var pad = this.mp.s.atom.radius * scale - h / 2;
 		return {
 			text: text,
@@ -188,12 +176,12 @@ MPAtom.prototype.calculateCenterLine = function()
 				right: halfw - pad
 			}
 		};
-	}
-	else
-	{
+	} else {
 		return {
 			text: text,
-			area: { point: true }
+			area: {
+				point: true
+			}
 		};
 	}
 }
@@ -204,8 +192,7 @@ MPAtom.prototype.calculateCenterLine = function()
  * @param  {Array}   ends
  * @return {Array}        Calculated ends
  */
-MPAtom.prototype.calculateBondVertices = function(from, ends)
-{
+MPAtom.prototype.calculateBondVertices = function (from, ends) {
 	var begin = this.mp.mol.atoms[from].center;
 	return this._calculateBondVertices(begin, ends);
 }
@@ -220,56 +207,48 @@ MPAtom.prototype.calculateBondVertices = function(from, ends)
  *                         (values are in counter clockwise direction)
  * @return {Array}         Calculated ends
  */
-MPAtom.prototype._calculateBondVertices = function(begin, ends)
-{
+MPAtom.prototype._calculateBondVertices = function (begin, ends) {
 	//TODO: implement bonding site for collapsed groups (only left or right)
 
-	if(begin.x === this.center.x
-			|| this.hidden || this.line === undefined)//provide fallback
+	if (begin.x === this.center.x ||
+		this.hidden || this.line === undefined) //provide fallback
 	{
 		var ret = [];
 		var r = this.isVisible() ? this.mp.s.atom.radius : 0;
 		var below = begin.y < this.center.y;
-		for(var i = 0; i < ends.length; i++)
-		{
+		for (var i = 0; i < ends.length; i++) {
 			ret.push(MPPFO({
-				x: this.center.x + (below ? ends[i] : -ends[i]),//counter clockwise
+				x: this.center.x + (below ? ends[i] : -ends[i]), //counter clockwise
 				y: this.center.y + (below ? -r : r)
 			}));
 		}
 		return ret;
-	}
-	else if(begin.y === this.center.y)
-	{
+	} else if (begin.y === this.center.y) {
 		var ret = [];
-		var r = this.isVisible() ? this.line.area.half  || this.mp.s.atom.radius : 0;
+		var r = this.isVisible() ? this.line.area.half || this.mp.s.atom.radius : 0;
 		var right = begin.x > this.center.x;
-		for(var i = 0; i < ends.length; i++)
-		{
+		for (var i = 0; i < ends.length; i++) {
 			ret.push(MPPFO({
 				x: this.center.x + (right ? r : -r),
-				y: this.center.y + (right ? ends[i] : -ends[i])//counter clockwise
+				y: this.center.y + (right ? ends[i] : -ends[i]) //counter clockwise
 			}));
 		}
 		return ret;
-	}
-	else if(!this.isVisible())
-	{
-		if(ends.length === 1 && ends[0] === 0)
-		{
-			return [MPPFO({ x: this.center.x, y: this.center.y })];
-		}
-		else
-		{
+	} else if (!this.isVisible()) {
+		if (ends.length === 1 && ends[0] === 0) {
+			return [MPPFO({
+				x: this.center.x,
+				y: this.center.y
+			})];
+		} else {
 			var dx = begin.x - this.center.x;
 			var dy = begin.y - this.center.y;
 			var d = Math.sqrt(dx * dx + dy * dy);
-			var A = dx / d;//dx = a = A * c = d
-			var B = dy / d;//dy = b = B * c = d
+			var A = dx / d; //dx = a = A * c = d
+			var B = dy / d; //dy = b = B * c = d
 
 			var ret = [];
-			for(var i = 0; i < ends.length; i++)
-			{
+			for (var i = 0; i < ends.length; i++) {
 				ret.push(MPPFO({
 					x: -B * ends[i],
 					y: A * ends[i]
@@ -277,38 +256,32 @@ MPAtom.prototype._calculateBondVertices = function(begin, ends)
 			}
 
 			//translate to real center
-			for(var i = 0; i < ret.length; i++)
-			{
+			for (var i = 0; i < ret.length; i++) {
 				ret[i].x += this.center.x;
 				ret[i].y += this.center.y;
 			}
 
 			return ret;
 		}
-	}
-	else
-	{
-		var ac = this.center;//aligin center
-		var bc = this.center;//bond center
-		var tdir = 1;//tangent direction
+	} else {
+		var ac = this.center; //aligin center
+		var bc = this.center; //bond center
+		var tdir = 1; //tangent direction
 
-		if(this.line.area.left && begin.x < this.center.x)
-		{
+		if (this.line.area.left && begin.x < this.center.x) {
 			ac = new MPPoint(this.center.x + this.line.area.left, this.center.y);
-		}
-		else if(this.line.area.right && begin.x > this.center.x)
-		{
+		} else if (this.line.area.right && begin.x > this.center.x) {
 			ac = new MPPoint(this.center.x + this.line.area.right, this.center.y);
 			tdir = -1;
 		}
 
-		var acbc = Math.abs(ac.x - bc.x);//distance between align center and bond center
+		var acbc = Math.abs(ac.x - bc.x); //distance between align center and bond center
 		var r = this.mp.s.atom.radius;
 		var dx = begin.x - bc.x;
 		var dy = begin.y - bc.y;
 		var d = Math.sqrt(dx * dx + dy * dy);
-		var A = dx / d;//dx = a = A * c = d
-		var B = dy / d;//dy = b = B * c = d
+		var A = dx / d; //dx = a = A * c = d
+		var B = dy / d; //dy = b = B * c = d
 
 		//alignCenter tangent crossing with bond line
 		var td = (tdir > 0 ? r - A * acbc : r + A * acbc);
@@ -319,8 +292,7 @@ MPAtom.prototype._calculateBondVertices = function(begin, ends)
 		var y = bc.y + ty;
 
 		var ret = [];
-		for(var i = 0; i < ends.length; i++)
-		{
+		for (var i = 0; i < ends.length; i++) {
 			ret.push(MPPFO({
 				x: x - B * ends[i],
 				y: y + A * ends[i]
@@ -330,41 +302,28 @@ MPAtom.prototype._calculateBondVertices = function(begin, ends)
 	}
 }
 
-MPAtom.prototype.calculateVisibility = function()
-{
-	if(this.isHidden())
-	{
+MPAtom.prototype.calculateVisibility = function () {
+	if (this.isHidden()) {
 		return false;
-	}
-	else if(this.mp.s.skeletalDisplay)
-	{
-		if(this.element === "C" && this.charge === 0 && this.isotope === 0)
-		{
-			if(this.bonds.length === 0)
-			{
+	} else if (this.mp.s.skeletalDisplay) {
+		if (this.element === "C" && this.charge === 0 && this.isotope === 0) {
+			if (this.bonds.length === 0) {
 				return true;
-			}
-			else
-			{
-				if(this.bonds.length === 2
-				&& this.mp.mol.bonds[this.bonds[0]].type === this.mp.mol.bonds[this.bonds[1]].type
-				&& this.mp.mol.bonds[this.bonds[0]].stereo === this.mp.mol.bonds[this.bonds[1]].stereo)
-				{
+			} else {
+				if (this.bonds.length === 2 &&
+					this.mp.mol.bonds[this.bonds[0]].type === this.mp.mol.bonds[this.bonds[1]].type &&
+					this.mp.mol.bonds[this.bonds[0]].stereo === this.mp.mol.bonds[this.bonds[1]].stereo) {
 					var af = this.mp.mol.bonds[this.bonds[0]].getAngle(this);
 					var at = this.mp.mol.bonds[this.bonds[1]].getAngle(this);
 					var da = Math.max(af, at) - Math.min(af, at);
 
 					//display atom anyway if the bonds are straight
-					if(indev(da, Math.PI, this.mp.s.bond.angleDev))
-					{
+					if (indev(da, Math.PI, this.mp.s.bond.angleDev)) {
 						return true;
-					}
-					else return false;
-				}
-				else return false;
+					} else return false;
+				} else return false;
 			}
 		}
 		return true;
-	}
-	else return true;
+	} else return true;
 }

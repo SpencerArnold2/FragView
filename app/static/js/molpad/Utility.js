@@ -25,9 +25,8 @@ var PI2 = 2 * Math.PI;
  * @param  {Float} dev Deviation value
  * @return {Boolean}
  */
-function indev(val, num, dev)
-{
-    return val > num - dev && val < num + dev;
+function indev(val, num, dev) {
+	return val > num - dev && val < num + dev;
 }
 
 /**
@@ -35,20 +34,18 @@ function indev(val, num, dev)
  * @param {Float} a
  * @param {Float} b
  */
-function radSide(a, b)
-{
-    return angleBetween(a, b) < Math.PI ? 1 : -1;
+function radSide(a, b) {
+	return angleBetween(a, b) < Math.PI ? 1 : -1;
 }
 
 /**
  * Normalize angle to value between 0 and 2PI
  * @param {Float} a
  */
-function posRad(a)
-{
-    while(a < 0) a += PI2;
-    while(a > PI2) a -= PI2;
-    return a;
+function posRad(a) {
+	while (a < 0) a += PI2;
+	while (a > PI2) a -= PI2;
+	return a;
 }
 
 /**
@@ -56,10 +53,9 @@ function posRad(a)
  * @param {Float} a
  * @param {Float} b
  */
-function smallestAngleBetween(a, b)
-{
-    var d = Math.abs(posRad(a) - posRad(b));
-    return d < PI2 - d ? d : PI2 - d;
+function smallestAngleBetween(a, b) {
+	var d = Math.abs(posRad(a) - posRad(b));
+	return d < PI2 - d ? d : PI2 - d;
 }
 
 /**
@@ -68,17 +64,14 @@ function smallestAngleBetween(a, b)
  * @param {Float} from
  * @param {Float} to
  */
-function angleBetween(from, to)
-{
-    from = posRad(from);
-    to = posRad(to);
+function angleBetween(from, to) {
+	from = posRad(from);
+	to = posRad(to);
 
-	if(to <= from)//the point 'to' on a circle is actually 2PI behind
+	if (to <= from) //the point 'to' on a circle is actually 2PI behind
 	{
 		return to - from + PI2;
-	}
-	else
-	{
+	} else {
 		return to - from;
 	}
 }
@@ -91,12 +84,11 @@ function angleBetween(from, to)
  * @param  {Float}   steps  Number of rotation steps in one circle
  * @return {Float}
  */
-function clampedAngle(start, center, point, steps)
-{
+function clampedAngle(start, center, point, steps) {
 	var a = center.angleTo(point);
 	var clampFactor = steps / PI2;
-	return posRad(Math.round((a - start) * clampFactor) / clampFactor
-			+ start);//clamp to x steps, normalize to startAngle
+	return posRad(Math.round((a - start) * clampFactor) / clampFactor +
+		start); //clamp to x steps, normalize to startAngle
 }
 
 /**
@@ -106,22 +98,17 @@ function clampedAngle(start, center, point, steps)
  * @param  {Object} map
  * @return {Array}
  */
-function mapArray(array, map)
-{
-    for(var i = 0; i < array.length; i++)
-	{
-		if(map[array[i]] !== undefined)
-		{
+function mapArray(array, map) {
+	for (var i = 0; i < array.length; i++) {
+		if (map[array[i]] !== undefined) {
 			array[i] = map[array[i]];
-		}
-		else
-		{
+		} else {
 			array.splice(i, 1);
 			i--;
 		}
 	}
 
-    return array;
+	return array;
 }
 
 /**
@@ -130,10 +117,9 @@ function mapArray(array, map)
  * @param  {Float} mult
  * @return {Array}
  */
-function transformArrayMult(array, mult)
-{
+function transformArrayMult(array, mult) {
 	var ret = []
-	for(var i = 0; i < array.length; i++)
+	for (var i = 0; i < array.length; i++)
 		ret.push(array[i] * mult);
 	return ret;
 }
@@ -144,10 +130,9 @@ function transformArrayMult(array, mult)
  * @param  {Float} val
  * @return {Array}
  */
-function transformArrayAdd(array, val)
-{
+function transformArrayAdd(array, val) {
 	var ret = []
-	for(var i = 0; i < array.length; i++)
+	for (var i = 0; i < array.length; i++)
 		ret.push(array[i] + val);
 	return ret;
 }
@@ -157,27 +142,23 @@ function transformArrayAdd(array, val)
  * @param {String} nail
  * @param {Array}  haystack
  */
-function oneOf(nail, haystack)
-{
+function oneOf(nail, haystack) {
 	return haystack.indexOf(nail) !== -1;
 }
 
-function getMultiTouchDelta(e)
-{
+function getMultiTouchDelta(e) {
 	var t = e.originalEvent.targetTouches;
-	if(t.length <= 1) return 0;
-	else
-	{
+	if (t.length <= 1) return 0;
+	else {
 		var dx = Math.abs(t[0].pageX - t[1].pageX);
 		var dy = Math.abs(t[0].pageY - t[1].pageY);
 		return Math.sqrt(dx * dx + dy * dy);
 	}
 }
 
-function sign(x)
-{
-    //polyfill from Mozilla
-    x = +x;// convert to a number
-    if(x === 0 || isNaN(x)) return x
-    return x > 0 ? 1 : -1
+function sign(x) {
+	//polyfill from Mozilla
+	x = +x; // convert to a number
+	if (x === 0 || isNaN(x)) return x
+	return x > 0 ? 1 : -1
 }

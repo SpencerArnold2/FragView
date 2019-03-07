@@ -18,71 +18,64 @@
 
 @import (reference) "global";
 
-#periodictable
-{
+#periodictable {
 	position: relative;
 	margin-bottom: 20px;
 
 	.no-select;
 }
 
-#periodictable br
-{
+#periodictable br {
 	clear: both;
 }
 
-.pt-space, .pt-element
-{
+.pt-space,
+.pt-element {
 	float: left;
 }
 
-.pt-element
-{
+.pt-element {
 	cursor: pointer;
 	text-align: center;
 	overflow: hidden;
 }
 
-.pt-space, .pt-element
-{
+.pt-space,
+.pt-element {
 	width: 30px;
 	height: 30px;
 }
 
-.pt-element > h3
-{
+.pt-element>h3 {
 	display: none;
 	margin: 0;
 	margin-top: 5px;
 	font-size: 6pt;
 }
 
-.pt-element > h4
-{
+.pt-element>h4 {
 	display: block;
 	margin: 0;
 	font-size: 9pt;
 	line-height: 30px;
 }
 
-@media all and (min-width: 1000px)
-{
-	.pt-space, .pt-element
-	{
+@media all and (min-width: 1000px) {
+
+	.pt-space,
+	.pt-element {
 		width: 50px;
 		height: 50px;
 	}
 
-	.pt-element > h3
-	{
+	.pt-element>h3 {
 		display: block;
 		margin: 0;
 		margin-top: 5px;
 		font-size: 6pt;
 	}
 
-	.pt-element > h4
-	{
+	.pt-element>h4 {
 		display: block;
 		margin: 0;
 		font-size: 14pt;

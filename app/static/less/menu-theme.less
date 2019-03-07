@@ -18,8 +18,7 @@
 
 @import (reference) "vars";
 
-#brand
-{
+#brand {
 	width: 50px;
 	height: 40px;
 	background-image: url(../img/brand.svg);
@@ -27,53 +26,45 @@
 	background-position: center;
 }
 
-.dropdown-toggle
-{
+.dropdown-toggle {
 	border-left: 1px solid @menu-bar-bg;
 	border-right: 1px solid @menu-bar-bg;
 }
 
-.dropdown-toggle:after
-{
+.dropdown-toggle:after {
 	margin-left: 8px;
 	color: @foreground;
 	font-family: FontAwesome;
 	content: '\f107';
 }
 
-.dropdown.open > .dropdown-toggle
-{
-	background-color: @light !important;
-	border-color: @contrast !important;
+.dropdown.open>.dropdown-toggle {
+	background-color: @light  !important;
+	border-color: @contrast  !important;
 }
 
-.caret
-{
+.caret {
 	border-top-color: @foreground;
 }
 
-.dropdown-menu
-{
+.dropdown-menu {
 	background: @light;
 	border: 1px solid @contrast;
 }
 
-.menu-header
-{
+.menu-header {
 	font-weight: bold;
 	text-transform: uppercase;
 	border-bottom: 1px solid @contrast;
 }
 
-.menu-divider
-{
+.menu-divider {
 	margin: 5px !important;
 	border-bottom: 1px dashed @contrast;
 }
 
-.disabled
-{
-	color: @foreground-disabled !important;
+.disabled {
+	color: @foreground-disabled  !important;
 	cursor: default;
 	border-color: @light2;
 }
@@ -82,13 +73,11 @@
 Menu-item icons
 */
 
-.menu-item > a
-{
+.menu-item>a {
 	color: @foreground;
 }
 
-.menu-item > a:before
-{
+.menu-item>a:before {
 	display: inline-block;
 	width: 30px;
 	color: @foreground-less;
@@ -98,41 +87,94 @@ Menu-item icons
 	content: ' ';
 }
 
-.menu-item > a.radio:before, .menu-item > a.check:before
-{
+.menu-item>a.radio:before,
+.menu-item>a.check:before {
 	color: transparent;
 	content: '\f00c';
 }
 
-.menu-item > a.checked:before
-{
+.menu-item>a.checked:before {
 	color: #000;
 }
 
-.menu-item > a.disabled:before
-{
-	color: @light !important;
+.menu-item>a.disabled:before {
+	color: @light  !important;
 }
 
-#action-search-pubchem:before { content: '\f1c0'; }
-#action-search-rcsb:before { content: '\f1c0'; }
-#action-search-cod:before { content: '\f1c0'; }
+#action-search-pubchem:before {
+	content: '\f1c0';
+}
 
-#action-help:before { content: '\f1cd'; }
-#action-about:before { content: '\f05a'; }
+#action-search-rcsb:before {
+	content: '\f1c0';
+}
 
-#action-share:before { content: '\f064'; }
-#action-embed:before { content: '\f121'; font-weight: bold; }
-#action-export-sketcher-png:before, #action-export-model-png:before,
-#action-export-model:before { content: '\f019'; }
-#action-data-infocard:before { content: '\f1ec'; }
-#action-data-spectra:before { content: '\f1fe'; }
-#model-source:before { content: '\f08e'; }
-#action-search-similarity:before { content: '\2248'; font-weight: bold; }
-#action-search-substructure:before { content: '\2282'; font-weight: bold; }
-#action-search-superstructure:before { content: '\2283'; font-weight: bold; }
+#action-search-cod:before {
+	content: '\f1c0';
+}
 
-#action-model-reset:before { content: '\f021'; }
-#action-cif-unit-cell:before { content: '\f1b2'; }
-#action-cif-cubic-supercell:before { content: '\f1b3'; }
-#action-cif-flat-supercell:before { content: '\f1b3'; }
+#action-help:before {
+	content: '\f1cd';
+}
+
+#action-about:before {
+	content: '\f05a';
+}
+
+#action-share:before {
+	content: '\f064';
+}
+
+#action-embed:before {
+	content: '\f121';
+	font-weight: bold;
+}
+
+#action-export-sketcher-png:before,
+#action-export-model-png:before,
+#action-export-model:before {
+	content: '\f019';
+}
+
+#action-data-infocard:before {
+	content: '\f1ec';
+}
+
+#action-data-spectra:before {
+	content: '\f1fe';
+}
+
+#model-source:before {
+	content: '\f08e';
+}
+
+#action-search-similarity:before {
+	content: '\2248';
+	font-weight: bold;
+}
+
+#action-search-substructure:before {
+	content: '\2282';
+	font-weight: bold;
+}
+
+#action-search-superstructure:before {
+	content: '\2283';
+	font-weight: bold;
+}
+
+#action-model-reset:before {
+	content: '\f021';
+}
+
+#action-cif-unit-cell:before {
+	content: '\f1b2';
+}
+
+#action-cif-cubic-supercell:before {
+	content: '\f1b3';
+}
+
+#action-cif-flat-supercell:before {
+	content: '\f1b3';
+}

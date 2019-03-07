@@ -30,15 +30,16 @@ var MP_ZOOM_TO_POINTER = 1;
  * @param {Float}      devicePixelRatio
  * @param {Object}     buttons
  */
-function MolPad(container, devicePixelRatio, buttons)
-{
+function MolPad(container, devicePixelRatio, buttons) {
 	this.loadSettings();
 
 	//active tool data
 	this.tool = {
-		type: "bond",//bond || fragment || chain || charge || erase || drag || select || atom
-		data: { type: MP_BOND_SINGLE },
-		selection: []//TMP
+		type: "bond", //bond || fragment || chain || charge || erase || drag || select || atom
+		data: {
+			type: MP_BOND_SINGLE
+		},
+		selection: [] //TMP
 	};
 
 	this.mol = new MPMolecule(this);
@@ -57,19 +58,16 @@ function MolPad(container, devicePixelRatio, buttons)
  * MolPad API
  */
 
-MolPad.prototype.setTool = function(type, data)
-{
+MolPad.prototype.setTool = function (type, data) {
 	this.tool.type = type;
 	this.tool.data = data;
 }
 
-MolPad.prototype.onChange = function(cb)
-{
+MolPad.prototype.onChange = function (cb) {
 	this.changeCallback = cb;
 }
 
-MolPad.prototype.clear = function(cb)
-{
+MolPad.prototype.clear = function (cb) {
 	this.mol.clear();
 	this.sel.update();
 
@@ -80,33 +78,29 @@ MolPad.prototype.clear = function(cb)
 	this.mol.updateCopy();
 }
 
-MolPad.prototype.changed = function()
-{
+MolPad.prototype.changed = function () {
 	jQuery(this.buttons.undo).toggleClass("tool-button-disabled", this.mol.stack.length === 0);
 	jQuery(this.buttons.redo).toggleClass("tool-button-disabled", this.mol.reverseStack.length === 0);
-	if(this.changeCallback !== undefined) this.changeCallback();
+	if (this.changeCallback !== undefined) this.changeCallback();
 }
 
-MolPad.prototype.undo = function(noRedoPush)
-{
+MolPad.prototype.undo = function (noRedoPush) {
 	this.dismissHandler();
-	if(this.mol.undo(noRedoPush)) this.changed();
+	if (this.mol.undo(noRedoPush)) this.changed();
 }
 
-MolPad.prototype.redo = function()
-{
+MolPad.prototype.redo = function () {
 	this.dismissHandler();
-	if(this.mol.redo()) this.changed();
+	if (this.mol.redo()) this.changed();
 }
 
-MolPad.prototype.setSkeletalDisplay = function(on)
-{
-	if(on === this.s.skeletalDisplay) return;
+MolPad.prototype.setSkeletalDisplay = function (on) {
+	if (on === this.s.skeletalDisplay) return;
 
 	this.dismissHandler();
 	this.s.skeletalDisplay = on;
 
-	if(on) this.mol.removeImplicitHydrogen();
+	if (on) this.mol.removeImplicitHydrogen();
 	else this.mol.addImplicitHydrogen();
 
 	this.mol.invalidateAll();
@@ -115,16 +109,14 @@ MolPad.prototype.setSkeletalDisplay = function(on)
 	this.mol.updateCopy();
 }
 
-MolPad.prototype.setColored = function(on)
-{
+MolPad.prototype.setColored = function (on) {
 	this.s.atom.colored = this.s.bond.colored = on;
 	this.s.fonts.isotope.fontStyle = this.s.fonts.element.fontStyle =
-			this.s.fonts.charge.fontStyle = on ? "bold" : "normal";
+		this.s.fonts.charge.fontStyle = on ? "bold" : "normal";
 	this.redraw(true);
 }
 
-MolPad.prototype.toDataURL = function()
-{
+MolPad.prototype.toDataURL = function () {
 	return this.canvas.toDataURL("image/png");
 }
 
@@ -133,12 +125,10 @@ MolPad.prototype.toDataURL = function()
  * @param {String}  mol
  * @param {Boolean} forceRemoveHydrogen
  */
-MolPad.prototype.loadMOL = function(mol, forceRemoveHydrogen)
-{
+MolPad.prototype.loadMOL = function (mol, forceRemoveHydrogen) {
 	this.mol.loadMOL(mol);
 
-	if(this.s.skeletalDisplay || forceRemoveHydrogen)
-	{
+	if (this.s.skeletalDisplay || forceRemoveHydrogen) {
 		this.mol.removeImplicitHydrogen();
 	}
 
@@ -146,12 +136,10 @@ MolPad.prototype.loadMOL = function(mol, forceRemoveHydrogen)
 	this.mol.updateCopy();
 }
 
-MolPad.prototype.getMOL = function()
-{
+MolPad.prototype.getMOL = function () {
 	return this.mol.getMOL();
 }
 
-MolPad.prototype.getSMILES = function()
-{
+MolPad.prototype.getSMILES = function () {
 	return this.mol.getSMILES();
 }

@@ -18,8 +18,7 @@
 
 @import (reference) "vars";
 
-body
-{
+body {
 	margin: 0;
 	padding: 10px;
 
@@ -28,93 +27,78 @@ body
 	background: @light;
 }
 
-pre
-{
-    padding: 10px;
-    white-space: pre-wrap;
-    background: @light2;
-    border: 1px solid @contrast;
+pre {
+	padding: 10px;
+	white-space: pre-wrap;
+	background: @light2;
+	border: 1px solid @contrast;
 }
 
-hr
-{
+hr {
 	border: 0;
 	border-bottom: 1px solid @light2;
 }
 
-a
-{
+a {
 	color: #06c;
 	cursor: pointer;
 }
 
-a:visited
-{
+a:visited {
 	color: #06c;
 }
 
-a:hover
-{
+a:hover {
 	color: @highlight;
 	text-decoration: underline;
 }
 
-a:active
-{
+a:active {
 	color: @active;
 }
 
-#return-to-molview
-{
+#return-to-molview {
 	display: inline-block;
 	color: @foreground;
 	text-decoration: none;
 }
 
-#header
-{
+#header {
 	padding-bottom: 10px;
 	border-bottom: 1px solid @light2;
-	font-size: 0;//remove inline-block spacing
+	font-size: 0; //remove inline-block spacing
 }
 
-#logo
-{
+#logo {
 	height: 40px;
 }
 
-#mark
-{
+#mark {
 	height: 40px;
 	display: block;
 	margin-left: 5px;
 	vertical-align: top;
 }
 
-@media all and (min-width: 700px)
-{
-	#logo
-	{
+@media all and (min-width: 700px) {
+	#logo {
 		height: 60px;
 	}
 
-	#mark
-	{
+	#mark {
 		height: 60px;
 		margin-left: 10px;
 	}
 }
 
-#content
-{
+#content {
 	margin: 0 auto;
 	max-width: 700px;
 	word-wrap: break-word;
 }
 
-#footer
-{
-    padding: 20px 10px;
+#footer {
+	padding: 20px 10px;
 	text-align: center;
 	color: @foreground-light;
 }

@@ -75,8 +75,6 @@ Query parameters:
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/chemicaldata.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/autocomplete.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/welcome.less')}}" />
-    <!-- <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='molview-app.min.css')}}" /> -->
-
 
     <!-- src -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
@@ -107,8 +105,8 @@ Query parameters:
     <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/smiles.js') }}"></script>
     <!-- datasets -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/PeriodicTable.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='datasets/PDBNames.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='datasets/MineralNames.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/datasets/PDBNames.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/datasets/MineralNames.js') }}"></script>
     <!-- core -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/Data.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/Utility.js') }}"></script>
@@ -152,13 +150,10 @@ Query parameters:
     <script type="text/javascript" src="{{ url_for('static', filename='js/MolView.js') }}"></script>
 </head>
 
-<body <?php if(isset($menu)) if($menu == "off") echo 'class="no-menu"'; ?>>
+<body <?php if(isset($menu)) if($menu=="off" ) echo 'class="no-menu"' ; ?>>
     <svg width="0" height="0">
         <filter id="pubchemImageFilter" height="1" width="1" y="0" x="0" color-interpolation-filters="sRGB">
-            <feColorMatrix
-                in="SourceGraphic"
-                type="matrix"
-                values="1.05 0    0    0 0
+            <feColorMatrix in="SourceGraphic" type="matrix" values="1.05 0    0    0 0
                         0    1.05 0    0 0
                         0    0    1.05 0 0
                         0    0    0    1 0"></feColorMatrix>
@@ -193,15 +188,18 @@ Query parameters:
                     <ul class="dropdown-menu">
                         <li class="menu-header">Layout</li>
                         <li id="layout-menu">
-                            <a id="action-layout-model" <?php if($contentClass == "model") echo 'class="selected"' ?>></a>
-                            <a id="action-layout-hsplit" <?php if($contentClass == "hsplit") echo 'class="selected"' ?>></a>
-                            <br/>
-                            <a id="action-layout-vsplit" <?php if($contentClass == "vsplit") echo 'class="selected"' ?>></a>
-                            <a id="action-layout-sketcher" <?php if($contentClass == "sketcher") echo 'class="selected"' ?>></a>
+                            <a id="action-layout-model" <?php if($contentClass=="model" ) echo 'class="selected"' ?>></a>
+                            <a id="action-layout-hsplit" <?php if($contentClass=="hsplit" ) echo 'class="selected"' ?>></a>
+                            <br />
+                            <a id="action-layout-vsplit" <?php if($contentClass=="vsplit" ) echo 'class="selected"' ?>></a>
+                            <a id="action-layout-sketcher" <?php if($contentClass=="sketcher" ) echo 'class="selected"'
+                                ?>></a>
                         </li>
                         <li class="menu-header">Theme</li>
-                        <li class="menu-item"><a id="action-theme-desktop" <?php echo !$touch ? 'class="radio checked"' : 'class="radio"'; ?>>Desktop</a></li>
-                        <li class="menu-item"><a id="action-theme-touch" <?php echo $touch ? 'class="radio checked"' : 'class="radio"'; ?>>Touch</a></li>
+                        <li class="menu-item"><a id="action-theme-desktop" <?php echo !$touch ? 'class="radio checked"'
+                                : 'class="radio"' ; ?>>Desktop</a></li>
+                        <li class="menu-item"><a id="action-theme-touch" <?php echo $touch ? 'class="radio checked"' :
+                                'class="radio"' ; ?>>Touch</a></li>
                         <li class="menu-header">Information</li>
                         <li class="menu-item"><a id="action-help">Help</a></li>
                         <li class="menu-item"><a id="action-about">About</a></li>
@@ -238,9 +236,12 @@ Query parameters:
                         <li class="menu-item"><a id="action-model-wireframe" class="r-mode radio">Wireframe</a></li>
                         <li class="menu-item"><a id="action-model-line" class="r-mode radio">Line</a></li>
                         <li class="menu-header">Background</li>
-                        <li class="menu-item"><a id="action-model-bg-black" <?php echo 'class="model-bg radio'.(isset($bg) ? $bg == "black" ? ' checked"' : '"' : ' checked"'); ?> >Black</a></li>
-                        <li class="menu-item"><a id="action-model-bg-gray" <?php echo 'class="model-bg radio'.(isset($bg) ? $bg == "gray" ? ' checked"' : '"' : '"'); ?> >Gray</a></li>
-                        <li class="menu-item"><a id="action-model-bg-white" <?php echo 'class="model-bg radio'.(isset($bg) ? $bg == "white" ? ' checked"' : '"' : '"'); ?> >White</a></li>
+                        <li class="menu-item"><a id="action-model-bg-black" <?php echo 'class="model-bg radio'
+                                .(isset($bg) ? $bg=="black" ? ' checked"' : '"' : ' checked"' ); ?> >Black</a></li>
+                        <li class="menu-item"><a id="action-model-bg-gray" <?php echo 'class="model-bg radio'
+                                .(isset($bg) ? $bg=="gray" ? ' checked"' : '"' : '"' ); ?> >Gray</a></li>
+                        <li class="menu-item"><a id="action-model-bg-white" <?php echo 'class="model-bg radio'
+                                .(isset($bg) ? $bg=="white" ? ' checked"' : '"' : '"' ); ?> >White</a></li>
                         <li class="menu-header">Engine</li>
                         <li class="menu-item"><a id="action-engine-glmol" class="radio checked">GLmol</a></li>
                         <li class="menu-item"><a id="action-engine-jmol" class="radio">Jmol</a></li>
@@ -257,13 +258,15 @@ Query parameters:
                         <li class="menu-item"><a id="action-bio-assembly" class="check">Show bio assembly</a></li>
                         <li class="menu-header">Chain representation</li>
                         <li class="menu-item"><a id="action-chain-type-ribbon" class="chain-type radio checked">Ribbon</a></li>
-                        <li class="menu-item"><a id="action-chain-type-cylinders" class="chain-type radio">Cylinder and plate</a></li>
+                        <li class="menu-item"><a id="action-chain-type-cylinders" class="chain-type radio">Cylinder and
+                                plate</a></li>
                         <li class="menu-item"><a id="action-chain-type-btube" class="chain-type radio">B-factor tube</a></li>
                         <li class="menu-item"><a id="action-chain-type-ctrace" class="chain-type radio">C-alpha trace</a></li>
                         <li class="menu-divider"></li>
                         <li class="menu-item"><a id="action-chain-type-bonds" class="check">Bonds</a></li>
                         <li class="menu-header">Chain color scheme</li>
-                        <li class="menu-item"><a id="action-chain-color-ss" class="chain-color radio checked">Secondary structure</a></li>
+                        <li class="menu-item"><a id="action-chain-color-ss" class="chain-color radio checked">Secondary
+                                structure</a></li>
                         <li class="menu-item"><a id="action-chain-color-spectrum" class="chain-color radio">Spectrum</a></li>
                         <li class="menu-item"><a id="action-chain-color-chain" class="chain-color radio">Chain</a></li>
                         <li class="menu-item"><a id="action-chain-color-residue" class="chain-color radio">Residue</a></li>
@@ -277,12 +280,17 @@ Query parameters:
                         <li class="menu-item"><a id="action-jmol-hq" class="check">High Quality</a></li>
                         <li class="menu-item"><a id="action-jmol-clean" class="jmol-script">Clean</a></li>
                         <li class="menu-header jmol-script jmol-calc">Calculations</li>
-                        <li class="menu-item"><a id="action-jmol-mep-lucent" class="jmol-script jmol-calc">MEP surface lucent</a></li>
-                        <li class="menu-item"><a id="action-jmol-mep-opaque" class="jmol-script jmol-calc">MEP surface opaque</a></li>
+                        <li class="menu-item"><a id="action-jmol-mep-lucent" class="jmol-script jmol-calc">MEP surface
+                                lucent</a></li>
+                        <li class="menu-item"><a id="action-jmol-mep-opaque" class="jmol-script jmol-calc">MEP surface
+                                opaque</a></li>
                         <li class="menu-item"><a id="action-jmol-charge" class="jmol-script jmol-calc">Charge</a></li>
-                        <li class="menu-item"><a id="action-jmol-bond-dipoles" class="jmol-script jmol-calc">Bond dipoles</a></li>
-                        <li class="menu-item"><a id="action-jmol-net-dipole" class="jmol-script jmol-calc">Overall dipole</a></li>
-                        <li class="menu-item"><a id="action-jmol-minimize" class="jmol-script jmol-calc">Energy minimization</a></li>
+                        <li class="menu-item"><a id="action-jmol-bond-dipoles" class="jmol-script jmol-calc">Bond
+                                dipoles</a></li>
+                        <li class="menu-item"><a id="action-jmol-net-dipole" class="jmol-script jmol-calc">Overall
+                                dipole</a></li>
+                        <li class="menu-item"><a id="action-jmol-minimize" class="jmol-script jmol-calc">Energy
+                                minimization</a></li>
                         <li class="menu-header jmol-script">Measurement</li>
                         <li class="menu-item"><a id="action-jmol-measure-distance" class="jmol-script jmol-picking radio">Distance</a></li>
                         <li class="menu-item"><a id="action-jmol-measure-angle" class="jmol-script jmol-picking radio">Angle</a></li>
@@ -293,24 +301,23 @@ Query parameters:
         </div>
     </div>
     <div id="content">
-        <div id="main-layer" <?php echo 'class="layer '.$contentClass.'"' ?>>
+        <div id="main-layer" <?php echo 'class="layer ' .$contentClass.'"' ?>>
             <!-- Dynamic onload layout -->
             <script type="text/javascript">
                 MolView.query = getQuery();
 
-                if(localStorage && localStorage["molview.theme"])
-                {
+                if (localStorage && localStorage["molview.theme"]) {
                     MolView.setTheme(localStorage["molview.theme"]);
                 }
 
-                if($(window).height() > $(window).width()
-                    && !MolView.query.layout
-                    && MolView.layout != "model") Actions.layout_hsplit();
+                if ($(window).height() > $(window).width() &&
+                    !MolView.query.layout &&
+                    MolView.layout != "model") Actions.layout_hsplit();
 
                 //compact menu bar
                 MolView.setMenuLayout($(window).width() < 1100,
-                        $(window).width() < 1100 && !MolView.touch,
-                        $(window).width() < 390 && MolView.touch);
+                    $(window).width() < 1100 && !MolView.touch,
+                    $(window).width() < 390 && MolView.touch);
             </script>
             <div id="sketcher">
                 <div id="molpad" class="sketcher">
@@ -339,50 +346,58 @@ Query parameters:
                             <div id="action-mp-clear" class="tool-button tool-button-horizontal" title="Clear all"></div>
                             <div id="action-mp-eraser" class="tool-button tool-button-horizontal primary-tool" title="Erase"></div>
                             <div class="horizontal-separator"></div>
-                            <div id="action-mp-undo" class="tool-button tool-button-horizontal tool-button-disabled" title="Undo"></div>
-                            <div id="action-mp-redo" class="tool-button tool-button-horizontal tool-button-disabled" title="Redo"></div>
+                            <div id="action-mp-undo" class="tool-button tool-button-horizontal tool-button-disabled"
+                                title="Undo"></div>
+                            <div id="action-mp-redo" class="tool-button tool-button-horizontal tool-button-disabled"
+                                title="Redo"></div>
                             <div class="horizontal-separator"></div>
                             <div id="action-mp-drag" class="tool-button tool-button-horizontal primary-tool" title="Drag atoms and bonds"></div>
                             <div id="action-mp-rect" class="tool-button tool-button-horizontal primary-tool" title="Rectangle selection"></div>
                             <div id="action-mp-lasso" class="tool-button tool-button-horizontal primary-tool" title="Lasso selection"></div>
                             <div class="horizontal-separator"></div>
                             <div id="action-mp-color-mode" class="tool-button tool-button-horizontal enabled" title="Toggle color mode"></div>
-                            <div id="action-mp-skeletal-formula" class="tool-button tool-button-horizontal enabled" title="Toggle skeletal formula"></div>
+                            <div id="action-mp-skeletal-formula" class="tool-button tool-button-horizontal enabled"
+                                title="Toggle skeletal formula"></div>
                             <div id="action-mp-center" class="tool-button tool-button-horizontal" title="Center structure"></div>
                             <div class="horizontal-separator"></div>
                             <div id="action-mp-clean" class="tool-button tool-button-horizontal" title="Clean structure"></div>
-                            <div id="action-resolve" class="tool-button tool-button-horizontal" title="Update 3D view">2D to 3D</div>
+                            <div id="action-resolve" class="tool-button tool-button-horizontal" title="Update 3D view">2D
+                                to 3D</div>
                         </div>
                     </div>
                     <div id="elem-tools" class="toolbar">
                         <div class="toolbar-inner">
-                            <div id="action-mp-atom-c" class="tool-button primary-tool tool-element element-colored" title="Carbon">C</div>
-                            <div id="action-mp-atom-h" class="tool-button primary-tool tool-element element-colored" title="Hydrogen">H</div>
-                            <div id="action-mp-atom-n" class="tool-button primary-tool tool-element element-colored" title="Nitrogen">N</div>
-                            <div id="action-mp-atom-o" class="tool-button primary-tool tool-element element-colored" title="Oxygen">O</div>
-                            <div id="action-mp-atom-p" class="tool-button primary-tool tool-element element-colored" title="Phosphorus">P</div>
-                            <div id="action-mp-atom-s" class="tool-button primary-tool tool-element element-colored" title="Sulfur">S</div>
-                            <div id="action-mp-atom-f" class="tool-button primary-tool tool-element element-colored" title="Fluorine">F</div>
-                            <div id="action-mp-atom-cl" class="tool-button primary-tool tool-element element-colored" title="Chlorine">Cl</div>
-                            <div id="action-mp-atom-br" class="tool-button primary-tool tool-element element-colored" title="Bromine">Br</div>
-                            <div id="action-mp-atom-i" class="tool-button primary-tool tool-element element-colored" title="Iodine">I</div>
+                            <div id="action-mp-atom-c" class="tool-button primary-tool tool-element element-colored"
+                                title="Carbon">C</div>
+                            <div id="action-mp-atom-h" class="tool-button primary-tool tool-element element-colored"
+                                title="Hydrogen">H</div>
+                            <div id="action-mp-atom-n" class="tool-button primary-tool tool-element element-colored"
+                                title="Nitrogen">N</div>
+                            <div id="action-mp-atom-o" class="tool-button primary-tool tool-element element-colored"
+                                title="Oxygen">O</div>
+                            <div id="action-mp-atom-p" class="tool-button primary-tool tool-element element-colored"
+                                title="Phosphorus">P</div>
+                            <div id="action-mp-atom-s" class="tool-button primary-tool tool-element element-colored"
+                                title="Sulfur">S</div>
+                            <div id="action-mp-atom-f" class="tool-button primary-tool tool-element element-colored"
+                                title="Fluorine">F</div>
+                            <div id="action-mp-atom-cl" class="tool-button primary-tool tool-element element-colored"
+                                title="Chlorine">Cl</div>
+                            <div id="action-mp-atom-br" class="tool-button primary-tool tool-element element-colored"
+                                title="Bromine">Br</div>
+                            <div id="action-mp-atom-i" class="tool-button primary-tool tool-element element-colored"
+                                title="Iodine">I</div>
                             <div id="action-mp-periodictable" class="tool-button primary-tool" title="Periodic Table">...</div>
                         </div>
                     </div>
                     <div id="molpad-canvas-wrapper"></div>
                 </div>
             </div>
-            <div id="model" <?php
-                if(isset($bg))
-                {
-                    echo 'style="background:'.($bg != "white" ? $bg != "gray" ?
-                        "#000000" : "#cccccc" : "#ffffff").'"';
-                }
-            ?>>
+            <div id="model" <?php if(isset($bg)) { echo 'style="background:' .($bg !="white" ? $bg !="gray" ? "#000000"
+                : "#cccccc" : "#ffffff" ).'"'; } ?>>
                 <!-- Get preferred model background color from localStorage -->
                 <script type="text/javascript">
-                    if(localStorage && localStorage["model.background"])
-                    {
+                    if (localStorage && localStorage["model.background"]) {
                         var c = localStorage["model.background"];
                         $("#model").css("background", c == "gray" ? "#ccc" : c);
                     }
@@ -410,12 +425,11 @@ Query parameters:
             <div id="properties-wrapper">
                 <div id="general-properties">
                     <div id="molecule-image-wrapper" class="properties-block">
-                        <img id="molecule-image" alt=""
-                            style="-webkit-filter: url('#pubchemImageFilter');
+                        <img id="molecule-image" alt="" style="-webkit-filter: url('#pubchemImageFilter');
                                        moz-filter: url('#pubchemImageFilter');
                                        -ms-filter: url('#pubchemImageFilter');
                                         -o-filter: url('#pubchemImageFilter');
-                                           filter: url('#pubchemImageFilter');*"/>
+                                           filter: url('#pubchemImageFilter');*" />
                     </div>
                     <div class="properties-block">
                         <div id="molecule-info">
@@ -423,10 +437,22 @@ Query parameters:
                             <p id="molecule-description"></p>
                         </div>
                         <table id="common-chem-props">
-                            <tr id="prop-formula-wrapper"><td>Formula</td><td id="prop-formula" class="chemprop"></td></tr>
-                            <tr id="prop-mw-wrapper"><td>Molecular weight</td><td id="prop-mw" class="chemprop"></td></tr>
-                            <tr id="prop-donors-wrapper"><td>Hydrogen bond donors</td><td id="prop-donors" class="chemprop"></td></tr>
-                            <tr id="prop-acceptors-wrapper"><td>Hydrogen bond acceptors</td><td id="prop-acceptors" class="chemprop"></td></tr>
+                            <tr id="prop-formula-wrapper">
+                                <td>Formula</td>
+                                <td id="prop-formula" class="chemprop"></td>
+                            </tr>
+                            <tr id="prop-mw-wrapper">
+                                <td>Molecular weight</td>
+                                <td id="prop-mw" class="chemprop"></td>
+                            </tr>
+                            <tr id="prop-donors-wrapper">
+                                <td>Hydrogen bond donors</td>
+                                <td id="prop-donors" class="chemprop"></td>
+                            </tr>
+                            <tr id="prop-acceptors-wrapper">
+                                <td>Hydrogen bond acceptors</td>
+                                <td id="prop-acceptors" class="chemprop"></td>
+                            </tr>
                         </table>
                         <h3 id="percent-composition-title">Percent composition</h3>
                         <table id="percent-composition-table"></table>
@@ -475,8 +501,10 @@ Query parameters:
                 <button class="btn close btn-primary "><i class="fa fa-arrow-left"></i> Return</button>
                 <select id="spectrum-select"></select>
                 <button id="action-export-spectrum-png" class="btn"><i class="fa fa-download"></i> Download PNG image</button>
-                <button id="action-export-spectrum-jcamp" class="btn"><i class="fa fa-download"></i> Download JCAMP data</button>
-                <a id="spectrum-nist-source" class="btn" target="_blank"><i class="fa fa-external-link"></i> NIST source</a>
+                <button id="action-export-spectrum-jcamp" class="btn"><i class="fa fa-download"></i> Download JCAMP
+                    data</button>
+                <a id="spectrum-nist-source" class="btn" target="_blank"><i class="fa fa-external-link"></i> NIST
+                    source</a>
             </div>
             <div id="spectrum-wrapper">
                 <canvas id="spectrum-canvas"></canvas>
@@ -503,44 +531,68 @@ Query parameters:
                         <!-- <button id="action-start-help" class="btn btn-large">Get started</button> -->
                         <button class="btn close btn-large btn-primary">Close</button>
                     </div>
-                    <p>We need your support to create more cool stuff! <a class="btn" target="_blank" title="Consider donating to this project" href="https://www.patreon.com/molview">Donate</a></p>
+                    <p>We need your support to create more cool stuff! <a class="btn" target="_blank" title="Consider donating to this project"
+                            href="https://www.patreon.com/molview">Donate</a></p>
                     <p id="allow-tracking-wrapper">
                         <input id="allow-tracking" type="checkbox" />
                         <script type="text/javascript">
                             // Disable by default (GDPR)
                             $("#allow-tracking").prop("checked", Preferences.get("molview", "allow_tracking", false))
                         </script>
-                        <label for="allow-tracking">Allow MolView to collect annonymous usage data (<a class="gray" href="tracking">details</a>)</label>
+                        <label for="allow-tracking">Allow MolView to collect annonymous usage data (<a class="gray"
+                                href="tracking">details</a>)</label>
                     </p>
                     <div class="btn-group">
                         <a class="btn" target="_blank" title="YouTube Channel" href="https://www.youtube.com/channel/UCRP9nXCC59TMlqc-bk1mi3A">YouTube</a>
                         <a class="btn" target="_blank" title="@molview" href="https://twitter.com/molview">Twitter</a>
                         <a class="btn" target="_blank" title="Facebook page" href="https://www.facebook.com/molview">Facebook</a>
-                        <a class="btn" target="_blank" title="+MolView" href="https://google.com/+MolViewOrganization/about" rel="publisher">Google+</a>
+                        <a class="btn" target="_blank" title="+MolView" href="https://google.com/+MolViewOrganization/about"
+                            rel="publisher">Google+</a>
                         <a class="btn" target="_blank" title="MolView Blog" href="http://blog.molview.org">Blog</a>
                     </div>
                 </div>
                 <div class="dialog" id="about-dialog" style="display: none;">
                     <h2>About</h2>
-                    <p>MolView is an intuitive, Open-Source web-application to make science and education more awesome! MolView is mainly intended as web-based data visualization platform. You can use MolView to search through different scientific databases including compound databases, protein databases and spectral databases, and view records from these databases as interactive visualizations using WebGL and HTML5 technologies. This web application is built on top of the JavaScript libraries and online services listed below. The <a class="link" href="http://chemagic.com/JSmolVMK2.htm" target="_blank" title="Virtual Model Kit">Virtual Model Kit</a> has been a source of inspiration for the birth of this project.</p>
+                    <p>MolView is an intuitive, Open-Source web-application to make science and education more awesome!
+                        MolView is mainly intended as web-based data visualization platform. You can use MolView to
+                        search through different scientific databases including compound databases, protein databases
+                        and spectral databases, and view records from these databases as interactive visualizations
+                        using WebGL and HTML5 technologies. This web application is built on top of the JavaScript
+                        libraries and online services listed below. The <a class="link" href="http://chemagic.com/JSmolVMK2.htm"
+                            target="_blank" title="Virtual Model Kit">Virtual Model Kit</a> has been a source of
+                        inspiration for the birth of this project.</p>
                     <ul>
                         <li>JavaScript libraries
                             <ul>
-                                <li><a class="link" href="http://ggasoftware.com/opensource/ketcher" target="_blank" title="Ketcher">Ketcher</a>: Chemical 2D data reader/writer</li>
-                                <li><a class="link" href="http://webglmol.sourceforge.jp/index-en.html" target="_blank" title="GLmol">GLmol v0.47</a>: primary 3D render engine</li>
-                                <li><a class="link" href="http://jmol.sourceforge.net/" target="_blank" title="JSmol">JSmol</a>: 3D render engine</li>
-                                <li><a class="link" href="http://web.chemdoodle.com/" target="_blank" title="ChemDoodle Web">ChemDoodle Web Components v6.0.1</a>: 3D render engine and spectrum display</li>
+                                <li><a class="link" href="http://ggasoftware.com/opensource/ketcher" target="_blank"
+                                        title="Ketcher">Ketcher</a>: Chemical 2D data reader/writer</li>
+                                <li><a class="link" href="http://webglmol.sourceforge.jp/index-en.html" target="_blank"
+                                        title="GLmol">GLmol v0.47</a>: primary 3D render engine</li>
+                                <li><a class="link" href="http://jmol.sourceforge.net/" target="_blank" title="JSmol">JSmol</a>:
+                                    3D render engine</li>
+                                <li><a class="link" href="http://web.chemdoodle.com/" target="_blank" title="ChemDoodle Web">ChemDoodle
+                                        Web Components v6.0.1</a>: 3D render engine and spectrum display</li>
                             </ul>
                         </li>
                         <li>Databases/REST API's
                             <ul>
-                                <li><a class="link" href="http://cactus.nci.nih.gov/chemical/structure" target="_blank" title="NCI/CADD Chemical Identifier Resolver API">NCI/CADD Chemical Identifier Resolver</a></li>
-                                <li><a class="link" href="http://www.rcsb.org/pdb/software/rest.do" target="_blank" title="RCSB Protein Databank API">RCSB Protein Data Bank</a> (~100.000 macromolecules)</li>
-                                <li><a class="link" href="https://pubchem.ncbi.nlm.nih.gov/pug_rest/PUG_REST.html" target="_blank" title="The PubChem Project API">The PubChem Project</a> (~51 million compounds)</li>
-                                <li><a class="link" href="http://www.crystallography.net/" target="_blank" title="COD">Crystallography Open Database</a> (~300.000 crystals)</li>
-                                <li><a class="link" href="http://webbook.nist.gov/chemistry" target="_blank" title="NIST Chemistry WebBook Reference">NIST Chemistry WebBook</a> (~30.000 spectra)</li>
-                                <li><a class="link" href="http://www.nmrdb.org/" target="_blank" title="NMRdb.org">NMR Database</a></li>
-                                <li><a class="link" href="http://mymemory.translated.net/doc/spec.php" target="_blank" title="MyMemory API">MyMemory translation API</a></li>
+                                <li><a class="link" href="http://cactus.nci.nih.gov/chemical/structure" target="_blank"
+                                        title="NCI/CADD Chemical Identifier Resolver API">NCI/CADD Chemical Identifier
+                                        Resolver</a></li>
+                                <li><a class="link" href="http://www.rcsb.org/pdb/software/rest.do" target="_blank"
+                                        title="RCSB Protein Databank API">RCSB Protein Data Bank</a> (~100.000
+                                    macromolecules)</li>
+                                <li><a class="link" href="https://pubchem.ncbi.nlm.nih.gov/pug_rest/PUG_REST.html"
+                                        target="_blank" title="The PubChem Project API">The PubChem Project</a> (~51
+                                    million compounds)</li>
+                                <li><a class="link" href="http://www.crystallography.net/" target="_blank" title="COD">Crystallography
+                                        Open Database</a> (~300.000 crystals)</li>
+                                <li><a class="link" href="http://webbook.nist.gov/chemistry" target="_blank" title="NIST Chemistry WebBook Reference">NIST
+                                        Chemistry WebBook</a> (~30.000 spectra)</li>
+                                <li><a class="link" href="http://www.nmrdb.org/" target="_blank" title="NMRdb.org">NMR
+                                        Database</a></li>
+                                <li><a class="link" href="http://mymemory.translated.net/doc/spec.php" target="_blank"
+                                        title="MyMemory API">MyMemory translation API</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -548,14 +600,16 @@ Query parameters:
                         MolView v2.4
                         &nbsp;+&nbsp;
                         <a class="link" href="legal" target="_blank">Terms of Use</a>
-                        <br/>
-                        Copyright &copy; 2014, 2015 <a class="link" target="_blank" rel="author" title="Personal website" href="https://hermanbergwerf.com">Herman Bergwerf</a>
+                        <br />
+                        Copyright &copy; 2014, 2015 <a class="link" target="_blank" rel="author" title="Personal website"
+                            href="https://hermanbergwerf.com">Herman Bergwerf</a>
                         &nbsp;+&nbsp;
                         <a class="link" href="license" target="_blank">License</a>
                         &nbsp;+&nbsp;
                         <a class="link" href="https://github.com/molview" target="_blank">GitHub</a>
-                        <br/>
-                        <a class="link" target="_blank" title="Chrome App" href="https://chrome.google.com/webstore/detail/molview/nogcacamdkipgkfpfiakaoamdnihinnm">Chrome Web Store</a>
+                        <br />
+                        <a class="link" target="_blank" title="Chrome App" href="https://chrome.google.com/webstore/detail/molview/nogcacamdkipgkfpfiakaoamdnihinnm">Chrome
+                            Web Store</a>
                         &nbsp;+&nbsp;
                         <a class="link" target="_blank" title="YouTube Channel" href="https://www.youtube.com/channel/UCRP9nXCC59TMlqc-bk1mi3A">YouTube</a>
                         &nbsp;+&nbsp;
@@ -563,7 +617,8 @@ Query parameters:
                         &nbsp;+&nbsp;
                         <a class="link" target="_blank" title="Facebook page" href="https://www.facebook.com/molview">Facebook</a>
                         &nbsp;+&nbsp;
-                        <a class="link" target="_blank" title="+MolView" href="https://google.com/+MolViewOrganization" rel="publisher">Google+</a>
+                        <a class="link" target="_blank" title="+MolView" href="https://google.com/+MolViewOrganization"
+                            rel="publisher">Google+</a>
                         &nbsp;+&nbsp;
                         <a class="link" target="_blank" title="+MolView" href="http://blog.molview.org">Blog</a>
                         &nbsp;+&nbsp;
@@ -573,7 +628,6 @@ Query parameters:
                         <button class="btn close btn-primary">Continue</button>
                     </div>
                 </div>
-               
                 <div class="dialog" id="periodictable-dialog" style="display: none;">
                     <h2>Periodic Table</h2>
                     <div id="periodictable"></div>

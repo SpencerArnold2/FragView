@@ -16,8 +16,7 @@
  * along with MolView.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-function MPLine(obj)
-{
+function MPLine(obj) {
     this.from = obj !== undefined ? obj.from.clone() || new MPPoint() : new MPPoint();
     this.to = obj !== undefined ? obj.to.clone() || new MPPoint() : new MPPoint();
 }
@@ -31,13 +30,11 @@ function MPLine(obj)
     };
 } */
 
-MPLine.prototype.intersection = function(line)
-{
-    var denominator = ((line.to.y - line.from.y) * (this.to.x - this.from.x))
-                    - ((line.to.x - line.from.x) * (this.to.y - this.from.y));
+MPLine.prototype.intersection = function (line) {
+    var denominator = ((line.to.y - line.from.y) * (this.to.x - this.from.x)) -
+        ((line.to.x - line.from.x) * (this.to.y - this.from.y));
 
-    if(denominator === 0)
-    {
+    if (denominator === 0) {
         return {
             p: undefined,
             onL1: false,
@@ -64,7 +61,6 @@ MPLine.prototype.intersection = function(line)
     };
 }
 
-MPLine.prototype.length = function()
-{
+MPLine.prototype.length = function () {
     return this.from.distanceTo(this.to);
 }

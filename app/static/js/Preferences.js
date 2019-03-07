@@ -31,10 +31,8 @@ var Preferences = {
 	/**
 	 * Initialize Preferences
 	 */
-	init: function()
-	{
-		if(Storage === undefined)
-		{
+	init: function () {
+		if (Storage === undefined) {
 			window.localStorage = {};
 		}
 	},
@@ -46,11 +44,10 @@ var Preferences = {
 	 * @param  {Boolean|String} def Default value
 	 * @return {Boolean|String}     Value for key in specified module
 	 */
-	get: function(mod, key, def)
-	{
+	get: function (mod, key, def) {
 		var val = window.localStorage[mod + "." + key];
-		if(val === "true") return true;
-		else if(val === "false") return false;
+		if (val === "true") return true;
+		else if (val === "false") return false;
 		else return val || def;
 	},
 
@@ -60,8 +57,7 @@ var Preferences = {
 	 * @param  {String}         key Key name (should be lowercase)
 	 * @param  {Boolean|String} val Value for key in module
 	 */
-	set: function(mod, key, val)
-	{
+	set: function (mod, key, val) {
 		window.localStorage[mod + "." + key] = val;
 	}
 };

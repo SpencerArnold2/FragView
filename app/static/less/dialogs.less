@@ -18,8 +18,7 @@
 
 @import (reference) "vars";
 
-.dialog-overlay
-{
+.dialog-overlay {
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -31,19 +30,16 @@
 	overflow: auto;
 }
 
-#dialog-click-area
-{
+#dialog-click-area {
 	min-width: 100%;
 	min-height: 100%;
 }
 
-#dialog-wrapper
-{
+#dialog-wrapper {
 	padding: @menubar-height + 1 10px;
 }
 
-.dialog
-{
+.dialog {
 	position: relative;
 	margin: 0 auto;
 	padding: 20px;
@@ -56,8 +52,7 @@
 	border-radius: 8px;
 }
 
-.dialog h2
-{
+.dialog h2 {
 	margin: 0;
 	margin-bottom: 20px;
 
@@ -66,16 +61,17 @@
 	color: @foreground-less;
 }
 
-.dialog > .footer
-{
+.dialog>.footer {
 	margin-top: 10px;
 	text-align: right;
 }
 
-@media all and (min-width: 1060px)
-{
-	#help-dialog, #about-dialog, #share-dialog, #embed-dialog
-	{
+@media all and (min-width: 1060px) {
+
+	#help-dialog,
+	#about-dialog,
+	#share-dialog,
+	#embed-dialog {
 		max-width: 960px;
 	}
 }
@@ -84,15 +80,12 @@
 Elements dialog
 */
 
-#periodictable-dialog
-{
+#periodictable-dialog {
 	width: 540px;
 }
 
-@media all and (min-width: 1000px)
-{
-	#periodictable-dialog
-	{
+@media all and (min-width: 1000px) {
+	#periodictable-dialog {
 		width: 900px;
 	}
 }
