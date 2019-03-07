@@ -46,7 +46,7 @@ if($cod -> connect_errno > 0)
 	return;
 }
 
-//lookup record in database
+lookup record in database
 $query = 'SELECT flags FROM data WHERE file="'.$codid.'"';
 if($row = $cod -> query($query) -> fetch_row())
 {
