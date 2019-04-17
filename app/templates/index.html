@@ -54,7 +54,6 @@ Query parameters:
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="MolView" />
 
-
     <!-- CSS -->
     <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
     <link type="text/css" rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
@@ -79,13 +78,14 @@ Query parameters:
     <!-- src -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/Polyfill.js') }}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/JSmol.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/Detector.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/three.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/GLmol.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/lib/ChemDoodleWeb.js') }}"></script>
     <!-- applib -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/jquery.hotkeys.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/Blob.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/Filesaver.min.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/chem/prototype.js') }}"></script>
@@ -148,6 +148,7 @@ Query parameters:
     <script type="text/javascript" src="{{ url_for('static', filename='js/Spectroscopy.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/Autocomplete.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/MolView.js') }}"></script>
+
 </head>
 
 <body <?php if(isset($menu)) if($menu=="off" ) echo 'class="no-menu"' ; ?>>
@@ -303,7 +304,7 @@ Query parameters:
     <div id="content">
         <div id="main-layer" <?php echo 'class="layer ' .$contentClass.'"' ?>>
             <!-- Dynamic onload layout -->
-            <script type="text/javascript">
+            <!-- <script type="text/javascript">
                 MolView.query = getQuery();
 
                 if (localStorage && localStorage["molview.theme"]) {
@@ -318,7 +319,7 @@ Query parameters:
                 MolView.setMenuLayout($(window).width() < 1100,
                     $(window).width() < 1100 && !MolView.touch,
                     $(window).width() < 390 && MolView.touch);
-            </script>
+            </script> -->
             <div id="sketcher">
                 <div id="molpad" class="sketcher">
                     <div id="chem-tools" class="toolbar">
@@ -519,10 +520,10 @@ Query parameters:
         <div id="dialog-click-area">
             <div id="dialog-wrapper">
                 <div class="dialog" id="start-dialog">
-                    <img id="welcome-logo" src="img/logo.svg" alt="" />
-                    <img id="welcome-mark" src="img/mark.svg" alt="MolView" />
+                    <img id="welcome-logo" src="{{ url_for('static', filename='img/logo.svg') }}" alt="" />
+                    <img id="welcome-mark" src="{{ url_for('static', filename='img/mark.svg') }}" alt="MolView" />
                     <a id="agpl-logo-wrapper" target="_blank" href="http://github.com/molview">
-                        <img id="agpl-logo" src="img/agpl.svg" alt="AGPL">
+                        <img id="agpl-logo" src="{{ url_for('static', filename='img/agpl.svg') }}" alt="AGPL">
                     </a>
                     <div id="welcome-loading-msg">LOADING&hellip;</div>
                     <p>By closing this banner and using MolView, you agree with the Terms of Use!</p>
