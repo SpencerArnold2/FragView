@@ -151,7 +151,7 @@ Query parameters:
 
 </head>
 
-<body <?php if(isset($menu)) if($menu=="off" ) echo 'class="no-menu"' ; ?>>
+<body>
     <svg width="0" height="0">
         <filter id="pubchemImageFilter" height="1" width="1" y="0" x="0" color-interpolation-filters="sRGB">
             <feColorMatrix in="SourceGraphic" type="matrix" values="1.05 0    0    0 0
@@ -165,43 +165,17 @@ Query parameters:
     </div>
     <div id="menu">
         <div id="menu-bar" class="hstack">
-            <div id="brand"></div>
-            <form id="search" class="hstack" action="index.php">
+            <form id="search" class="hstack">
                 <div class="input-wrapper">
                     <button><i class="fa fa-search"></i></button>
                     <input id="search-input" name="q" type="text" autocomplete="off" spellcheck="false" />
                     <div class="input-focus"></div>
-                    <div id="search-dropdown" class="dropdown">
-                        <a class="dropdown-toggle"></a>
-                        <ul class="dropdown-menu dropdown-left">
-                            <li class="menu-item"><a id="action-show-search-layer">Show last search results</a></li>
-                            <li class="menu-header">Advanced search</li>
-                            <li class="menu-item"><a id="action-search-pubchem">PubChem Compounds</a></li>
-                            <li class="menu-item"><a id="action-search-rcsb">RCSB Protein Data Bank</a></li>
-                            <li class="menu-item"><a id="action-search-cod">Crystallography Open Database</a></li>
-                        </ul>
-                    </div>
                 </div>
             </form>
             <ul id="main-menu" class="hstack">
                 <li id="molview-dropdown" class="dropdown">
-                    <a class="dropdown-toggle">MolView</a>
+                    <a class="dropdown-toggle">Information</a>
                     <ul class="dropdown-menu">
-                        <li class="menu-header">Layout</li>
-                        <li id="layout-menu">
-                            <a id="action-layout-model" <?php if($contentClass=="model" ) echo 'class="selected"' ?>></a>
-                            <a id="action-layout-hsplit" <?php if($contentClass=="hsplit" ) echo 'class="selected"' ?>></a>
-                            <br />
-                            <a id="action-layout-vsplit" <?php if($contentClass=="vsplit" ) echo 'class="selected"' ?>></a>
-                            <a id="action-layout-sketcher" <?php if($contentClass=="sketcher" ) echo 'class="selected"'
-                                ?>></a>
-                        </li>
-                        <li class="menu-header">Theme</li>
-                        <li class="menu-item"><a id="action-theme-desktop" <?php echo !$touch ? 'class="radio checked"'
-                                : 'class="radio"' ; ?>>Desktop</a></li>
-                        <li class="menu-item"><a id="action-theme-touch" <?php echo $touch ? 'class="radio checked"' :
-                                'class="radio"' ; ?>>Touch</a></li>
-                        <li class="menu-header">Information</li>
                         <li class="menu-item"><a id="action-help">Help</a></li>
                         <li class="menu-item"><a id="action-about">About</a></li>
                     </ul>
@@ -229,7 +203,6 @@ Query parameters:
                 <li id="model-dropdown" class="dropdown">
                     <a class="dropdown-toggle">Model</a>
                     <ul class="dropdown-menu">
-                        <li class="menu-item"><a id="action-model-reset">Reset</a></li>
                         <li class="menu-header">Representation</li>
                         <li class="menu-item"><a id="action-model-balls" class="r-mode radio checked">Ball and Stick</a></li>
                         <li class="menu-item"><a id="action-model-stick" class="r-mode radio">Stick</a></li>
@@ -237,67 +210,12 @@ Query parameters:
                         <li class="menu-item"><a id="action-model-wireframe" class="r-mode radio">Wireframe</a></li>
                         <li class="menu-item"><a id="action-model-line" class="r-mode radio">Line</a></li>
                         <li class="menu-header">Background</li>
-                        <li class="menu-item"><a id="action-model-bg-black" <?php echo 'class="model-bg radio'
-                                .(isset($bg) ? $bg=="black" ? ' checked"' : '"' : ' checked"' ); ?> >Black</a></li>
-                        <li class="menu-item"><a id="action-model-bg-gray" <?php echo 'class="model-bg radio'
-                                .(isset($bg) ? $bg=="gray" ? ' checked"' : '"' : '"' ); ?> >Gray</a></li>
-                        <li class="menu-item"><a id="action-model-bg-white" <?php echo 'class="model-bg radio'
-                                .(isset($bg) ? $bg=="white" ? ' checked"' : '"' : '"' ); ?> >White</a></li>
-                        <li class="menu-header">Engine</li>
-                        <li class="menu-item"><a id="action-engine-glmol" class="radio checked">GLmol</a></li>
-                        <li class="menu-item"><a id="action-engine-jmol" class="radio">Jmol</a></li>
-                        <li class="menu-item"><a id="action-engine-cdw" class="radio">ChemDoodle</a></li>
-                        <li class="menu-header">Crystallography</li>
-                        <li class="menu-item"><a id="action-cif-unit-cell">Load unit cell</a></li>
-                        <li class="menu-item"><a id="action-cif-cubic-supercell">Load 2&times;2&times;2 supercell</a></li>
-                        <li class="menu-item"><a id="action-cif-flat-supercell">Load 1&times;3&times;3 supercell</a></li>
+                        <li class="menu-item"><a id="action-model-bg-black">Black</a></li>
+                        <li class="menu-item"><a id="action-model-bg-gray">Gray</a></li>
+                        <li class="menu-item"><a id="action-model-bg-white">White</a></li>
                     </ul>
                 </li>
-                <li id="protein-dropdown" class="dropdown">
-                    <a class="dropdown-toggle">Protein</a>
-                    <ul class="dropdown-menu">
-                        <li class="menu-item"><a id="action-bio-assembly" class="check">Show bio assembly</a></li>
-                        <li class="menu-header">Chain representation</li>
-                        <li class="menu-item"><a id="action-chain-type-ribbon" class="chain-type radio checked">Ribbon</a></li>
-                        <li class="menu-item"><a id="action-chain-type-cylinders" class="chain-type radio">Cylinder and
-                                plate</a></li>
-                        <li class="menu-item"><a id="action-chain-type-btube" class="chain-type radio">B-factor tube</a></li>
-                        <li class="menu-item"><a id="action-chain-type-ctrace" class="chain-type radio">C-alpha trace</a></li>
-                        <li class="menu-divider"></li>
-                        <li class="menu-item"><a id="action-chain-type-bonds" class="check">Bonds</a></li>
-                        <li class="menu-header">Chain color scheme</li>
-                        <li class="menu-item"><a id="action-chain-color-ss" class="chain-color radio checked">Secondary
-                                structure</a></li>
-                        <li class="menu-item"><a id="action-chain-color-spectrum" class="chain-color radio">Spectrum</a></li>
-                        <li class="menu-item"><a id="action-chain-color-chain" class="chain-color radio">Chain</a></li>
-                        <li class="menu-item"><a id="action-chain-color-residue" class="chain-color radio">Residue</a></li>
-                        <li class="menu-item"><a id="action-chain-color-polarity" class="chain-color radio">Polarity</a></li>
-                        <li class="menu-item"><a id="action-chain-color-bfactor" class="chain-color radio">B-factor</a></li>
-                    </ul>
-                </li>
-                <li id="jmol-dropdown" class="dropdown">
-                    <a class="dropdown-toggle">Jmol</a>
-                    <ul class="dropdown-menu">
-                        <li class="menu-item"><a id="action-jmol-hq" class="check">High Quality</a></li>
-                        <li class="menu-item"><a id="action-jmol-clean" class="jmol-script">Clean</a></li>
-                        <li class="menu-header jmol-script jmol-calc">Calculations</li>
-                        <li class="menu-item"><a id="action-jmol-mep-lucent" class="jmol-script jmol-calc">MEP surface
-                                lucent</a></li>
-                        <li class="menu-item"><a id="action-jmol-mep-opaque" class="jmol-script jmol-calc">MEP surface
-                                opaque</a></li>
-                        <li class="menu-item"><a id="action-jmol-charge" class="jmol-script jmol-calc">Charge</a></li>
-                        <li class="menu-item"><a id="action-jmol-bond-dipoles" class="jmol-script jmol-calc">Bond
-                                dipoles</a></li>
-                        <li class="menu-item"><a id="action-jmol-net-dipole" class="jmol-script jmol-calc">Overall
-                                dipole</a></li>
-                        <li class="menu-item"><a id="action-jmol-minimize" class="jmol-script jmol-calc">Energy
-                                minimization</a></li>
-                        <li class="menu-header jmol-script">Measurement</li>
-                        <li class="menu-item"><a id="action-jmol-measure-distance" class="jmol-script jmol-picking radio">Distance</a></li>
-                        <li class="menu-item"><a id="action-jmol-measure-angle" class="jmol-script jmol-picking radio">Angle</a></li>
-                        <li class="menu-item"><a id="action-jmol-measure-torsion" class="jmol-script jmol-picking radio">Torsion</a></li>
-                    </ul>
-                </li>
+                
             </ul>
         </div>
     </div>
