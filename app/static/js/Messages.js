@@ -21,6 +21,9 @@
  * @type {Object}
  */
 var Messages = {
+	//tree errors
+	delete_first: "You need to delete the fragments below before you can split this molecule.",
+	cannot_delete_root:"You cannot delete the root molecule. You can edit it or replace it.",
 	//notifications
 	cir_down: "The Chemical Identifier Resolver is offline, some functions might be unavailable.",
 	cir_func_down: "This function is unavailable because the Chemical Identifier Resolver is offline.",

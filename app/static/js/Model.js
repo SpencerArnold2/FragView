@@ -47,8 +47,8 @@ var Model = {
 	},
 
 	engine: undefined, //"GLmol", "JSmol", "CDW"
-	GLmol: GLmolPlugin,
-	JSmol: JSmolPlugin,
+	//GLmol: GLmolPlugin,
+	//JSmol: JSmolPlugin,
 	CDW: CDWPlugin,
 
 	pixelMult: 1,
@@ -63,7 +63,8 @@ var Model = {
 
 		this.setBackground(Preferences.get("model", "background", "black"));
 
-		if (this.GLmol && this.JSmol && this.CDW) //all plugins are loaded
+		if (this.CDW) //all plugins are loaded
+		//this.GLmol && this.JSmol &&  
 		{
 			if (MolView.loadDefault) {
 				this.data.mol = (defaultMol3D || "");

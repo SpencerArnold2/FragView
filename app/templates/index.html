@@ -74,6 +74,8 @@ Query parameters:
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/chemicaldata.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/autocomplete.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/welcome.less')}}" />
+    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/trees.less')}}" />
+
 
     <!-- src -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
@@ -148,6 +150,7 @@ Query parameters:
     <script type="text/javascript" src="{{ url_for('static', filename='js/Spectroscopy.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/Autocomplete.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/MolView.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Tree_BinaryTree.js') }}"></script>
 
 </head>
 
@@ -162,6 +165,20 @@ Query parameters:
     </svg>
     <div id="progress">
         <canvas id="progress-canvas"></canvas>
+    </div>
+    <div id="tree-menu-container">
+        <div id="tree-menu">
+            <div id="tree-options-menu" class="tree-top-row">
+                <a id="tree-selection-split" href="#">Split</a>
+                <a id="tree-selection-delete" href="#">Delete</a>
+                <a id="tree-selection-clear" href="#">Clear All</a>
+            </div>
+            <div id="tree-row-1" class="tree-rows">
+                <div class="tree-columns" id="original-column">
+                    <a id="node0" class="tree-node active" href="#">Node 0</span></h1></a>
+                </div>
+            </div>            
+        </div>
     </div>
     <div id="menu">
         <div id="menu-bar" class="hstack">
@@ -216,6 +233,13 @@ Query parameters:
                     </ul>
                 </li>
                 
+            </ul>
+            <ul id="tree-toggle" class="hstack">
+                <div id="burger" class ="tree-toggle-button">
+                    <div class="line1"></div>
+                    <div class="line2"></div>
+                    <div class="line3"></div>
+                </div>
             </ul>
         </div>
     </div>
@@ -313,7 +337,7 @@ Query parameters:
                 </div>
             </div>
             <div id="model" <?php if(isset($bg)) { echo 'style="background:' .($bg !="white" ? $bg !="gray" ? "#000000"
-                : "#cccccc" : "#ffffff" ).'"'; } ?>>
+                : "#cccccc" : "#ffffff" ).'"'; } ?>
                 <!-- Get preferred model background color from localStorage -->
                 <script type="text/javascript">
                     if (localStorage && localStorage["model.background"]) {
@@ -557,6 +581,7 @@ Query parameters:
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Tree_Actions.js') }}"></script>
 </body>
 
 </html>

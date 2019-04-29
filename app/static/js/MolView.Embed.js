@@ -75,7 +75,8 @@ var MolView = {
 			if (!(this.query.smiles || this.query.cid || this.query.pdbid || this.query.codid)) {
 				Progress.complete();
 			}
-		}).bind(this), Detector.webgl ? "GLmol" : (((this.query.pdbid && !MolView.mobile) || this.query.codid) ? "JSmol" : "GLmol"));
+		}),"CDW");
+		//.bind(this), Detector.webgl ? "GLmol" : (((this.query.pdbid && !MolView.mobile) || this.query.codid) ? "JSmol" : "GLmol"));
 	},
 
 	//do not remove: called from Loader

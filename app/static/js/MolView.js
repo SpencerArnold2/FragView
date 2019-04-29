@@ -341,7 +341,7 @@ var MolView = {
 			if (!Request.CIR.available) {
 				Messages.alert("cir_down");
 			}
-		}, "GLmol");
+		}, "CDW");
 	},
 
 	/**
