@@ -39,17 +39,14 @@ function openTreeMenu(){
 }
 navSlide();
 
-// document.getElementById("node0").addEventListener("click", function(){ Model.loadMOL(defaultMol3D)});
-// document.getElementById("node0").addEventListener("click", function(){ Sketcher.loadMOL(defaultMol2D)});
-// document.getElementById("tree-test-2").addEventListener("click", function(){ Model.loadMOL(testMol3D_n1)});
-// document.getElementById("tree-test-2").addEventListener("click", function(){ Sketcher.loadMOL(testMol2D_n1)});
-// document.getElementById("tree-test-3").addEventListener("click", function(){ Model.loadMOL(testMol3D_n2)});
-// document.getElementById("tree-test-3").addEventListener("click", function(){ Sketcher.loadMOL(testMol2D_n2)});
 
-// $(document).ready(function(){
-//     document.getElementById("tree-selection-split").addEventListener("click", function(){BST.insert(BST.root, testMol3D_n1, testMol3D_n2, 0) });
-// });
 document.getElementById("tree-selection-split").addEventListener("click", function(){selectMoleculeToSplit() });
+document.getElementById("tree-selection-delete").addEventListener("click", function(){selectMoleculeToDelete() });
+document.getElementById("tree-selection-clear").addEventListener("click", function(){clearTreeMenu() });
+function clearTreeMenu(){
+    BST.clearAll();
+    updateGrid(BST);
+}
 function selectMoleculeToSplit(){
     let treePosition = document.getElementsByClassName("active")[0].id;
     treePosition = treePosition.replace("node", "");
@@ -57,6 +54,15 @@ function selectMoleculeToSplit(){
     let molList = BST.getMolList();
     let moleculeToSplit = molList[treePosition];
     BST.insert(moleculeToSplit, testMol3D_n1, testMol3D_n2, testMol2D_n1, testMol2D_n2, treePosition);
+}
+function selectMoleculeToDelete(){
+    let treePosition = document.getElementsByClassName("active")[0].id;
+    treePosition = treePosition.replace("node", "");
+    treePosition = parseInt(treePosition, 10);
+    let molList = BST.getMolList();
+    let moleculeToDelete = molList[treePosition];
+    BST.deleteNode(moleculeToDelete);
+    updateGrid(BST);
 }
 
 

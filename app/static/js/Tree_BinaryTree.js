@@ -35,7 +35,6 @@ class Node{
     setRight(node){
         this.right = node;
     }
-
 }
 class BinaryTree{
     constructor(mol3d, mol2d){
@@ -72,6 +71,32 @@ class BinaryTree{
         this.molecules[newID_1] = newNode_1;
         this.molecules[newID_2] = newNode_2;
         updateGrid(this);
+    }
+    deleteNode(node){
+        let index = node.getID();
+        if (index == 0){
+            this.clearAll();
+            return node;
+        }
+        else{
+           if (node.left === null){
+            node = null;
+            this.molecules[index] = null;
+            return node;
+            }
+            else{
+                this.deleteNode(node.left);
+                this.deleteNode(node.right);
+                node = null;
+                this.molecules[index] = null;
+                return node;
+            } 
+        }
+        
+    }
+    clearAll(){
+        this.deleteNode(this.root.getLeft());
+        this.deleteNode(this.root.getRight());
     }
 
     
