@@ -79,6 +79,16 @@ var Actions = {
 		if (blob !== null) saveAs(blob, document.title + " (model).png");
 	},
 
+	//Added by JA on 5/18/2019, Test function for STL export. Not working.
+	//Need to figure out what is being passed to the canvas as 3D-modeling.
+	export_model_stl: function () {		
+		var scene = Model.getFileBlob();
+		var exporter = new THREE.STLExporter();
+		var str = exporter.parse( scene ); // Export the scene
+		var blob = new Blob( [str], { type : 'text/plain' } ); // Generate Blob from the string
+		saveAs( blob, 'file.stl' ); //Save the Blob to file.stl
+	},
+
 	export_model: function () {
 		var blob = Model.getFileBlob();
 		saveAs(blob, document.title + "." + (Model.getFileExstension().toLowerCase()));
