@@ -226,8 +226,9 @@ var MolView = {
 		this.addAction("export_model_png", "menu", true);
 		this.addAction("export_model", "menu", true);
 
-		this.addAction("export_model_stl", "menu", true); //Added by JA on 5/18/19, To reflect new feature STL file export.
-		
+		this.addAction("export_model_stl", "menu", true); //New feature STL export button
+		this.addAction("molecular_orbital", "menu", true);
+
 		this.addAction("data_infocard", "menu", true);
 		this.addAction("data_spectra", "menu", true);
 		this.addAction("search_substructure", "menu", true);
@@ -344,7 +345,7 @@ var MolView = {
 			if (!Request.CIR.available) {
 				Messages.alert("cir_down");
 			}
-		}, "CDW");
+		}, "JSmol");  //change this line to either GLmol or JSmol or CDW
 	},
 
 	/**

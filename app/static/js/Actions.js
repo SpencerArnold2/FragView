@@ -79,19 +79,22 @@ var Actions = {
 		if (blob !== null) saveAs(blob, document.title + " (model).png");
 	},
 
-	//Added by JA on 5/18/2019, Test function for STL export. Not working.
-	//Need to figure out what is being passed to the canvas as 3D-modeling.
-	export_model_stl: function () {		
-		var scene = Model.getFileBlob();
-		var exporter = new THREE.STLExporter();
-		var str = exporter.parse( scene ); // Export the scene
-		var blob = new Blob( [str], { type : 'text/plain' } ); // Generate Blob from the string
-		saveAs( blob, 'file.stl' ); //Save the Blob to file.stl
-	},
-
 	export_model: function () {
 		var blob = Model.getFileBlob();
 		saveAs(blob, document.title + "." + (Model.getFileExstension().toLowerCase()));
+	},
+
+	export_model_stl: function () {		
+		//Newly implemnted JSmol STL export commands: WRITE STL "FILENAME.STL"
+		//Check out JSmolPlugin.js for script()
+		Jmol.script (JSmol, 'WRITE STL "file.stl"');
+		//Jmol.script (JSmol, 'select *;if ($s1) {isosurface s1 delete} else {calculate partialcharge;isosurface s1 vdw map MEP translucent}');
+	},
+
+	molecular_orbital: function () {
+		//still testing MO and Isosurface commands
+		//wanna make a toggle ON/OFF button
+		Jmol.script (JSmol, 'select *;if ($s1) {isosurface s1 delete} else {calculate partialcharge;isosurface s1 vdw map MEP translucent}');
 	},
 
 	data_infocard: function () {
