@@ -226,8 +226,13 @@ var MolView = {
 		this.addAction("export_model_png", "menu", true);
 		this.addAction("export_model", "menu", true);
 
-		this.addAction("export_model_stl", "menu", true); //New feature STL export button
-		this.addAction("molecular_orbital", "menu", true);
+		//Added by Jinyoung An
+		this.addAction("export_model_stl", "menu", true); //STL file export button
+		this.addAction("isosurface_vdw", "menu", true); //Isosuface vdw display ON/OFF
+		this.addAction("molecular_orbital_sp", "menu", true); //Show sp orbitals
+		this.addAction("molecular_orbital_sp2", "menu", true); //Show sp2 orbitals
+		this.addAction("molecular_orbital_sp3", "menu", true); //Show sp3 orbitals
+		this.addAction("open_console", "menu", true); //Opens Jmol console window for dev
 
 		this.addAction("data_infocard", "menu", true);
 		this.addAction("data_spectra", "menu", true);
