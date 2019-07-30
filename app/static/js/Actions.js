@@ -84,6 +84,54 @@ var Actions = {
 		saveAs(blob, document.title + "." + (Model.getFileExstension().toLowerCase()));
 	},
 
+	export_model_stl: function () {		
+		//Export the current 3D model into a STL file format for 3D printing.
+		//Check out JSmolPlugin.js for script()
+		//Added by Jinyoung An(@jinyoungan85)
+		Jmol.script (JSmol, 'WRITE STL "file.stl"');
+	},
+
+	isosurface_vdw: function () {
+		//calculate PARTIALCHARGE = Calculates relatively reasonable partial charges using the MMFF94 charge model.
+		//vdw # = Atom radius relative to the van der Waals radius.
+		//MEP = Color mapping data set which depicts the molecular electrostatic potential
+		//translucent = Display the isosurface as translucent object.
+		//Added by Jinyoung An(@jinyoungan85)
+		Jmol.script (JSmol, 'select *;if ($s1) {isosurface s1 delete} else {calculate partialcharge;isosurface s1 vdw map MEP translucent}');
+	},
+
+	molecular_orbital_sp: function () {
+		//Delete lcaoCartoon on currently selected atoms first,
+		// then display selected atoms' sp orbitals
+		//Added by Jinyoung An(@jinyoungan85)
+		Jmol.script (
+			JSmol, 'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp (carbon and connected(2)) or (nitrogen and connected(1));select ~sp; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create MOLECULAR "spa" "spb";lcaoCartoon COLOR pink pink; lcaoCartoon TRANSLUCENT;lcaoCartoon create MOLECULAR "px" "py";bind "double" "javascript pTog()";javascript echo(1)'
+			);
+	},	
+
+	molecular_orbital_sp2: function () {
+		//Delete lcaoCartoon on currently selected atoms first,
+		// then display selected atoms' sp2 orbitals
+		//Added by Jinyoung An(@jinyoungan85)
+		Jmol.script (
+			JSmol, 'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp2 (carbon and connected(3)) or (oxygen and connected(1)) or (nitrogen and connected(2)); select ~sp2; lcaoCartoon COLOR cyan TRANSLUCENT; lcaoCartoon delete create MOLECULAR "sp2a" "sp2b" "sp2c"; lcaoCartoon COLOR pink pink TRANSLUCENT; lcaoCartoon create MOLECULAR "pz";bind "double" "javascript pTog()";javascript echo(1)'
+			);
+	},
+
+	molecular_orbital_sp3: function () {
+		//Delete lcaoCartoon on currently selected atoms first,
+		// then display selected atoms' sp3 orbitals
+		//Added by Jinyoung An(@jinyoungan85)
+		Jmol.script (
+			JSmol,'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp3 (carbon and connected(4)) or (oxygen and connected(2)) or (nitrogen and connected(3));select ~sp3; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create "sp3a" "sp3b" "sp3c" "sp3d";bind "double" "javascript pTog()";javascript echo(1)'
+			);
+	},
+
+	open_console: function () {
+		//Opens up Jmol console pop-up window for developers to test Jmol script and its output.
+		Jmol.script(JSmol, 'console');
+	},
+
 	data_infocard: function () {
 		var smiles;
 		try {

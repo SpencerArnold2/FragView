@@ -182,6 +182,7 @@ Query parameters:
             </div>            
         </div>
     </div>
+    <div id="JmolApplet0_console"></div>
     <div id="menu">
         <div id="menu-bar" class="hstack">
             <form id="search" class="hstack">
@@ -209,6 +210,9 @@ Query parameters:
                         <li class="menu-item"><a id="action-export-sketcher-png">Structural formula image</a></li>
                         <li class="menu-item"><a id="action-export-model-png">3D model image</a></li>
                         <li class="menu-item"><a id="action-export-model">MOL file</a></li>
+                        <!-- Newely added button for STL Export by Jinyoung An-->
+                        <li class="menu-item"><a id="action-export-model-stl">STL file for 3D printing</a></li>
+
                         <li class="menu-header">Chemical data</li>
                         <li class="menu-item"><a id="action-data-infocard">Information card</a></li>
                         <li class="menu-item"><a id="action-data-spectra">Spectroscopy</a></li>
@@ -223,6 +227,12 @@ Query parameters:
                     <a class="dropdown-toggle">Model</a>
                     <ul class="dropdown-menu">
                         <li class="menu-header">Representation</li>
+                        <!-- Newly added buttons for isosurface, orbital display features by Jinyoung An-->
+                        <li class="menu-item"><a id="action-isosurface-vdw">Isosurface vdw ON/OFF</a></li>
+                        <li class="menu-item"><a id="action-molecular-orbital-sp">View Sp orbitals</a></li>
+                        <li class="menu-item"><a id="action-molecular-orbital-sp2">View Sp2 orbitals</a></li>
+                        <li class="menu-item"><a id="action-molecular-orbital-sp3">View Sp3 orbitals</a></li>
+
                         <li class="menu-item"><a id="action-model-balls" class="r-mode radio checked">Ball and Stick</a></li>
                         <li class="menu-item"><a id="action-model-stick" class="r-mode radio">Stick</a></li>
                         <li class="menu-item"><a id="action-model-vdw" class="r-mode radio">van der Waals Spheres</a></li>
@@ -232,6 +242,8 @@ Query parameters:
                         <li class="menu-item"><a id="action-model-bg-black">Black</a></li>
                         <li class="menu-item"><a id="action-model-bg-gray">Gray</a></li>
                         <li class="menu-item"><a id="action-model-bg-white">White</a></li>
+                        <!--Opens up Jmol console window for dev-->
+                        <li class="menu-item"><a id="action-open-console">Open Jmol Console</a></li>
                     </ul>
                 </li>
                 
