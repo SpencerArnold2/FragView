@@ -52,8 +52,8 @@ var Sketcher = {
 				});
 			this.molpad.setSkeletalDisplay(Preferences.get("sketcher", "skeletal_formula", true));
 			this.setColored(Preferences.get("sketcher", "colored", true));
-			this.setTool($("#action-mp-lasso"), "select", {
-				type: "lasso"
+			this.setTool($("#action-mp-rect"), "select", {
+				type: "rect"
 			});
 
 			if (MolView.loadDefault) {
@@ -230,7 +230,13 @@ var Sketcher = {
 				.toggleClass("tool-button-selected")
 				.hasClass("tool-button-selected");
 			Preferences.set("sketcher", "skeletal_formula", skeletal);
+			
 			this.molpad.setSkeletalDisplay(skeletal);
+			var atomList = this.molpad.mol.atoms;
+			for(i=0;i<atomList.length;i++) {
+				if(atomList[i].element === "H") {
+				}
+			}
 		}
 	},
 

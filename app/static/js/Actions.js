@@ -71,6 +71,7 @@ var Actions = {
 		var dataURL = Sketcher.toDataURL();
 		var blob = dataURItoBlob(dataURL);
 		if (blob !== null) saveAs(blob, document.title + " (structural formula).png");
+		var url = URL.createObjectURL(blob);
 	},
 
 	export_model_png: function () {
@@ -84,52 +85,417 @@ var Actions = {
 		saveAs(blob, document.title + "." + (Model.getFileExstension().toLowerCase()));
 	},
 
-	export_model_stl: function () {		
+	export_model_stl: function () {
 		//Export the current 3D model into a STL file format for 3D printing.
 		//Check out JSmolPlugin.js for script()
 		//Added by Jinyoung An(@jinyoungan85)
-		Jmol.script (JSmol, 'WRITE STL "file.stl"');
+		Jmol.script(JSmol, 'WRITE STL "file.stl"');
+		Jmol.script(JSmol, "hbonds ON");
+		Jmol.script(JSmol, "color hbonds TYPE");
 	},
 
+	toggle_hydrogens: function() {
+		var setting = document.getElementById("action-models-toggle-hydrogens");
+		if(setting.classList.contains("checked")) {
+			Jmol.script(JSmol, "calculate hydrogens;");
+			setting.classList.remove("checked");
+		}
+		else {
+			Jmol.script(JSmol, "SELECT hydrogen; delete selected");
+			setting.classList.add("checked");
+		}
+	},
+
+	updateTree: function () {
+		Sketcher.center();
+		url = sketcherBlobURL();
+		nodeId = document.getElementsByClassName("active")[0].id;
+		nodeId = nodeId.replace("node-","");
+		selectedNode = document.getElementById("img" + nodeId);
+		selectedNode.src = url
+	},
+
+	treeSmile: function (root="", newTreeFlag=false) {
+		$(".r-mode").removeClass("checked");
+        document.getElementById("action-model-balls").classList.add("checked");
+		let smile = document.getElementById("search-smile").value;
+		let splitVer, fragFlag;
+		if(root.contains(".")) {
+			splitVer = smile.split(".");
+			fragFlag = true;
+		}
+		//Not needed anymore because frag limit is checked before AJAX
+		//if(true) {
+			// var totalNodes = MolTree.tree.getNodeDb().db.length;
+			// for (i = 1; i < totalNodes; i++) {
+			// 	let currentNode = MolDataList.getNode(i.toString());
+			// 	MolDataList.delNode(i.toString());
+			// }
+			//clearTreeMenu();
+
+			//Sketcher.clear();
+			//Use S to differentiate search smiles for loader
+			// let smile = document.getElementById("search-smile").value;
+			//console.log("newTreeFlag", newTreeFlag);
+			if(smile === "" && root !== "") {
+				smile = root;
+			}
+			if (smile === "" && root === "") {
+				Messages.alert("empty_smile_search");
+			}
+			else {
+				resetUpdateAnim();
+				// document.getElementById("tree-menu-container").style.display = "";
+				Loader.loadSMILES(smile, fragFlag, newTreeFlag);
+			}
+		//}
+		//else {
+		//	Messages.alert("frag_limit_exceeded");
+		//}
+	},
+	treeSmileCont: function (ajaxData) {
+		//ajaxData["output"] is joined fragments 2D molfile
+		//console.log("Smiles retrieved", ajaxData["output"])
+		smile = document.getElementById("search-smile").value;
+		//[ATOM] specifies it is explicit (no hydrogens are drawn) so
+		// if this does not exist, implicit hydrogens only exist
+		// if(smile.search("[H]") === 0 || smile.search("[H]") === -1) {
+		// 	implicitFlag = true;
+		// }
+		setTimeout(function () {
+			mol2d = Sketcher.getMOL();
+			mol3d = Model.data.mol;
+			var molInfo = [mol2d, mol3d];
+			var DomRoot = document.getElementById("node-0");
+			var DomRootURL = sketcherBlobURL();
+			DomRoot.title = smile;
+			DomRoot.innerHTML = "<img id=img0 src=" + DomRootURL + ">";
+			addClickHandler(DomRoot);
+			let rootNode = MolDataList.getNode("0");
+			rootNode.set2d(molInfo[0]);
+			rootNode.set3d(molInfo[1]);
+			Sketcher.loadMOL(ajaxData["output"][1]);
+		}, 100)
+		if (hasFragment(smile)) {
+
+			result = ajaxData;
+			result["output"].shift();
+			frags = smileSplitter(smile);
+
+			setTimeout(function() {
+				term = 1;
+				term = Actions.promiseFrags(frags, result);
+				rootNodeH = document.getElementById("node-0");
+				DomRoot = document.getElementById("node-0");
+				DomRoot.style.pointerEvents = "none";
+
+			}, 500)
+			//to revert back to root node
+			setTimeout(function() {
+				// var node = MolDataList.getNode(1);
+			 	// Model.loadMOL(node.get3d());
+				// Sketcher.loadMOL(node.get2d());
+				// rootNodeH.className = "node";
+			 	// firstFrag = document.getElementById("node-1");
+			 	// firstFrag.className = "node active";
+			}, 1800)
+		}
+		else {
+			cancelUpdateAnim();
+		}
+
+
+	},
+	revertFirstNodeNew() {
+		var node = MolDataList.getNode(1);
+		Model.loadMOL(node.get3d());
+		Sketcher.loadMOL(node.get2d());
+		rootNodeNew = document.getElementById("node-0");
+		rootNodeNew.className = "node";
+		firstFrag = document.getElementById("node-1");
+		firstFrag.className = "node active";
+		cancelUpdateAnim();
+	},
+	revertRootNode(rootNode) {
+		var node = MolDataList.getNode(parseInt(rootNode.replace("node-",""), 10));
+		Sketcher.loadMOL(node.get2d());
+		cancelUpdateAnim();
+	},
+	//This is not supposed to load the 3d model because
+	// it will be used for generating fragments only. The
+	// 3d will hold the root node and only switch to the first
+	// child node should the new tree contain framents in initial smile
+	convert3d(smiles) {
+		//console.log("3d smiles", smiles);
+		Progress.increment();
+        var rdkitMolecule = RDKit.Molecule.fromSmiles(smiles);
+        rdkitMolecule.addHs();
+        rdkitMolecule.EmbedMolecule();
+        rdkitMolecule.MMFFoptimizeMolecule();
+        var rdkitmol = rdkitMolecule.toMolfile();
+        var mymol = rdkitmol.split("\n");
+        mymol[0] = "2";
+        let results = [mymol.join("\n")];
+        return results;
+	},
+	convert2d(smiles, mol3d, mol2d) {
+		// console.log("mol2d", mol2d);
+		// console.log("mol3d", mol3d);
+		Progress.increment();
+        Sketcher.loadMOL(mol2d);
+        Progress.complete();
+        Messages.clear()
+        let results = [mol3d, mol2d];
+
+        return results;
+	},
+	//Call order ****
+	//generate 3d molfile
+	// load 2d molfile
+	//  take 2d screenshot
+	//   generate new node
+	//Settimeouts take place before execution; therefore, it is critical
+	// that these are continuously placed after a promise
+	promiseFrags(frags, result, rootNode="") {
+		//console.log("rootNode", rootNode);
+		let parentId = document.getElementsByClassName("active")[0].id;
+		//console.log("load 3d mol 0");
+		
+		new Promise(function(resolve, reject) {
+			setTimeout(() => resolve(Actions.convert3d(frags[0])), 100);
+		}).then(function(results) {
+			//console.log("load sketcher mol 0");
+			
+			return new Promise((resolve, reject) => {
+				setTimeout(() => resolve(Actions.convert2d(frags[0], results[0], result["output"][0])), 100);
+			});
+		}).then(function(results) {
+			//console.log("store mol 0");
+
+			return new Promise((resolve, reject) => {
+				setTimeout(() => resolve(storeMOL(results[0], result["output"][0], frags[0], false, parentId)), 100);
+			});
+		}).then(function(results) {
+			//console.log("load 3d mol 1");
+
+			return new Promise((resolve, reject) => {
+				setTimeout(() => resolve(Actions.convert3d(frags[1])), 100);
+			});
+		}).then(function(results) {
+			//console.log("load sketcher mol 1");
+
+			return new Promise((resolve, reject) => {
+				setTimeout(() => resolve(Actions.convert2d(frags[1], results[0], result["output"][1])), 100);
+			});
+		}).then(function (results) {
+			//console.log("store mol 1");
+
+			return new Promise((resolve, reject) => {
+				setTimeout(() => resolve(storeMOL(results[0], result["output"][1], frags[1], false, parentId)), 100);
+			});
+		}).then(function(results) {
+			if(frags.length > 2) {
+				//console.log("load 3d mol 2");
+
+				return new Promise((resolve, reject) => {
+					setTimeout(() => resolve(Actions.convert3d(frags[2])), 100);
+				});
+			}
+		}).then(function(results) {
+			if(frags.length > 2) {
+				//console.log("sketcher load mol 2");
+
+				return new Promise((resolve, reject) => {
+					setTimeout(() => resolve(Actions.convert2d(frags[2], results[0], result["output"][2])), 100);
+				});
+			}
+		}).then(function(results) {
+			if(frags.length > 2) {
+				//console.log("store mol 2");
+
+				return new Promise((resolve, reject) => {
+					setTimeout(() => resolve(storeMOL(results[0], result["output"][2], frags[2], false, parentId)), 100);
+				});
+			}
+		}).then(function(results) {
+			if(frags.length > 3) {
+				//console.log("load 3d mol 3");
+
+				return new Promise((resolve, reject) => {
+					setTimeout(() => resolve(Actions.convert3d(frags[3])), 100);
+				});
+			}
+		}).then(function(results) {
+			if(frags.length > 3) {
+				//console.log("sketcher load mol 3");
+
+				return new Promise((resolve, reject) => {
+					setTimeout(() => resolve(Actions.convert2d(frags[3], results[0], result["output"][3])), 100);
+				});
+			}
+		}).then(function(results) {
+			if(frags.length > 3) {
+				//console.log("store mol 3");
+
+				return new Promise((resolve, reject) => {
+					setTimeout(() => resolve(storeMOL(results[0], result["output"][3], frags[3], false, parentId)), 100);
+				});
+			}
+		}).then(function(results) {
+			if(frags.length > 4) {
+				//console.log("load 3d mol 4");
+
+				return new Promise((resolve, reject) => {
+					setTimeout(() => resolve(Actions.convert3d(frags[4])), 100);
+				});
+			}
+		}).then(function(results) {
+			if(frags.length > 4) {
+				//console.log("sketcher load mol 4");
+
+				return new Promise((resolve, reject) => {
+					setTimeout(() => resolve(Actions.convert2d(frags[4], results[0], result["output"][4])), 100);
+				});
+			}
+		}).then(function(results) {
+			if(frags.length > 4) {
+				//console.log("store mol 4");
+
+				return new Promise((resolve, reject) => {
+					setTimeout(() => resolve(storeMOL(results[0], result["output"][4], frags[4], false, parentId)), 100);
+				});
+			}
+		}).then(function(results) {
+			if(!rootNode && frags.length > 1) { //Root node is empty for new trees
+				//console.log("new tree");
+
+				return new Promise((resolve, reject) => {
+					setTimeout(() => resolve(Actions.revertFirstNodeNew()), 100);
+				});
+			}
+			else {
+				//console.log("else");
+				return new Promise((resolve, reject) => {
+					setTimeout(() => resolve(Actions.revertRootNode(rootNode)), 100)
+				});
+			}
+		});
+
+		//console.log("Executing");
+		let index = document.getElementsByClassName("active")[0].id;
+		index = index.replace("node-", "");
+		index = parseInt(index, 10);
+		let node = MolDataList.getNode(index);
+		Model.loadMOL(node.get3d());
+		Sketcher.loadMOL(node.get2d());
+
+		return 0;
+	},
+
+	//For new tree
+	ajaxReturnData: function (data) {
+		Actions.treeSmileCont(data);
+	},
+	ajaxReturnDataFrags: function (frags, data) {
+		root2D = frags
+		rootNode = document.getElementsByClassName("active")[0].id;
+		frags.splice(frags.length-1, frags.length - 1);
+
+		Actions.promiseFrags(frags, data, rootNode);
+	},
 	isosurface_vdw: function () {
 		//calculate PARTIALCHARGE = Calculates relatively reasonable partial charges using the MMFF94 charge model.
 		//vdw # = Atom radius relative to the van der Waals radius.
 		//MEP = Color mapping data set which depicts the molecular electrostatic potential
 		//translucent = Display the isosurface as translucent object.
 		//Added by Jinyoung An(@jinyoungan85)
-		Jmol.script (JSmol, 'select *;if ($s1) {isosurface s1 delete} else {calculate partialcharge;isosurface s1 vdw map MEP translucent}');
+		var setting = document.getElementById("action-isosurface-vdw");
+		if(setting.classList.contains("checked")) {
+			setting.classList.remove("checked");
+		}
+		else {
+			$("#action-isosurface-vdw").addClass("checked");
+		}
+		Jmol.script(JSmol, 'select *;if ($s1) {isosurface s1 delete} else {calculate partialcharge;isosurface s1 vdw map MEP translucent}');
+		//console.log("SETTING", setting.classList.contains("checked"));
+		
 	},
 
 	molecular_orbital_sp: function () {
 		//Delete lcaoCartoon on currently selected atoms first,
 		// then display selected atoms' sp orbitals
 		//Added by Jinyoung An(@jinyoungan85)
-		Jmol.script (
-			JSmol, 'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp (carbon and connected(2)) or (nitrogen and connected(1));select ~sp; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create MOLECULAR "spa" "spb";lcaoCartoon COLOR pink pink; lcaoCartoon TRANSLUCENT;lcaoCartoon create MOLECULAR "px" "py";bind "double" "javascript pTog()";javascript echo(1)'
+		var setting = document.getElementById("action-molecular-orbital-sp");
+		var affectedSetting = document.getElementById("action-model-line");
+		var affectedSetting1 = document.getElementById("action-model-balls");
+		if(setting.classList.contains("checked")) {
+			Jmol.script(JSmol, "lcaoCartoon DELETE;");
+			Model.setRepresentation("balls");
+			setting.classList.remove("checked");
+			affectedSetting.classList.remove("checked");
+			affectedSetting1.classList.add("checked");
+		}
+		else {
+			Jmol.script(
+				JSmol, 'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp (carbon and connected(2)) or (nitrogen and connected(1));select ~sp; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create MOLECULAR "spa" "spb";lcaoCartoon COLOR pink pink; lcaoCartoon TRANSLUCENT;lcaoCartoon create MOLECULAR "px" "py";bind "double" "javascript pTog()";javascript echo(1)'
 			);
-	},	
+			setting.classList.add("checked");
+			affectedSetting.classList.add("checked");
+			affectedSetting1.classList.remove("checked");
+		}
+	},
 
 	molecular_orbital_sp2: function () {
 		//Delete lcaoCartoon on currently selected atoms first,
 		// then display selected atoms' sp2 orbitals
 		//Added by Jinyoung An(@jinyoungan85)
-		Jmol.script (
-			JSmol, 'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp2 (carbon and connected(3)) or (oxygen and connected(1)) or (nitrogen and connected(2)); select ~sp2; lcaoCartoon COLOR cyan TRANSLUCENT; lcaoCartoon delete create MOLECULAR "sp2a" "sp2b" "sp2c"; lcaoCartoon COLOR pink pink TRANSLUCENT; lcaoCartoon create MOLECULAR "pz";bind "double" "javascript pTog()";javascript echo(1)'
+		var setting = document.getElementById("action-molecular-orbital-sp2");
+		var affectedSetting = document.getElementById("action-model-line");
+		var affectedSetting1 = document.getElementById("action-model-balls");
+		if(setting.classList.contains("checked")) {
+			Jmol.script(JSmol, "lcaoCartoon DELETE;");
+			Model.setRepresentation("balls");
+			setting.classList.remove("checked");
+			affectedSetting.classList.remove("checked");
+			affectedSetting1.classList.add("checked");
+		}
+		else {
+			Jmol.script(
+				JSmol, 'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp2 (carbon and connected(3)) or (oxygen and connected(1)) or (nitrogen and connected(2)); select ~sp2; lcaoCartoon COLOR cyan TRANSLUCENT; lcaoCartoon delete create MOLECULAR "sp2a" "sp2b" "sp2c"; lcaoCartoon COLOR pink pink TRANSLUCENT; lcaoCartoon create MOLECULAR "pz";bind "double" "javascript pTog()";javascript echo(1)'
 			);
+			setting.classList.add("checked");
+			affectedSetting.classList.add("checked");
+			affectedSetting1.classList.remove("checked");
+		}
 	},
 
 	molecular_orbital_sp3: function () {
 		//Delete lcaoCartoon on currently selected atoms first,
 		// then display selected atoms' sp3 orbitals
 		//Added by Jinyoung An(@jinyoungan85)
-		Jmol.script (
-			JSmol,'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp3 (carbon and connected(4)) or (oxygen and connected(2)) or (nitrogen and connected(3));select ~sp3; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create "sp3a" "sp3b" "sp3c" "sp3d";bind "double" "javascript pTog()";javascript echo(1)'
+		var setting = document.getElementById("action-molecular-orbital-sp3");
+		var affectedSetting = document.getElementById("action-model-line");
+		var affectedSetting1 = document.getElementById("action-model-balls");
+		if(setting.classList.contains("checked")) {
+			Jmol.script(JSmol, "lcaoCartoon DELETE;");
+			Model.setRepresentation("balls");
+			setting.classList.remove("checked");
+			affectedSetting.classList.remove("checked");
+			affectedSetting1.classList.add("checked");
+		}
+		else {
+			Jmol.script(
+				JSmol, 'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp3 (carbon and connected(4)) or (oxygen and connected(2)) or (nitrogen and connected(3));select ~sp3; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create "sp3a" "sp3b" "sp3c" "sp3d";bind "double" "javascript pTog()";javascript echo(1)'
 			);
+			setting.classList.add("checked");
+			affectedSetting.classList.add("checked");
+			affectedSetting1.classList.remove("checked");
+		}
 	},
 
 	open_console: function () {
 		//Opens up Jmol console pop-up window for developers to test Jmol script and its output.
-		Jmol.script(JSmol, 'console');
+		//Jmol.script(JSmol, 'console');
 	},
 
 	data_infocard: function () {
@@ -392,39 +758,6 @@ var Actions = {
 			"OFF" : "TORSION");
 	},
 
-	/*
-	Autocomplete
-	*/
-	search_pubchem: function () {
-		if ($("#search-input").val() === "") {
-			MolView.alertEmptyInput();
-		} else {
-			$("#search-input").blur();
-			MolView.hideDialogs();
-			Messages.process(Loader.PubChem.search, "search");
-		}
-	},
-
-	search_rcsb: function () {
-		if ($("#search-input").val() === "") {
-			MolView.alertEmptyInput();
-		} else {
-			$("#search-input").blur();
-			MolView.hideDialogs();
-			Messages.process(Loader.RCSB.search, "search");
-		}
-	},
-
-	search_cod: function () {
-		if ($("#search-input").val() === "") {
-			MolView.alertEmptyInput();
-		} else {
-			$("#search-input").blur();
-			MolView.hideDialogs();
-			Messages.process(Loader.COD.search, "search");
-		}
-	},
-
 	show_search_layer: function () {
 		MolView.setLayer("search");
 	},
@@ -609,6 +942,9 @@ var Actions = {
 	},
 
 	resolve: function () {
+		resetUpdateAnim();
+		//Added Sketcher.center to help with showing molecule image on Treant.
+		Sketcher.center();
 		Messages.process(Loader.resolve, "resolve");
 	},
 

@@ -58,7 +58,7 @@ var MolView = {
 	 * on initialization
 	 * @type {Boolean}
 	 */
-	loadDefault: true,
+	//loadDefault: true,
 
 	/**
 	 * Indicates macromolecule support
@@ -104,9 +104,9 @@ var MolView = {
 			this.loadDefault = false;
 		}
 
-		Spectroscopy.init();
+		//Spectroscopy.init();
 		Autocomplete.init();
-		Request.init();
+		//Request.init();
 		Sketcher.init();
 		SearchGrid.init();
 
@@ -232,7 +232,8 @@ var MolView = {
 		this.addAction("molecular_orbital_sp", "menu", true); //Show sp orbitals
 		this.addAction("molecular_orbital_sp2", "menu", true); //Show sp2 orbitals
 		this.addAction("molecular_orbital_sp3", "menu", true); //Show sp3 orbitals
-		this.addAction("open_console", "menu", true); //Opens Jmol console window for dev
+		//this.addAction("open_console", "menu", true); //Opens Jmol console window for dev
+		this.addAction("toggle_hydrogens", "menu", true); //Turn off Hs to prepare for STL print
 
 		this.addAction("data_infocard", "menu", true);
 		this.addAction("data_spectra", "menu", true);
@@ -285,6 +286,11 @@ var MolView = {
 		this.addAction("search_rcsb", "menu", true);
 		this.addAction("search_cod", "menu", true);
 		this.addAction("show_search_layer", "menu", true);
+		//New search bar
+		this.addAction("search_smile", "button", false);
+		this.addAction("treeSmile", "menu", true);
+		//New search button
+		this.addAction("search_button", "button", false);
 		this.addAction("load_more_pubchem", "button", true);
 		this.addAction("load_more_rcsb", "button", true);
 		this.addAction("load_more_cod", "button", true);
@@ -350,7 +356,9 @@ var MolView = {
 			if (!Request.CIR.available) {
 				Messages.alert("cir_down");
 			}
+
 		}, "JSmol");  //change this line to either GLmol or JSmol or CDW
+
 	},
 
 	/**

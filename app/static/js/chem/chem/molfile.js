@@ -911,6 +911,7 @@ chem.Molfile.parseMol = function ( /* string */ ctabLines) /* chem.Struct */ {
 	return struct;
 };
 
+//RDKit version line standard molfile
 chem.Molfile.parseCTab = function ( /* string */ ctabLines) /* chem.Struct */ {
 	var mf = chem.Molfile;
 	var countsSplit = mf.partitionLine(ctabLines[0], mf.fmtInfo.countsLinePartition);

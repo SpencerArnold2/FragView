@@ -490,36 +490,45 @@ MPAtom.prototype.drawStateColor = function () {
 	draw between other green selection areas and because the invalidation is not
 	working correctly when adding fragments which are not yet collapsed */
 
-	if (this.display === "hover" || this.display === "active" ||
-		(this.display === "normal" && this.isSelected()) || incorrect) {
-		var d = incorrect ? "incorrect" : (this.isSelected() ? "selected" : this.display);
+	//Do not highlight atoms when they are hovered over.
+	// if (this.display === "hover" || this.display === "active" ||
+	// 	(this.display === "normal" && this.isSelected()) || incorrect) {
+	// 	var d = incorrect ? "incorrect" : (this.isSelected() ? "selected" : this.display);
 
-		this.mp.ctx.beginPath();
-		if (this.line.area.point) {
-			this.mp.ctx.arc(this.center.x, this.center.y,
-				this.mp.s.atom.selectionRadiusScaled, 0, PI2);
-			this.mp.ctx.fillStyle = this.mp.s.atom[d].color;
-			this.mp.ctx.fill();
-		} else {
-			this.mp.ctx.moveTo(this.center.x + this.line.area.left, this.center.y);
-			this.mp.ctx.lineTo(this.center.x + this.line.area.right, this.center.y);
-			this.mp.ctx.strokeStyle = this.mp.s.atom[d].color;
-			this.mp.ctx.stroke();
-		}
-	}
+	// 	this.mp.ctx.beginPath();
+	// 	if (this.line.area.point) {
+	// 		this.mp.ctx.arc(this.center.x, this.center.y,
+	// 			this.mp.s.atom.selectionRadiusScaled, 0, PI2);
+	// 		this.mp.ctx.fillStyle = this.mp.s.atom[d].color;
+	// 		this.mp.ctx.fill();
+	// 	} else {
+	// 		this.mp.ctx.moveTo(this.center.x + this.line.area.left, this.center.y);
+	// 		this.mp.ctx.lineTo(this.center.x + this.line.area.right, this.center.y);
+	// 		this.mp.ctx.strokeStyle = this.mp.s.atom[d].color;
+	// 		this.mp.ctx.stroke();
+	// 	}
+	// }
 }
 
 /**
  * Draw actual atom label
  */
-MPAtom.prototype.drawLabel = function () {
+MPAtom.prototype.drawLabel = function (atom="", implicitFlag=false) {
 	//TODO: add support for collapsed groups (CH2- to H2C-, OH- to HO-, etc.)
+	atom = atom;
+	implicitFlag = implicitFlag;
 
 	if (this.isHidden() || this.line === undefined) return;
 
 	if (this.isVisible()) {
 		if (this.mp.s.atom.colored) {
 			this.mp.ctx.fillStyle = JmolAtomColorsHashHex[this.element] || JmolAtomColorsHashHex["C"];
+		}
+
+		if(implicitFlag) {
+			if(atom === "H") {
+				this.mp.ctx.fillStyle = "#868DEE";
+			}
 		}
 
 		if (this.mp.s.atom.miniLabel) {

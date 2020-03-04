@@ -157,11 +157,11 @@ var Progress = {
 					if (Progress.opacity <= 0) {
 						Progress.animReady = true;
 					} else {
-						Progress.ctx.fillStyle = "rgba(255,0,0," + Progress.opacity + ")";
+						Progress.ctx.fillStyle = "rgba(99,51,148" + Progress.opacity + ")";
 						Progress.ctx.fillRect(0, 0, Progress.canvas.width * Progress.animValue, Progress.canvas.height);
 					}
 				} else {
-					Progress.ctx.fillStyle = "rgb(255,0,0)";
+					Progress.ctx.fillStyle = "rgb(99,51,148)";
 					Progress.ctx.fillRect(0, 0, Progress.canvas.width * Progress.animValue, Progress.canvas.height);
 				}
 			}
@@ -203,5 +203,12 @@ var Progress = {
 		this.value = 1;
 		this.ready = true;
 		document.title = document.title.replace(/ \[loading\]/g, "");
+	},
+
+	//Check to see if progress bar is full
+	isComplete: function() {
+		if(this.ready === true) {
+			return true;
+		}
 	}
 };

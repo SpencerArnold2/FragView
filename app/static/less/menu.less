@@ -60,6 +60,36 @@
 	list-style: none;
 }
 
+#update-tree-button, #search-button {
+	display: block;
+	width: 5em;
+}
+
+#action-about { 
+	display: block;
+	width: 5.5em;
+	height: 2.5em;
+}
+
+#loadModelAnim {
+	float: right;
+	border: 10px solid @highlight-light;
+	border-top: 10px solid @active;
+	border-radius: 50%;
+	height: 15px;
+	width: 15px;
+	animation: spin 2s linear infinite;
+
+}
+
+.updateItems {
+	float: right;
+}
+
+.clear {
+	clear: both;
+}
+
 .dropdown {
 	position: relative;
 	margin: 0;
@@ -146,8 +176,20 @@ at least one other dropdown in order to:
 }
 
 #search-input {
+	display: none;
 	width: 300px;
 	font-family: 'Open Sans', sans-serif;
+}
+
+#search-smile {
+	font-family: 'Open Sans', sans-serif;
+	width: 300px;
+	text-align: center;
+}
+
+#search-button:hover, #update-tree-button:hover {
+	background-color: @active;
+	color: #FFF;
 }
 
 #search-dropdown {

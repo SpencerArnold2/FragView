@@ -411,7 +411,10 @@ MPAtom.prototype.getHandler = function () {
 			scope: this,
 			onPointerDown: function (e, mp) {
 				if (this.scope.isSelected()) mp.sel.remove();
-				else mp.mol.removeAtom(this.scope.index, true);
+				//error notification for attmept at erasing atom
+				//else Messages.alert("erase_atom_fail");
+				//Removes atom on erase
+				//else mp.mol.removeAtom(this.scope.index, true);
 
 				//dismiss all further calls to this handler
 				mp.pointer.handler = undefined;

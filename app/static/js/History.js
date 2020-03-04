@@ -29,7 +29,8 @@ var History = {
 		window.addEventListener('popstate', function (event) {
 			var q = getQuery();
 			if (JSON.stringify(q) !== JSON.stringify(MolView.query)) {
-				document.title = "MolView";
+				//document.title = "MolView";
+				document.title = "FragView";
 				MolView.query = q;
 				MolView.executeQuery();
 			}

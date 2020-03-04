@@ -257,6 +257,13 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 
 		if (this.ready) {
 			this.currentModel = mol;
+			var rdkitSmile = Sketcher.getSMILES();
+			var rdkitMolecule = RDKit.Molecule.fromSmiles(rdkitSmile);
+			rdkitMolecule.addHs();
+			rdkitMolecule.EmbedMolecule();
+			rdkitMolecule.MMFFoptimizeMolecule();
+			var rdkitmol = rdkitMolecule.toMolfile();
+			
 
 			this._setMeasure("OFF");
 

@@ -57,6 +57,14 @@ var Messages = {
 	smiles_load_error: "Failed to load structure from sketcher",
 	smiles_load_error_force: "Failed to load structure from sketcher",
 	load_fail: "Failed to load structure from its database",
+	//Empty string search
+	empty_smile_search: "A blank SMILE cannot be entered",
+	//attempt to delete atom
+	erase_atom_fail: "Atoms cannot be erased",
+	//more than frag limit (ver 1.0 has limit of 5 frags)
+	frag_limit_exceeded: "Fragmentation must only produce five or fewer fragments",
+	//SMILE parse error
+	fail_smile_parse: "There was an error with parsing the smile",
 	search_fail: "The database did not return any records",
 	search_notfound: "The database could not find any matches",
 	structure_search_fail: "Structure search has failed",
@@ -149,6 +157,7 @@ var Messages = {
 		- smiles_load_error
 		- smiles_load_error_force
 		- load_fail
+		- empty_smile_search
 		- search_fail
 		- search_notfound
 		- remote_noreach

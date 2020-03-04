@@ -18,10 +18,23 @@
 
 @import (reference) "vars";
 
+#welcome-header {
+    display: inline-block;
+    text-align: center;
+    font-size: 2.5em;
+    color: #633394;
+}
+
+#welcome-image {
+    display: inline-block;
+    text-align: center;
+}
+
 #start-dialog
 {
-    padding: 20px 10px;
+    //padding: 20px 10px;
     max-width: 800px;
+    //max-height: 650px;
     text-align: center;
 }
 
@@ -29,7 +42,7 @@
 {
     #start-dialog
     {
-        padding: 100px;
+        //padding: 100px;
     }
 }
 
@@ -52,6 +65,7 @@
 {
     width: 120px;
     margin-right: 10px;
+    background-color: #BDBDBD;
 }
 
 #welcome-mark
@@ -83,4 +97,26 @@
     font-weight: lighter;
     font-size: 20pt;
     color: #333;
+}
+
+#loadingText {
+    font-size: 1.5em;
+    color: #633394;
+}
+
+#loadAnim {
+    border: 16px solid #dedede;
+    border-top: 16px solid #633394;
+    margin-top: 3%;
+    margin-bottom: 3%;
+    margin-left: 42%;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

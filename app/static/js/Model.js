@@ -67,7 +67,15 @@ var Model = {
 		//this.GLmol && this.JSmol &&  this.CDW
 		{
 			if (MolView.loadDefault) {
+				//Get smile from 2D default sketcher data.
+				// var rdkitSmile = Sketcher.getSMILES();
+				// var rdkitMolecule = RDKit.Molecule.fromSmiles(rdkitSmile);
+				// rdkitMolecule.addHs();
+				// rdkitMolecule.EmbedMolecule();
+				// rdkitMolecule.MMFFoptimizeMolecule();
+				// var rdkitmol = rdkitMolecule.toMolfile();
 				this.data.mol = (defaultMol3D || "");
+				//this.data.mol = (rdkitmol || "");
 			}
 
 			this.setRenderEngine(rnd || "GLmol", cb);
@@ -252,7 +260,13 @@ var Model = {
 		if (!oneOf(mode, ["balls", "stick", "vdw", "wireframe", "line"]))
 			return;
 
-		$(".r-mode").removeClass("checked");
+		//$(".r-mode").removeClass("checked");
+		$("#action-model-balls").removeClass("checked");
+		$("#action-model-stick").removeClass("checked");
+		$("#action-model-vdw").removeClass("checked");
+		$("#action-model-wireframe").removeClass("checked");
+		$("#action-model-line").removeClass("checked");
+
 		$("#action-model-" + mode).addClass("checked");
 
 		this.representation = mode;
@@ -425,9 +439,10 @@ var Model = {
 	 * @param {String} mol Molfile
 	 */
 	_loadMOL: function (mol) {
-		if (this.isGLmol()) return this.GLmol.loadMOL(mol);
-		else if (this.isJSmol()) return this.JSmol.loadMOL(mol);
-		else if (this.isCDW()) return this.CDW.loadMOL(mol);
+		// if (this.isGLmol()) return this.GLmol.loadMOL(mol);
+		// else if (this.isJSmol()) return this.JSmol.loadMOL(mol);
+		// else if (this.isCDW()) return this.CDW.loadMOL(mol);
+		return this.JSmol.loadMOL(mol);
 	},
 
 	/**
