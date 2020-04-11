@@ -1,3 +1,7 @@
+---Version 1.1 Notes---
+
+---Version 1.0 Notes---
+
 Although the setup.sh executable should automate the process as much as possible it does have limitations.
 What the shell script will do:
     1. Create the Anaconda environment with the packages that are required by the FragView application
