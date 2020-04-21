@@ -44,8 +44,7 @@ test note
     <meta name="viewport" content="width=device-width, user-scalable=no" />
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes" />
-
-    <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico')}}" />
+    
     <!-- <meta name="author" content="Herman Bergwerf" /> -->
     <meta name="keywords" <?php echo 'content="' .$metadata["keywords"].'"' ?> <!-- /> -->
 
@@ -58,6 +57,7 @@ test note
     <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/rdkitjs/rdkit.js') }}"></script> -->
 
     <!-- CSS -->
+    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/welcome.less')}}" />
     <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
     <link type="text/css" rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/vars.less')}}" />
@@ -77,94 +77,15 @@ test note
     <!-- <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/periodictable.less')}}" /> -->
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/chemicaldata.less')}}" />
     <!-- <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/autocomplete.less')}}" /> -->
-    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/welcome.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/hover.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/trees.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/Treant.css')}}" />
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Chewy&display=swap" />
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/Preferences.js') }}"></script>
-
-
-    <!-- src -->
-    <!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/Polyfill.js') }}"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/JSmol.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/Detector.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/three.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/GLmol.js') }}"></script>
-<!--XHR fails on this file. NOTE: object from this file gets created in spectroscopy.js and spectroscopy.init()
-    is called in Molview.js. All of the instances of these two files and the dependencies have been commented out.   
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/ChemDoodleWeb.js') }}"></script> 
-    <!-- applib 
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/jquery.hotkeys.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/Blob.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/Filesaver.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/common.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/vec2.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/set.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/map.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/pool.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/element.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/struct.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/molfile.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/sgroup.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/struct_valence.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/dfs.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/cis_trans.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/stereocenters.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/smiles.js') }}"></script>
-    <!-- datasets 
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/PeriodicTable.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/datasets/PDBNames.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/datasets/MineralNames.js') }}"></script>
-    <!-- core 
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Data.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Utility.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Preferences.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Progress.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Messages.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/GLmolPlugin.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/JSmolPlugin.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/CDWPlugin.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Model.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Request.js') }}"></script>
-    <!-- molpad
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/Data.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/Utility.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPPoint.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPLine.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPFragments.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPAtom.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPAtom_calc.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPAtom_handler.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPBond.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPBond_calc.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPBond_handler.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MolPad.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPSettings.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPMolecule.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPSelection.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPGraphics.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPEvents.js') }}"></script>
-    <!-- app 
-    <script type="text/javascript" src="{{ url_for('static', filename='js/History.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Sketcher.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/SearchGrid.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Loader.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Actions.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Share.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Link.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/InfoCard.js') }}"></script>
-    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/Spectroscopy.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Autocomplete.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/MolView.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/MolList.js') }}"></script>
-
-    <script type="text/javascript" src="{{ url_for('static', filename='js/STLExporter.js') }}"></script> -->
 
     <!-- <script>
         window.onbeforeunload = function(e) {
@@ -187,6 +108,16 @@ test note
         <canvas id="progress-canvas"></canvas>
     </div>
 
+    <div id="uploadTreeDialog" class="dialog-overlay" hidden>
+        <div id="dialog-click-area">
+            <div id="dialog-wrapper">
+                <div class="dialog" id="uploadDialog">
+                    <p id="uploadDialogText">Uploading new tree...    <span id="uploadDialogAnim"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     
     <div id="JmolApplet0_console"></div>
 
@@ -203,11 +134,14 @@ test note
             </form>
             <ul id="main-menu" class="hstack">
                 <li class="tree-button">
-                    <button id="search-button" onclick="Actions.treeSmile('', true)" title="Create the New Tree">New</button>
+                    <button id="search-button" onclick="Actions.treeSmile('', true)" title="Create a New Tree">New</button>
                 </li>
                 <li class="tree-button">
                     <button id="update-tree-button" onclick="Actions.updateTree()" title="Refresh Tree Image">Refresh</button>
                 </li>
+                <!-- <li class="tree-button">
+                    <button id="redraw-tree-button" onclick="Actions.redrawTree()" title="Redraw Tree">Redraw</button>
+                </li> -->
                 <!-- <li id="molview-dropdown" class="dropdown">
                     <a class="dropdown-toggle">Information</a>
                     <ul class="dropdown-menu">
@@ -228,7 +162,9 @@ test note
                         <li class="menu-item"><a id="action-export-model">MOL file</a></li>
                         <!-- Newely added button for STL Export by Jinyoung An-->
                         <li class="menu-item"><a id="action-export-model-stl">STL file for 3D printing</a></li>
-
+                        <li class="menu-item"><a id="action-export-tree-data" onclick="Actions.save_tree()" title="Save the current tree data and reupload file to pick up where you left off">Save tree data</a></li>
+                        <li class="menu-header">Import</li>
+                        <li class="menu-item"><a id="action-import-tree-data" onclick="Actions.upload_tree()">Upload tree data</a><input id="file-dialog" type="file" onchange="Actions.dialogChange()" /></li>
                         <!-- <li class="menu-header">Chemical data</li>
                         <li class="menu-item"><a id="action-data-infocard">Information card</a></li>
                         <li class="menu-item"><a id="action-data-spectra">Spectroscopy</a></li>
@@ -264,6 +200,7 @@ test note
                     </ul>
                 </li>
                 <li id="solo-menu-item" class="menu-item"><a id="action-about">About</a></li>
+                <li id="file-upload-text" class="menu-item"><p></p></li>
                 
             </ul>
             <div class="updateItems">
@@ -502,8 +439,12 @@ test note
                 <div class="dialog" id="start-dialog">
                     <!-- <img id="welcome-logo" src="https://www.mga.edu/_src/assets/images/mga-header-logo.png" alt="" /> -->
                     <!-- WORKS -->
-                    <!-- <p id="welcome-header">FragView</p> -->
-                    <p id="welcome-header"><img id="welcome-image" src="{{ url_for('static', filename='img/FragViewLogoWeb.png')}}" /></p>
+                    <p id="welcome-header">FragView</p>
+                    <p>Welcome to the educational platform for demonstrating metabolite fragmentation in MS/MS.</p>
+                    <div class="loadingSection">
+                        <!-- <span id="loadingText">Loading</span> -->
+                        <div id="loadAnim"></div>
+                    </div>
                     <!-- Image for Molview
                     <img id="welcome-mark" src="{{ url_for('static', filename='img/mark.svg') }}" alt="MolView" /> -->
                     <!-- <a id="agpl-logo-wrapper" target="_blank" href="http://github.com/molview">
@@ -535,14 +476,13 @@ test note
                             rel="publisher">Google+</a>
                         <a class="btn" target="_blank" title="MolView Blog" href="http://blog.molview.org">Blog</a>
                     </div> -->
-                    <p>Welcome to the educational platform for demonstrating metabolite fragmentation in MS/MS.</p>
                     <!-- <a class="gray" href="legal" target="_blank">read the Terms of Use</a> -->
                     <div id="welcome-button-bar" class="btn-group" style="display: none;">
                         <!-- <button id="action-start-help" class="btn btn-large">Get started</button> -->
-                        <div class="loadingSection">
+                        <!-- <div class="loadingSection">
                             <span id="loadingText">Loading</span>
                             <div id="loadAnim"></div>
-                        </div>
+                        </div> -->
                         <button id="closeWelcomeBannerBtn" class="btn close btn-large btn-primary" disabled>Close</button>
                     </div>
                     <!-- <p>We need your support to create more cool stuff! <a class="btn" target="_blank" title="Consider donating to this project"

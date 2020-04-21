@@ -1,15 +1,20 @@
 //These MolNodes will be held in the MolList and store the data to be loaded by Sketcher.js and Model.js
 class MolNode{
-    constructor(mol3d, mol2d, smile=""){
+    constructor(mol3d, mol2d, smile="", parentId=0, nodeId=0){
         this.mol2d = mol2d;
         this.mol3d = mol3d;
         this.smile = smile;
+        this.parentId = parentId;
+        this.nodeId = nodeId;
     }
     set2d(data){
         this.mol2d = data;
     }
     set3d(data){
         this.mol3d = data;
+    }
+    setSmile(smile) {
+        this.smile = smile;
     }
     get2d(){
         return this.mol2d;

@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, send_from_directory, redirect, url_for, jsonify
 from flask_cors import CORS, cross_origin
 import os
@@ -43,6 +42,23 @@ def two_dimensional():
 
     return jsonify({ "output": output })
 
+@app.route('/2dSingle', methods=["POST"])
+def single_two_dimensional():
+    content = request.get_json()
+    smile = content['smile']
+
+    output = []
+
+    if(smile):
+        m = Chem.MolFromSmiles(smile)
+        if m:
+            output.append(Chem.MolToMolBlock(m))
+        else:
+            return jsonify({ "error": f"Unable to generate mol from smile: {s}" }), 400
+    else:
+        return jsonify({ "error": "No smiles provided" }), 400
+    return jsonify({ "output": output })
+
 @app.route('/2dMol')
 def two_dimensionalMol():
     smile = request.args.get('smile', 0, str)
@@ -67,10 +83,13 @@ def loadLicense():
 def loadTerms():
     return render_template('terms.html')
 
-@app.route('/favicon.ico')
-def faviconRet():
-    print(os.path.join(app.root_path, 'static/img'))
-    return send_from_directory(os.path.join(app.root_path, 'static/img'), 'favicon-32x32.png')
+if(__name__ == "__main__"):
+    app.run(host='0.0.0.0')
+
+# @app.route('/favicon.ico')
+# def faviconRet():
+#     print(os.path.join(app.root_path, 'static/img'))
+#     return send_from_directory(os.path.join(app.root_path, 'static/img'), 'favicon-32x32.png')
     
 
     #m = Chem.MolFromSmiles(smile)

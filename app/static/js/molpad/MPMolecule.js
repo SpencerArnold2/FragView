@@ -120,6 +120,8 @@ MPMolecule.prototype.exec = function (callback, atoms, bonds) {
 //Assume molfile sent is RDKit molfile.
 MPMolecule.prototype.loadMOL = function (mol) {
 	this.clear();
+
+	console.log("MOL: ", mol);
 	
 	mymol = mol.split("\n");
 	

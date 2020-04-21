@@ -38,19 +38,42 @@
 	content: '\f107';
 }
 
-#search-button, #update-tree-button {
+.dropdown.open>.dropdown-toggle:after {
+	color: #FFF;
+}
+
+#search-button, #update-tree-button, #action-about {
 	font-family: 'Open Sans', sans-serif;
+	position: relative;
+	bottom: 0.7em;
 	font-size: 1em;
-	color: #111111;
-	background-color: #FFF;
-	margin: 0 10px 0 0;
-	padding: 0 0 5px 0;
+	color: #000;
 	border: none;
+	background-color: #FFF;
+	width: 5.5em;
+	height: 2.7em;
+	margin: 0 9% 0 0;
+	//padding: 0 0 5px 0;
+	//border: none;
+}
+
+#search-button:active, #update-tree-button:active, #action-about:active {
+	background-color: @active;
+	color: #FFF;
+}
+
+#action-about {
+	bottom: 0.45em;
+	padding: 10% 0 0 0;
+}
+
+.dropdown.open>.dropdown-toggle, .dropdown-toggle:hover {
+	background-color: @active  !important;
+	border-color: @contrast  !important;
 }
 
 .dropdown.open>.dropdown-toggle {
-	background-color: @light  !important;
-	border-color: @contrast  !important;
+	color: #FFF;
 }
 
 .caret {
@@ -88,13 +111,13 @@ Menu-item icons
 }
 
 #solo-menu-item {
-	margin: 2.8% 0 0 0;
+	margin: 1.8% 0 0 0;
 }
 
 .menu-item>a:before {
 	display: inline-block;
 	width: 30px;
-	color: @foreground-less;
+	color: #111111;
 	text-align: center;
 	font-family: FontAwesome;
 	font-size: 10pt;
@@ -149,9 +172,32 @@ Menu-item icons
 #action-export-sketcher-png:before,
 #action-export-model-png:before,
 #action-export-model-stl:before,
+#action-export-tree-data:before,
+#action-import-tree-data:before,
 #action-export-model:before {
 	content: '\f019';
 }
+
+//Hide file dialog
+#file-dialog {
+	display: none;
+}
+
+#file-upload-text {
+	margin: 1% 0 0 1%;
+	font-family: 'Chewy';
+	color: @active;
+}
+
+#newTree, #fileTree {
+	font-family: 'Chewy';
+	color: @active;
+}
+
+// #fileTree {
+// 	font-family: 'Chewy';
+// 	color: @alternative-medium;
+// }
 
 #action-data-infocard:before {
 	content: '\f1ec';

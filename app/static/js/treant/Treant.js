@@ -468,6 +468,8 @@
          * @returns {TreeNode}
          */
         addNode: function( parentTreeNode, nodeDefinition) {
+            console.log("parentTreeNode: ", parentTreeNode);
+            console.log("this.nodeDB: ", this.nodeDB);
             var dbEntry = this.nodeDB.get( parentTreeNode.id );
 
             this.CONFIG.callback.onBeforeAddNode.apply( this, [parentTreeNode, nodeDefinition] );

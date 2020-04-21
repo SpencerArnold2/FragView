@@ -232,7 +232,7 @@ var MolView = {
 		this.addAction("molecular_orbital_sp", "menu", true); //Show sp orbitals
 		this.addAction("molecular_orbital_sp2", "menu", true); //Show sp2 orbitals
 		this.addAction("molecular_orbital_sp3", "menu", true); //Show sp3 orbitals
-		//this.addAction("open_console", "menu", true); //Opens Jmol console window for dev
+		this.addAction("open_console", "menu", true); //Opens Jmol console window for dev
 		this.addAction("toggle_hydrogens", "menu", true); //Turn off Hs to prepare for STL print
 
 		this.addAction("data_infocard", "menu", true);
@@ -337,8 +337,8 @@ var MolView = {
 		this.addAction("export_spectrum_png", "button", true);
 		this.addAction("export_spectrum_jcamp", "button", true);
 
-		$("#welcome-loading-msg").hide();
-		$("#welcome-button-bar").show();
+		//$("#welcome-loading-msg").hide();
+		//$("#welcome-button-bar").show();
 
 		//custom event trackers
 		$("#model-source").on(this.trigger, function () {

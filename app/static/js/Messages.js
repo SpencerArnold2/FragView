@@ -57,6 +57,8 @@ var Messages = {
 	smiles_load_error: "Failed to load structure from sketcher",
 	smiles_load_error_force: "Failed to load structure from sketcher",
 	load_fail: "Failed to load structure from its database",
+	//Handle errors with not obtaining node to update image on
+	refresh_image_error: "An error occurred while updating the image to a tree node (make sure a tree node is selected)",
 	//Empty string search
 	empty_smile_search: "A blank SMILE cannot be entered",
 	//attempt to delete atom
@@ -113,6 +115,9 @@ var Messages = {
 		//Do not replace the current message (if present) with model_update
 		if (!(what === "model_update" && !Messages.isEmpty())) {
 			Messages.clear();
+
+			console.log("what: ", what);
+			console.log("messages[what]: ", Messages[what]);
 
 			if (what && what !== "" && Messages[what] && Messages[what] !== "") {
 				$("body").addClass("progress-cursor");
