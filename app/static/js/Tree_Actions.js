@@ -431,6 +431,15 @@ function handleLoadCompletion() {
         document.getElementById("closeWelcomeBannerBtn").disabled = false;
         document.getElementById("welcome-loading-msg").innerText = "Loading complete";
         document.getElementById("loadAnim").style.display = "none";
+        $("#closeWelcomeBannerBtn").on("click", startupSMILE);
     }
     jsmolLoadCount++;
+}
+
+function startupSMILE(event) {
+    var smileTxt = document.getElementById("welcomeTextBox");
+    if(smileTxt.value !== "") {
+        document.getElementById("search-smile").value = smileTxt.value;
+        Actions.treeSmile('', true);
+    }
 }

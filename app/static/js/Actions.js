@@ -178,23 +178,40 @@ var Actions = {
 		// if(smile.search("[H]") === 0 || smile.search("[H]") === -1) {
 		// 	implicitFlag = true;
 		// }
-		setTimeout(function () {
-			//mol2d = Sketcher.getMOL();
-			//mol3d = Model.data.mol;
-			var molInfo = [mol2d, mol3d];
-			var DomRoot = document.getElementById("node-0");
-			var DomRootURL = sketcherBlobURL();
-			DomRoot.title = smile;
-			console.log("DOMROOT title: ", DomRoot.title);
-			console.log("smile: ", smile);
-			DomRoot.innerHTML = "<img id=img0 src=" + DomRootURL + ">";
-			addClickHandler(DomRoot);
-			let rootNode = MolDataList.getNode("0");
-			rootNode.set2d(molInfo[0]);
-			rootNode.set3d(molInfo[1]);
-			//Causes undefined mol on fragments with new tree
-			//Sketcher.loadMOL(ajaxData["output"][0]);
-		}, 100)
+
+
+
+		// setTimeout(function () {
+		// 	//mol2d = Sketcher.getMOL();
+		// 	//mol3d = Model.data.mol;
+		// 	var molInfo = [mol2d, mol3d];
+		// 	var DomRoot = document.getElementById("node-0");
+		// 	var DomRootURL = sketcherBlobURL();
+		// 	DomRoot.title = smile;
+		// 	console.log("DOMROOT title: ", DomRoot.title);
+		// 	console.log("smile: ", smile);
+		// 	DomRoot.innerHTML = "<img id=img0 src=" + DomRootURL + ">";
+		// 	addClickHandler(DomRoot);
+		// 	let rootNode = MolDataList.getNode("0");
+		// 	rootNode.set2d(molInfo[0]);
+		// 	rootNode.set3d(molInfo[1]);
+		// 	//Causes undefined mol on fragments with new tree
+		// 	//Sketcher.loadMOL(ajaxData["output"][0]);
+		// }, 100)
+
+
+		var molInfo = [mol2d, mol3d];
+		var DomRoot = document.getElementById("node-0");
+		var DomRootURL = sketcherBlobURL();
+		DomRoot.title = smile;
+		console.log("DOMROOT title: ", DomRoot.title);
+		console.log("smile: ", smile);
+		DomRoot.innerHTML = "<img id=img0 src=" + DomRootURL + ">";
+		addClickHandler(DomRoot);
+		let rootNode = MolDataList.getNode("0");
+		rootNode.set2d(molInfo[0]);
+		rootNode.set3d(molInfo[1]);
+		
 		if (hasFragment(smile)) {
 
 			console.log("HAS FRAGMENT")
@@ -210,16 +227,16 @@ var Actions = {
 				DomRoot = document.getElementById("node-0");
 				DomRoot.style.pointerEvents = "none";
 
-			}, 500)
+			}, 300)
 			//to revert back to root node
-			setTimeout(function () {
-				// var node = MolDataList.getNode(1);
-				// Model.loadMOL(node.get3d());
-				// Sketcher.loadMOL(node.get2d());
-				// rootNodeH.className = "node";
-				// firstFrag = document.getElementById("node-1");
-				// firstFrag.className = "node active";
-			}, 1800)
+			// setTimeout(function () {
+			// 	// var node = MolDataList.getNode(1);
+			// 	// Model.loadMOL(node.get3d());
+			// 	// Sketcher.loadMOL(node.get2d());
+			// 	// rootNodeH.className = "node";
+			// 	// firstFrag = document.getElementById("node-1");
+			// 	// firstFrag.className = "node active";
+			// }, 1800)
 		}
 		else {
 			cancelUpdateAnim();
@@ -313,17 +330,17 @@ var Actions = {
 		console.log("nodes: ", nodes);
 		if(count <= len) {
 			new Promise((resolve, reject) => {
-				setTimeout(() => resolve(Sketcher.loadMOL(nodes[count]["mol2d"])), 100);
+				setTimeout(() => resolve(Sketcher.loadMOL(nodes[count]["mol2d"])), 25);
 			}).then(function(results) {
 				//console.log("count", count);
 				if(count === 0) {
 					return new Promise((resolve, reject) =>{
-						setTimeout(() => resolve(Actions.treeSmileCont(nodes, nodes[count]["mol3d"], nodes[count]["mol2d"])), 100);
+						setTimeout(() => resolve(Actions.treeSmileCont(nodes, nodes[count]["mol3d"], nodes[count]["mol2d"])), 25);
 					})
 				}
 				else {
 					return new Promise((resolve, reject) => {
-						setTimeout(() => resolve(storeMOL(nodes[count]["mol3d"], nodes[count]["mol2d"], nodes[count]["smile"], false, nodes[count]["parentId"])), 100);
+						setTimeout(() => resolve(storeMOL(nodes[count]["mol3d"], nodes[count]["mol2d"], nodes[count]["smile"], false, nodes[count]["parentId"])), 25);
 					})
 				}
 			}).then(function (results) {
@@ -338,7 +355,7 @@ var Actions = {
 				// will always be in index one for that iteration
 				if(count !== 0) {
 					return new Promise((resolve, reject) => {
-						setTimeout(() => resolve(MolDataList.molList.splice(nodes.length-1,1)), 500);
+						setTimeout(() => resolve(MolDataList.molList.splice(nodes.length-1,1)), 25);
 					})
 				}
 				
@@ -347,7 +364,7 @@ var Actions = {
 
 				return new Promise((resolve, reject) => {
 					count += 1;
-					setTimeout(() => resolve(Actions.recursiveCreate(count, nodes, len)), 100);
+					setTimeout(() => resolve(Actions.recursiveCreate(count, nodes, len)), 25);
 				})
 				
 			});

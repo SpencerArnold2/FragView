@@ -14,4 +14,8 @@ After the script runs, the application should be accessible from [IP ADDRESS]:50
 the address for the server.
 
 Known Issues:
-    There are no known issues with the script at this time.
+    1. If running the script results in a green light for the app and nginx but there is a bad gateway
+        error and the .sock file is not visible in the app directory, try restarting the service 
+        (   sudo systemctl restart FragView[VersionNumber]  )
+        or maybe removing the conda env (NOT TESTED). Restarting the service fixed the problem before
+        and the error did not occur again even if the setup.sh script was executed again.
