@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html itemscope itemtype="http://schema.org/Thing">
+Loading
 
 <!--
 This file is part of MolView (http://molview.org)
@@ -34,6 +35,7 @@ Query parameters:
 - menu = on || off
 - dialog = about || help || share || embed
 - bg = black || gray || white
+test note
 -->
 
 <head>
@@ -42,11 +44,9 @@ Query parameters:
     <meta name="viewport" content="width=device-width, user-scalable=no" />
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes" />
-
-    <link rel="shortcut icon" href="favicon-32x32.png" />
-    <?php echo "<title>".$metadata["title"]."</title>"; ?>
-    <meta name="author" content="Herman Bergwerf" />
-    <meta name="keywords" <?php echo 'content="' .$metadata["keywords"].'"' ?> />
+    
+    <!-- <meta name="author" content="Herman Bergwerf" /> -->
+    <meta name="keywords" <?php echo 'content="' .$metadata["keywords"].'"' ?> <!-- /> -->
 
     <!-- Open Graph + Schema.org + Twitter Card -->
     <meta name="twitter:card" content="summary">
@@ -54,7 +54,10 @@ Query parameters:
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="MolView" />
 
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/rdkitjs/rdkit.js') }}"></script> -->
+
     <!-- CSS -->
+    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/welcome.less')}}" />
     <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
     <link type="text/css" rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/vars.less')}}" />
@@ -66,94 +69,30 @@ Query parameters:
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/sketcher.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/model.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/search.less')}}" />
+    <link type="text/css" rel="stylesheet/css" href="{{ url_for('static', filename='css/license.css')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/messages.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/dialogs.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/help.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/share.less')}}" />
-    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/periodictable.less')}}" />
+    <!-- <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/periodictable.less')}}" /> -->
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/chemicaldata.less')}}" />
-    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/autocomplete.less')}}" />
-    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/welcome.less')}}" />
+    <!-- <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/autocomplete.less')}}" /> -->
+    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/hover.less')}}" />
     <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/trees.less')}}" />
+    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/Treant.css')}}" />
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Chewy&display=swap" />
 
-    <!-- src -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/Polyfill.js') }}"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/JSmol.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/Detector.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/three.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/GLmol.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/ChemDoodleWeb.js') }}"></script>
-    <!-- applib -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/jquery.hotkeys.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/Blob.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/Filesaver.min.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/prototype.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/common.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/vec2.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/set.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/map.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/pool.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/element.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/struct.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/molfile.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/sgroup.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/struct_valence.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/dfs.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/cis_trans.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/stereocenters.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/smiles.js') }}"></script>
-    <!-- datasets -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/PeriodicTable.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/datasets/PDBNames.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/datasets/MineralNames.js') }}"></script>
-    <!-- core -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Data.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Utility.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/Preferences.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Progress.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Messages.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/GLmolPlugin.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/JSmolPlugin.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/CDWPlugin.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Model.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Request.js') }}"></script>
-    <!-- molpad -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/Data.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/Utility.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPPoint.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPLine.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPFragments.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPAtom.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPAtom_calc.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPAtom_handler.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPBond.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPBond_calc.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPBond_handler.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MolPad.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPSettings.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPMolecule.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPSelection.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPGraphics.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPEvents.js') }}"></script>
-    <!-- app -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/History.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Sketcher.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/SearchGrid.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Loader.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Actions.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Share.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Link.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/InfoCard.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Spectroscopy.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Autocomplete.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/MolView.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Tree_BinaryTree.js') }}"></script>
 
-    <script type="text/javascript" src="{{ url_for('static', filename='js/STLExporter.js') }}"></script>
-
+    <!-- <script>
+        window.onbeforeunload = function(e) {
+            window.location.replace("localhost:5000/");
+        }
+    
+    </script> -->
 </head>
 
 <body>
@@ -168,59 +107,72 @@ Query parameters:
     <div id="progress">
         <canvas id="progress-canvas"></canvas>
     </div>
-    <div id="tree-menu-container">
-        <div id="tree-menu">
-            <div id="tree-options-menu" class="tree-top-row">
-                <a id="tree-selection-split" href="#">Split</a>
-                <a id="tree-selection-delete" href="#">Delete</a>
-                <a id="tree-selection-clear" href="#">Clear All</a>
-            </div>
-            <div id="tree-row-1" class="tree-rows">
-                <div class="tree-columns" id="original-column">
-                    <a id="node0" class="tree-node active" href="#">Node 0</span></h1></a>
+
+    <div id="uploadTreeDialog" class="dialog-overlay" hidden>
+        <div id="dialog-click-area">
+            <div id="dialog-wrapper">
+                <div class="dialog" id="uploadDialog">
+                    <p id="uploadDialogText">Uploading new tree...    <span id="uploadDialogAnim"></span></p>
                 </div>
-            </div>            
+            </div>
         </div>
     </div>
+
+    
     <div id="JmolApplet0_console"></div>
+
     <div id="menu">
         <div id="menu-bar" class="hstack">
             <form id="search" class="hstack">
                 <div class="input-wrapper">
-                    <button><i class="fa fa-search"></i></button>
+                    <input id="search-smile" placeholder="SMILE" name="q" type="text" autocomplete="off" spellcheck="false" />
+                    <!-- <button id="search-button">New Tree</button> -->
+                    <button style="display: none;"><i class="fa fa-search"></i></button>
                     <input id="search-input" name="q" type="text" autocomplete="off" spellcheck="false" />
                     <div class="input-focus"></div>
                 </div>
             </form>
             <ul id="main-menu" class="hstack">
-                <li id="molview-dropdown" class="dropdown">
+                <li class="tree-button">
+                    <button id="search-button" onclick="Actions.treeSmile('', true)" title="Create a New Tree">New</button>
+                </li>
+                <li class="tree-button">
+                    <button id="update-tree-button" onclick="Actions.updateTree()" title="Refresh Tree Image">Refresh</button>
+                </li>
+                <!-- <li class="tree-button">
+                    <button id="redraw-tree-button" onclick="Actions.redrawTree()" title="Redraw Tree">Redraw</button>
+                </li> -->
+                <!-- <li id="molview-dropdown" class="dropdown">
                     <a class="dropdown-toggle">Information</a>
                     <ul class="dropdown-menu">
+                        <li class="menu-item"><a id="action-treeSmile">SMILE</a></li>
                         <li class="menu-item"><a id="action-help">Help</a></li>
                         <li class="menu-item"><a id="action-about">About</a></li>
                     </ul>
-                </li>
+                </li> -->
                 <li id="tools-dropdown" class="dropdown">
                     <a class="dropdown-toggle">Tools</a>
                     <ul class="dropdown-menu">
-                        <li class="menu-header">Link</li>
+                        <!-- <li class="menu-header">Link</li> -->
                         <!-- <li class="menu-item"><a id="action-share">Share</a></li> -->
-                        <li class="menu-item"><a id="action-embed">Embed</a></li>
+                        <!-- <li class="menu-item"><a id="action-embed">Embed</a></li> -->
                         <li class="menu-header">Export</li>
                         <li class="menu-item"><a id="action-export-sketcher-png">Structural formula image</a></li>
                         <li class="menu-item"><a id="action-export-model-png">3D model image</a></li>
                         <li class="menu-item"><a id="action-export-model">MOL file</a></li>
                         <!-- Newely added button for STL Export by Jinyoung An-->
                         <li class="menu-item"><a id="action-export-model-stl">STL file for 3D printing</a></li>
-
-                        <li class="menu-header">Chemical data</li>
+                        <li class="menu-item"><a id="action-export-tree-data" onclick="Actions.save_tree()" title="Save the current tree data and reupload file to pick up where you left off">Save tree data</a></li>
+                        <li class="menu-header">Import</li>
+                        <li class="menu-item"><a id="action-import-tree-data" onclick="Actions.upload_tree()">Upload tree data</a><input id="file-dialog" type="file" onchange="Actions.dialogChange()" /></li>
+                        <!-- <li class="menu-header">Chemical data</li>
                         <li class="menu-item"><a id="action-data-infocard">Information card</a></li>
                         <li class="menu-item"><a id="action-data-spectra">Spectroscopy</a></li>
                         <li class="menu-item"><a id="model-source" class="disabled" target="_blank">3D model source</a></li>
                         <li class="menu-header">Advanced search</li>
                         <li class="menu-item"><a id="action-search-similarity">Similarity</a></li>
                         <li class="menu-item"><a id="action-search-substructure">Substructure</a></li>
-                        <li class="menu-item"><a id="action-search-superstructure">Superstructure</a></li>
+                        <li class="menu-item"><a id="action-search-superstructure">Superstructure</a></li> -->
                     </ul>
                 </li>
                 <li id="model-dropdown" class="dropdown">
@@ -228,33 +180,34 @@ Query parameters:
                     <ul class="dropdown-menu">
                         <li class="menu-header">Representation</li>
                         <!-- Newly added buttons for isosurface, orbital display features by Jinyoung An-->
-                        <li class="menu-item"><a id="action-isosurface-vdw">Isosurface vdw ON/OFF</a></li>
-                        <li class="menu-item"><a id="action-molecular-orbital-sp">View Sp orbitals</a></li>
-                        <li class="menu-item"><a id="action-molecular-orbital-sp2">View Sp2 orbitals</a></li>
-                        <li class="menu-item"><a id="action-molecular-orbital-sp3">View Sp3 orbitals</a></li>
+                        <li class="menu-item"><a id="action-isosurface-vdw" class="r-mode radio">Isosurface vdw ON/OFF</a></li>
+                        <li class="menu-item"><a id="action-molecular-orbital-sp" class="r-mode radio">View Sp orbitals</a></li>
+                        <li class="menu-item"><a id="action-molecular-orbital-sp2" class="r-mode radio">View Sp2 orbitals</a></li>
+                        <li class="menu-item"><a id="action-molecular-orbital-sp3" class="r-mode radio">View Sp3 orbitals</a></li>
 
                         <li class="menu-item"><a id="action-model-balls" class="r-mode radio checked">Ball and Stick</a></li>
                         <li class="menu-item"><a id="action-model-stick" class="r-mode radio">Stick</a></li>
                         <li class="menu-item"><a id="action-model-vdw" class="r-mode radio">van der Waals Spheres</a></li>
                         <li class="menu-item"><a id="action-model-wireframe" class="r-mode radio">Wireframe</a></li>
                         <li class="menu-item"><a id="action-model-line" class="r-mode radio">Line</a></li>
+                        <li class="menu-item"><a id="action-models-toggle-hydrogens" class="r-mode radio" onclick="Actions.toggle_hydrogens()">Turn off 3D Hydrogens</a></li>
                         <li class="menu-header">Background</li>
                         <li class="menu-item"><a id="action-model-bg-black">Black</a></li>
                         <li class="menu-item"><a id="action-model-bg-gray">Gray</a></li>
                         <li class="menu-item"><a id="action-model-bg-white">White</a></li>
-                        <!--Opens up Jmol console window for dev-->
-                        <li class="menu-item"><a id="action-open-console">Open Jmol Console</a></li>
+                        <!--Opens up Jmol console window for dev
+                        <li class="menu-item"><a id="action-open-console">Open Jmol Console</a></li> -->
                     </ul>
                 </li>
+                <li id="solo-menu-item" class="menu-item"><a id="action-about">About</a></li>
+                <li id="file-upload-text" class="menu-item"><p></p></li>
                 
             </ul>
-            <ul id="tree-toggle" class="hstack">
-                <div id="burger" class ="tree-toggle-button">
-                    <div class="line1"></div>
-                    <div class="line2"></div>
-                    <div class="line3"></div>
-                </div>
-            </ul>
+            <div class="updateItems">
+                <!-- <span id="updatingText">Updating</span> -->
+                <div id="loadModelAnim"></div>
+            </div>
+            <div class="clear"></div>
         </div>
     </div>
     <div id="content">
@@ -278,7 +231,7 @@ Query parameters:
             </script> -->
             <div id="sketcher">
                 <div id="molpad" class="sketcher">
-                    <div id="chem-tools" class="toolbar">
+                    <!-- <div id="chem-tools" class="toolbar">
                         <div class="toolbar-inner">
                             <div id="action-mp-bond-single" class="tool-button primary-tool" title="Single bond"></div>
                             <div id="action-mp-bond-double" class="tool-button primary-tool" title="Double bond"></div>
@@ -296,33 +249,35 @@ Query parameters:
                             <div id="action-mp-chain" class="tool-button primary-tool" title="Carbon chain"></div>
                             <div id="action-mp-charge-add" class="tool-button primary-tool" title="Charge +">e<sup>+</sup></div>
                             <div id="action-mp-charge-sub" class="tool-button primary-tool" title="Charge -">e<sup>&minus;</sup></div>
-                        </div>
+                        </div> -->
                     </div>
                     <div id="edit-tools" class="toolbar">
                         <div class="toolbar-inner hstack">
-                            <div id="action-mp-clear" class="tool-button tool-button-horizontal" title="Clear all"></div>
-                            <div id="action-mp-eraser" class="tool-button tool-button-horizontal primary-tool" title="Erase"></div>
+                            <!-- <div id="action-mp-clear" class="tool-button tool-button-horizontal" title="Clear all"></div> -->
+                            <div id="action-mp-eraser" class="tool-button tool-button-horizontal primary-tool" title="Break Bond"></div>
                             <div class="horizontal-separator"></div>
+                            <div id="action-resolve" class="tool-button tool-button-horizontal" title="Fragmentation">Frag</div>
+                            <div class="horizontal-separator"></div>
+                            <!-- Undo/Redo Sketcher features -->
                             <div id="action-mp-undo" class="tool-button tool-button-horizontal tool-button-disabled"
                                 title="Undo"></div>
                             <div id="action-mp-redo" class="tool-button tool-button-horizontal tool-button-disabled"
                                 title="Redo"></div>
-                            <div class="horizontal-separator"></div>
+                            <!-- <div class="horizontal-separator"></div>
                             <div id="action-mp-drag" class="tool-button tool-button-horizontal primary-tool" title="Drag atoms and bonds"></div>
                             <div id="action-mp-rect" class="tool-button tool-button-horizontal primary-tool" title="Rectangle selection"></div>
                             <div id="action-mp-lasso" class="tool-button tool-button-horizontal primary-tool" title="Lasso selection"></div>
                             <div class="horizontal-separator"></div>
                             <div id="action-mp-color-mode" class="tool-button tool-button-horizontal enabled" title="Toggle color mode"></div>
                             <div id="action-mp-skeletal-formula" class="tool-button tool-button-horizontal enabled"
-                                title="Toggle skeletal formula"></div>
+                                title="Toggle skeletal formula"></div> -->
                             <div id="action-mp-center" class="tool-button tool-button-horizontal" title="Center structure"></div>
-                            <div class="horizontal-separator"></div>
-                            <div id="action-mp-clean" class="tool-button tool-button-horizontal" title="Clean structure"></div>
-                            <div id="action-resolve" class="tool-button tool-button-horizontal" title="Update 3D view">2D
-                                to 3D</div>
+                            <!-- <div class="horizontal-separator"></div>
+                            <div id="action-mp-clean" class="tool-button tool-button-horizontal" title="Clean structure"></div> -->
+                            
                         </div>
                     </div>
-                    <div id="elem-tools" class="toolbar">
+                    <!-- <div id="elem-tools" class="toolbar">
                         <div class="toolbar-inner">
                             <div id="action-mp-atom-c" class="tool-button primary-tool tool-element element-colored"
                                 title="Carbon">C</div>
@@ -346,7 +301,7 @@ Query parameters:
                                 title="Iodine">I</div>
                             <div id="action-mp-periodictable" class="tool-button primary-tool" title="Periodic Table">...</div>
                         </div>
-                    </div>
+                    </div> -->
                     <div id="molpad-canvas-wrapper"></div>
                 </div>
             </div>
@@ -364,6 +319,11 @@ Query parameters:
                 </div>
                 <div id="jsmol" class="render-engine" style="display: none;"></div>
                 <div id="glmol" class="render-engine" style="display: none;"></div>
+            </div>
+            <div id="tree-menu-container">
+                <div id="tree-menu">
+            
+                </div>
             </div>
         </div>
         <div id="search-layer" class="layer" style="display: none;">
@@ -472,20 +432,36 @@ Query parameters:
     <div id="autocomplete-dropdown-wrapper" style="display: none;">
         <div id="autocomplete-dropdown"></div>
     </div>
+    
     <div id="dialog-overlay" class="dialog-overlay">
         <div id="dialog-click-area">
             <div id="dialog-wrapper">
                 <div class="dialog" id="start-dialog">
-                    <img id="welcome-logo" src="{{ url_for('static', filename='img/logo.svg') }}" alt="" />
-                    <img id="welcome-mark" src="{{ url_for('static', filename='img/mark.svg') }}" alt="MolView" />
-                    <a id="agpl-logo-wrapper" target="_blank" href="http://github.com/molview">
+                    <!-- <img id="welcome-logo" src="https://www.mga.edu/_src/assets/images/mga-header-logo.png" alt="" /> -->
+                    <!-- WORKS -->
+                    <p id="welcome-header">FragView</p>
+                    <p>Welcome to the educational platform for demonstrating metabolite fragmentation in MS/MS.</p>
+                    <div class="loadingSection">
+                        <!-- <span id="loadingText">Loading</span> -->
+                        <div id="loadAnim"></div>
+                    </div>
+
+                    <div id="welcome-form" hidden>
+                        <p>Know a SMILE you want to work with? Enter the SMILE to have a new tree created for it after loading is finished</p>
+                        <input id="welcomeTextBox" placeholder="Enter a SMILE">
+                    </div>
+
+                    
+                    <!-- Image for Molview
+                    <img id="welcome-mark" src="{{ url_for('static', filename='img/mark.svg') }}" alt="MolView" /> -->
+                    <!-- <a id="agpl-logo-wrapper" target="_blank" href="http://github.com/molview">
                         <img id="agpl-logo" src="{{ url_for('static', filename='img/agpl.svg') }}" alt="AGPL">
-                    </a>
+                    </a> -->
                     <div id="welcome-loading-msg">LOADING&hellip;</div>
-                    <p>By closing this banner and using MolView, you agree with the Terms of Use!</p>
+                    <!-- <p>By closing this banner and using MolView, you agree with the Terms of Use!</p>
                     <a class="gray" href="legal" target="_blank">read the Terms of Use</a>
                     <div id="welcome-button-bar" class="btn-group" style="display: none;">
-                        <!-- <button id="action-start-help" class="btn btn-large">Get started</button> -->
+                        <button id="action-start-help" class="btn btn-large">Get started</button>
                         <button class="btn close btn-large btn-primary">Close</button>
                     </div>
                     <p>We need your support to create more cool stuff! <a class="btn" target="_blank" title="Consider donating to this project"
@@ -506,65 +482,108 @@ Query parameters:
                         <a class="btn" target="_blank" title="+MolView" href="https://google.com/+MolViewOrganization/about"
                             rel="publisher">Google+</a>
                         <a class="btn" target="_blank" title="MolView Blog" href="http://blog.molview.org">Blog</a>
+                    </div> -->
+                    <!-- <a class="gray" href="legal" target="_blank">read the Terms of Use</a> -->
+                    <div id="welcome-button-bar" class="btn-group" style="display: none;">
+                        <!-- <button id="action-start-help" class="btn btn-large">Get started</button> -->
+                        <!-- <div class="loadingSection">
+                            <span id="loadingText">Loading</span>
+                            <div id="loadAnim"></div>
+                        </div> -->
+                        <button id="closeWelcomeBannerBtn" class="btn close btn-large btn-primary" disabled>Close</button>
+                    </div>
+                    <!-- <p>We need your support to create more cool stuff! <a class="btn" target="_blank" title="Consider donating to this project"
+                            href="https://www.patreon.com/molview">Donate</a></p> -->
+                    <p id="allow-tracking-wrapper">
+                        <!-- <input id="allow-tracking" type="checkbox" /> -->
+                        <script type="text/javascript">
+                            // Disable by default (GDPR)
+                            $("#allow-tracking").prop("checked", Preferences.get("molview", "allow_tracking", false))
+                        </script>
+                        <!-- <label for="allow-tracking">Allow MolView to collect annonymous usage data (<a class="gray"
+                                href="tracking">details</a>)</label> -->
+                    </p>
+                    <div class="btn-group">
+                        <!-- <a class="btn" target="_blank" title="YouTube Channel" href="https://www.youtube.com/channel/UCRP9nXCC59TMlqc-bk1mi3A">YouTube</a> -->
+                        <!-- <a class="btn" target="_blank" title="@mga" href="https://twitter.com/MGAStateU">Twitter</a>
+                        <a class="btn" target="_blank" title="Facebook page" href="https://www.facebook.com/MiddleGeorgiaStateUniversity2/">Facebook</a>
+                        <a class="btn" target="_blank" title="+MolView" href="https://google.com/+MolViewOrganization/about"
+                            rel="publisher">Google+</a>
+                        <a class="btn" target="_blank" title="MolView Blog" href="http://blog.molview.org">Blog</a>
+                        <a class="btn" target="_blank" title="MGA Home Page" href="https://mga.edu">MGA</a> -->
                     </div>
                 </div>
                 <div class="dialog" id="about-dialog" style="display: none;">
                     <h2>About</h2>
-                    <p>MolView is an intuitive, Open-Source web-application to make science and education more awesome!
+                    <p>Fragview is an open-source tool that will assist in the fragmentation of metabolites. Users can enter
+                        the SMILE they wish to work with and fragment the molecule. Currently, Fragview only supports splitting
+                        a molecule into five fragments at once.
+                        Fragview is built off of Molview and uses some other libraries below to provide users with
+                        an easy way to fragment metabolites, export data about the fragment, including STL and MOL files,
+                        and quickly switch between molecules on the tree.
+                    </p>
+                    <!-- <p>MolView is an intuitive, Open-Source web-application to make science and education more awesome!
                         MolView is mainly intended as web-based data visualization platform. You can use MolView to
                         search through different scientific databases including compound databases, protein databases
                         and spectral databases, and view records from these databases as interactive visualizations
                         using WebGL and HTML5 technologies. This web application is built on top of the JavaScript
                         libraries and online services listed below. The <a class="link" href="http://chemagic.com/JSmolVMK2.htm"
                             target="_blank" title="Virtual Model Kit">Virtual Model Kit</a> has been a source of
-                        inspiration for the birth of this project.</p>
+                        inspiration for the birth of this project.</p> -->
                     <ul>
                         <li>JavaScript libraries
                             <ul>
-                                <li><a class="link" href="http://ggasoftware.com/opensource/ketcher" target="_blank"
+                                <li><a class="link" href="https://lifescience.opensource.epam.com/ketcher/index.html" target="_blank"
                                         title="Ketcher">Ketcher</a>: Chemical 2D data reader/writer</li>
-                                <li><a class="link" href="http://webglmol.sourceforge.jp/index-en.html" target="_blank"
-                                        title="GLmol">GLmol v0.47</a>: primary 3D render engine</li>
+                                <!-- <li><a class="link" href="http://webglmol.sourceforge.jp/index-en.html" target="_blank"
+                                        title="GLmol">GLmol v0.47</a>: primary 3D render engine</li> -->
                                 <li><a class="link" href="http://jmol.sourceforge.net/" target="_blank" title="JSmol">JSmol</a>:
                                     3D render engine</li>
-                                <li><a class="link" href="http://web.chemdoodle.com/" target="_blank" title="ChemDoodle Web">ChemDoodle
-                                        Web Components v6.0.1</a>: 3D render engine and spectrum display</li>
+                                <li><a class="link" href="https://github.com/rdkit/RDKitjs" target="_blank" title="RDKitJS">RDKitJS</a>: Convert SMILES into 3D MOL data</li>
+                                <li><a class="link" href="https://fperucic.github.io/treant-js/" target="_blank" title="Treant">Treant.JS</a>: Library for JS Tree structure</li>
+                                <!-- <li><a class="link" href="http://web.chemdoodle.com/" target="_blank" title="ChemDoodle Web">ChemDoodle
+                                        Web Components v6.0.1</a>: 3D render engine and spectrum display</li> -->
                             </ul>
                         </li>
-                        <li>Databases/REST API's
+                        <!-- <li>Databases/REST API's -->
+                        <li>Other libraries
                             <ul>
-                                <li><a class="link" href="http://cactus.nci.nih.gov/chemical/structure" target="_blank"
+                                    <li><a class="link" href="http://molview.org/" target="_blank" title="MolView">MolView</a>: Structure for entire application</li>
+                                <li><a class="link" href="https://www.rdkit.org/docs/GettingStartedInPython.html" target="_blank" title="RDKit Python">RDKit for Python</a>: Convert SMILES into 2D MOL data</li>
+                                <!-- <li><a class="link" href="http://cactus.nci.nih.gov/chemical/structure" target="_blank"
                                         title="NCI/CADD Chemical Identifier Resolver API">NCI/CADD Chemical Identifier
-                                        Resolver</a></li>
-                                <li><a class="link" href="http://www.rcsb.org/pdb/software/rest.do" target="_blank"
+                                        Resolver</a></li> -->
+                                <!-- <li><a class="link" href="http://www.rcsb.org/pdb/software/rest.do" target="_blank"
                                         title="RCSB Protein Databank API">RCSB Protein Data Bank</a> (~100.000
-                                    macromolecules)</li>
-                                <li><a class="link" href="https://pubchem.ncbi.nlm.nih.gov/pug_rest/PUG_REST.html"
+                                    macromolecules)</li> -->
+                                <!-- <li><a class="link" href="https://pubchem.ncbi.nlm.nih.gov/pug_rest/PUG_REST.html"
                                         target="_blank" title="The PubChem Project API">The PubChem Project</a> (~51
-                                    million compounds)</li>
-                                <li><a class="link" href="http://www.crystallography.net/" target="_blank" title="COD">Crystallography
-                                        Open Database</a> (~300.000 crystals)</li>
-                                <li><a class="link" href="http://webbook.nist.gov/chemistry" target="_blank" title="NIST Chemistry WebBook Reference">NIST
-                                        Chemistry WebBook</a> (~30.000 spectra)</li>
-                                <li><a class="link" href="http://www.nmrdb.org/" target="_blank" title="NMRdb.org">NMR
-                                        Database</a></li>
-                                <li><a class="link" href="http://mymemory.translated.net/doc/spec.php" target="_blank"
-                                        title="MyMemory API">MyMemory translation API</a></li>
+                                    million compounds)</li> -->
+                                <!-- <li><a class="link" href="http://www.crystallography.net/" target="_blank" title="COD">Crystallography
+                                        Open Database</a> (~300.000 crystals)</li> -->
+                                <!-- <li><a class="link" href="http://webbook.nist.gov/chemistry" target="_blank" title="NIST Chemistry WebBook Reference">NIST
+                                        Chemistry WebBook</a> (~30.000 spectra)</li> -->
+                                <!-- <li><a class="link" href="http://www.nmrdb.org/" target="_blank" title="NMRdb.org">NMR
+                                        Database</a></li> -->
+                                <!-- <li><a class="link" href="http://mymemory.translated.net/doc/spec.php" target="_blank"
+                                        title="MyMemory API">MyMemory translation API</a></li> -->
                             </ul>
                         </li>
                     </ul>
                     <p id="about-links">
-                        MolView v2.4
+                        <!-- MolView v2.4 -->
+                        Fragview 1.1
                         &nbsp;+&nbsp;
-                        <a class="link" href="legal" target="_blank">Terms of Use</a>
+                        <a class="link" href="terms" target="_blank">Terms of Use</a>
                         <br />
-                        Copyright &copy; 2014, 2015 <a class="link" target="_blank" rel="author" title="Personal website"
-                            href="https://hermanbergwerf.com">Herman Bergwerf</a>
+                        Copyright &copy; 2020
+                        <!-- Copyright &copy; 2014, 2015 <a class="link" target="_blank" rel="author" title="Personal website"
+                            href="https://hermanbergwerf.com">Herman Bergwerf</a> -->
                         &nbsp;+&nbsp;
-                        <a class="link" href="license" target="_blank">License</a>
+                        <a class="link" href="licenses" target="_blank">License</a>
                         &nbsp;+&nbsp;
-                        <a class="link" href="https://github.com/molview" target="_blank">GitHub</a>
-                        <br />
+                        <a class="link" href="https://github.com/mgasoit/FragView" target="_blank">GitHub</a>
+                        <!-- <br />
                         <a class="link" target="_blank" title="Chrome App" href="https://chrome.google.com/webstore/detail/molview/nogcacamdkipgkfpfiakaoamdnihinnm">Chrome
                             Web Store</a>
                         &nbsp;+&nbsp;
@@ -579,12 +598,13 @@ Query parameters:
                         &nbsp;+&nbsp;
                         <a class="link" target="_blank" title="+MolView" href="http://blog.molview.org">Blog</a>
                         &nbsp;+&nbsp;
-                        <a class="link" target="_blank" title="Mail" href="mailto:info@molview.org">info@molview.org</a>
+                        <a class="link" target="_blank" title="Mail" href="mailto:info@molview.org">info@molview.org</a> -->
                     </p>
                     <div class="footer">
-                        <button class="btn close btn-primary">Continue</button>
+                        <button class="btn close btn-primary">Close</button>
                     </div>
                 </div>
+
                 <div class="dialog" id="periodictable-dialog" style="display: none;">
                     <h2>Periodic Table</h2>
                     <div id="periodictable"></div>
@@ -595,6 +615,110 @@ Query parameters:
             </div>
         </div>
     </div>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/rdkitjs/rdkit.js') }}"></script>
+    
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/Polyfill.js') }}"></script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.1/jquery.min.js"></script> -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/JSmol.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/Detector.js') }}"></script>
+    
+
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/lib/three.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/GLmol.js') }}"></script> -->
+
+
+<!--XHR fails on this file. NOTE: object from this file gets created in spectroscopy.js and spectroscopy.init()
+    is called in Molview.js. All of the instances of these two files and the dependencies have been commented out.   
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/ChemDoodleWeb.js') }}"></script> -->
+    <!-- applib -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/jquery.hotkeys.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/Blob.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/Filesaver.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/prototype.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/common.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/vec2.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/set.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/map.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/util/pool.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/element.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/struct.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/molfile.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/sgroup.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/struct_valence.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/dfs.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/cis_trans.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/stereocenters.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/chem/chem/smiles.js') }}"></script>
+    <!-- datasets -->
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/lib/PeriodicTable.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/datasets/PDBNames.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/datasets/MineralNames.js') }}"></script>
+
+
+    <!-- core -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Data.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Utility.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Preferences.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Progress.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Messages.js') }}"></script>
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/GLmolPlugin.js') }}"></script>
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/JSmolPlugin.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/CDWPlugin.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Model.js') }}"></script>
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Request.js') }}"></script>
+
+
+    <!-- molpad -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/Data.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/Utility.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPPoint.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPLine.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPFragments.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPAtom.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPAtom_calc.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPAtom_handler.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPBond.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPBond_calc.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPBond_handler.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MolPad.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPSettings.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPMolecule.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPSelection.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPGraphics.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPEvents.js') }}"></script>
+    <!-- app -->
+    <script type="text/javascript" src="{{ url_for('static', filename='js/History.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Sketcher.js') }}"></script>
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/SearchGrid.js') }}"></script>
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Loader.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Actions.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Share.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Link.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/InfoCard.js') }}"></script>
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/Spectroscopy.js') }}"></script> -->
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/Autocomplete.js') }}"></script>
+
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/MolView.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/MolList.js') }}"></script>
+
+    <script type="text/javascript" src="{{ url_for('static', filename='js/treant/vendor/raphael.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static', filename='js/treant/Treant.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/Tree_Actions.js') }}"></script>
 </body>
 

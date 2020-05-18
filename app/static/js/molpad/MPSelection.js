@@ -24,7 +24,7 @@ function MPSelection(mp) {
 	this.mirrorSide = 1;
 	this.startAngle = 0;
 	this.currentAngle = 0;
-	this.mp = mp;
+	this.mp = mp; 
 }
 
 MPSelection.prototype.hasCenter = function () {

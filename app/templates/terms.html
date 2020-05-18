@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="viewport" content="width=device-width, user-scalable=no" />
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <title>FragView - Terms of Use</title>
+
+        <link type="text/css" rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
+        <link type="text/css" rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+
+        <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/vars.less')}}" />
+        <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/global.less')}}" />
+        <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/external.less')}}" />
+
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Chewy&display=swap" />
+
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
+    </head>
+    <body>
+        <div id="extTitle">
+            <a class="extLink" href="/"><h1>FragView</h1></a>
+        </div>
+        <div id="main">
+            <h2 class='termsH2'>Terms of Use</h2>
+            <p>
+                FragView is an open-source application for metabolite fragmentation, it heavily
+                relies on the code base from MolView (see <a href='http://molview.org/'>http://molview.org/</a>). The website
+                will continue to be updated to add new features and address any issues discovered.
+            </p>
+            <h2 class='termsH2'>Copyright</h2>
+            <p>
+                FragView is an open-source project that possesses copyright protection from its GNU APGL license.
+                If you have any copyright questions about the project, please let us know through GitHub.
+            </p>
+            <h2 class='termsH2'>Additional Site Information</h2>
+            <p>
+                FragView will continuously be updated for improvement, which means the site can
+                change appearance without any notice to the users until the update is released. If
+                you wish to work with an older version of the site, please see our past pushes
+                to the GitHub branch at <a href='https://github.com/mgasoit/FragView'>https://github.com/mgasoit/FragView</a>.
+                Furthermore, if you want faster load times, it is recommended to download the application from the Master
+                GitHub branch and follow the instructions to run the application on a localhost server.
+            </p>
+            <h2 class='termsH2'>Reliability of Data</h2>
+            <p>
+                FragView uses RDKit Python and RDKitJS to deliver dynamic data for molecules and their fragments.
+                <!-- This means that it is possible that the positioning of similar molecules upon loading,
+                such as clicking the tree node, may differ to identical models. This does not result
+                in any difference with the actual atoms and fragments generated. -->
+                For more information on RDKit, see <a href='https://www.rdkit.org/docs/GettingStartedInPython.html'>https://www.rdkit.org/docs/GettingStartedInPython.html</a>.
+            </p>
+            <h2 class='termsH2'>Intellectual Property Rights</h2>
+            <p>
+                All third-party data is not owned by FragView and protected by their own, respective
+                copyrights. If you possess the copyright for any data involved in this application, please
+                post an issue at the GitHub branch (see <a href='https://github.com/mgasoit/FragView'>https://github.com/mgasoit/FragView</a>)
+                so we can evaluate your claim and take the necessary actions
+                to remove the data or properly identify its owner.
+            </p>
+            <h2 class='termsH2'>Privacy Policy</h2>
+            <p>
+                No data that you own will be stored in a server or database.
+            </p>
+        </div>
+    </body>
+</html>

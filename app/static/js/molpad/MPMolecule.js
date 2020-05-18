@@ -117,10 +117,18 @@ MPMolecule.prototype.exec = function (callback, atoms, bonds) {
  * Uses Ketcher chem utils
  * @param {String}  mol
  */
+//Assume molfile sent is RDKit molfile.
 MPMolecule.prototype.loadMOL = function (mol) {
 	this.clear();
 
-	var molecule = chem.Molfile.parseCTFile(mol.split("\n"));
+	console.log("MOL: ", mol);
+	
+	mymol = mol.split("\n");
+	
+	var test = mol.split(" ");
+	
+	
+	var molecule = chem.Molfile.parseCTFile(mymol);
 
 	//convert Ketcher data format into MolPad molecule
 	var scope = this;
@@ -444,13 +452,13 @@ MPMolecule.prototype.removeBond = function (index) {
 	var t = this.bonds[index].to;
 
 	//remove connected atoms if this is the last bond
-	if (this.atoms[f].bonds.length === 1) {
-		this.atoms.splice(f, 1);
-		if (t > f) t--;
-	}
-	if (this.atoms[t].bonds.length === 1) {
-		this.atoms.splice(t, 1);
-	}
+	// if (this.atoms[f].bonds.length === 1) {
+	// 	this.atoms.splice(f, 1);
+	// 	if (t > f) t--;
+	// }
+	// if (this.atoms[t].bonds.length === 1) {
+	// 	this.atoms.splice(t, 1);
+	// }
 
 	this.bonds.splice(index, 1);
 	return this.updateIndices();
@@ -603,11 +611,16 @@ MPMolecule.prototype.removeImplicitHydrogen = function () {
 			implicit.push(i);
 		}
 	}
+	
+	//Fix single fragment null implicit array
+	if(!implicit.length) {
+		Sketcher.toggleSkeletalFormula();
+		//fixImplicitHColor(this.atoms);
+	}
 
 	for (var i = 0; i < implicit.length; i++) {
 		this.atoms.splice(implicit[i] - i, 1);
 	}
-
 	this.updateIndices();
 }
 

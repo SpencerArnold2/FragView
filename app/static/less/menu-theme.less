@@ -26,10 +26,10 @@
 	background-position: center;
 }
 
-.dropdown-toggle {
-	border-left: 1px solid @menu-bar-bg;
-	border-right: 1px solid @menu-bar-bg;
-}
+// .dropdown-toggle {
+// 	border-left: 1px solid @menu-bar-bg;
+// 	border-right: 1px solid @menu-bar-bg;
+// }
 
 .dropdown-toggle:after {
 	margin-left: 8px;
@@ -38,9 +38,52 @@
 	content: '\f107';
 }
 
-.dropdown.open>.dropdown-toggle {
-	background-color: @light  !important;
+.dropdown.open>.dropdown-toggle:after {
+	color: #FFF;
+}
+
+#search-button, #update-tree-button, #action-about {
+	font-family: 'Open Sans', sans-serif;
+	position: relative;
+	bottom: 0.75em;
+	font-size: 1em;
+	color: #000;
+	border: none;
+	background-color: #FFF;
+	width: 5em;
+	height: 2.8em;
+	line-height: 1.3em;
+	//margin: 0 9% 0 0;
+	//padding: 0 0 5px 0;
+	//border: none;
+}
+
+#search-button {
+	width: 4.5em;
+}
+
+#search-button:active, #update-tree-button:active, #action-about:active {
+	background-color: @active;
+	color: #FFF;
+}
+
+#action-about {
+	bottom: 0.35em;
+	padding: 10% 0 0 0;
+}
+
+#action-about:before {
+	//display: none;
+	width: 1.3em;
+}
+
+.dropdown.open>.dropdown-toggle, .dropdown-toggle:hover {
+	background-color: @active  !important;
 	border-color: @contrast  !important;
+}
+
+.dropdown.open>.dropdown-toggle {
+	color: #FFF;
 }
 
 .caret {
@@ -77,10 +120,14 @@ Menu-item icons
 	color: @foreground;
 }
 
+#solo-menu-item {
+	margin: 1.8% 0 0 0;
+}
+
 .menu-item>a:before {
 	display: inline-block;
 	width: 30px;
-	color: @foreground-less;
+	color: #111111;
 	text-align: center;
 	font-family: FontAwesome;
 	font-size: 10pt;
@@ -117,9 +164,9 @@ Menu-item icons
 	content: '\f1cd';
 }
 
-#action-about:before {
-	content: '\f05a';
-}
+// #action-about:before {
+// 	content: '\f05a';
+// }
 
 #action-share:before {
 	content: '\f064';
@@ -135,9 +182,35 @@ Menu-item icons
 #action-export-sketcher-png:before,
 #action-export-model-png:before,
 #action-export-model-stl:before,
+#action-export-tree-data:before,
 #action-export-model:before {
 	content: '\f019';
 }
+
+#action-import-tree-data:before {
+	content: '\f093';
+}
+
+//Hide file dialog
+#file-dialog {
+	display: none;
+}
+
+#file-upload-text {
+	margin: 1% 0 0 1%;
+	font-family: 'Chewy';
+	color: @active;
+}
+
+#newTree, #fileTree {
+	font-family: 'Chewy';
+	color: @active;
+}
+
+// #fileTree {
+// 	font-family: 'Chewy';
+// 	color: @alternative-medium;
+// }
 
 #action-data-infocard:before {
 	content: '\f1ec';

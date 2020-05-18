@@ -1,87 +1,17 @@
-:root{
-    --rowNum: 1;
-    --colNum: 1;
-    --gridHeight: 100px;
-}
 
-.tree-toggle-button div{
-    width:25px;
-    height: 3px;
-    background-color:rgb(99, 51, 148, 0.8);
-    margin: 5px;
-    transition: all 0.3s ease;
-}
-.tree-toggle-button{
-    padding-top:6px;
-    display: block;
-    cursor: pointer;
-}
 #tree-menu-container{
-    width:100%;
-    height:0px;
-    z-index: 10;
-    padding-top:19px;
+    position: absolute;
+    top: 0;
+    bottom:0;
+    right:0;
+    left: 66.7%;
     overflow:hidden;
-    transition: 0.4s;
     text-align: center;
-}
-#tree-options-menu{
-    display:none;
-    background:rgb(99, 51, 148, 0.8);
-    position: fixed;
-    top: inherit;
-    left: 0;
-    transition: 0.3s;
-    & a{
-        padding: 5px 15px;
-        font-size:20px;
-        color:black;
-        text-align: center;
-    }
-    & a:hover{
-        color:white;
-    }
-}
-#tree-options-menu:hover{
-    background:black;
-}
-.animate .line1{
-    transform: rotate(-45deg) translate(-5px, 6px);
-}
-.animate .line2{
-    opacity: 0;
-}
-.animate .line3{
-    transform: rotate(45deg) translate(-5px, -6px);
-}
-.tree-node{
-    background-color: black;
-    border: none;
-    color:white;
-    padding:10px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size:80%;
-    margin: 4px, 2px;
-    border-radius: 50%;
-    max-width: 100px;
-    max-height: 100px;
-    width: 50%;
-    height: 50%;
 }
 #tree-menu{
-    background:rgb(99, 51, 148, 0.8);
-    position: absolute;
-    height:inherit;
+    background:white;
+    height:100%;
     width:100%;
     left:0;
-    z-index: 10; 
     overflow:scroll;
-    display: grid;
-    grid-template-columns: repeat(var(--colNum), auto);
-    grid-template-rows: repeat(var(--rowNum), var(--gridHeight));
-}
-.active, .tree-node:hover {
-    background-color: grey;
 }

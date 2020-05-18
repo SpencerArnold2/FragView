@@ -128,6 +128,11 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 				$("#jsmol").html(Jmol.getAppletHtml(JSmol));
 			}, "init_jmol");
 
+			// console.log("close button enabled");
+			// document.getElementById("closeWelcomeBannerBtn").disabled = false;
+    		// loadingText.innerText = "Loading complete";
+    		// document.getElementById("loadAnim").style.display = "none";
+
 			return true;
 		} else {
 			Messages.alert("no_canvas_support");
@@ -257,6 +262,12 @@ set MinimizationCallback "Model.JSmol.MinimizationCallback";',
 
 		if (this.ready) {
 			this.currentModel = mol;
+			var rdkitSmile = Sketcher.getSMILES();
+			var rdkitMolecule = RDKit.Molecule.fromSmiles(rdkitSmile);
+			rdkitMolecule.addHs();
+			rdkitMolecule.EmbedMolecule();
+			rdkitMolecule.MMFFoptimizeMolecule();
+			var rdkitmol = rdkitMolecule.toMolfile();
 
 			this._setMeasure("OFF");
 

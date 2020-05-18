@@ -30,7 +30,7 @@ var Loader = {
 			Messages.process(function () {
 				//request 3D molecule
 				Request.PubChem.sdf(cid, false, function (mol3d) {
-						Model.loadMOL(mol3d);
+						//Model.loadMOL(mol3d);
 
 						document.title = name || "MolView";
 
@@ -46,7 +46,7 @@ var Loader = {
 
 								Request.CIR.resolve(data.PropertyTable.Properties[0].IsomericSMILES, false,
 									function (mol3d) {
-										Model.loadMOL(mol3d);
+										//Model.loadMOL(mol3d);
 
 										document.title = name || "MolView";
 
@@ -142,7 +142,7 @@ var Loader = {
 		Progress.reset(2);
 
 		Request.resolve(smiles, 0, false, function (mol, cid) {
-				Model.loadMOL(mol);
+				//Model.loadMOL(mol);
 				Progress.complete();
 				Messages.clear();
 				document.title = title || "MolView";
