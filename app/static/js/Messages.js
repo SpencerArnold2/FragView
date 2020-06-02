@@ -63,10 +63,10 @@ var Messages = {
 	empty_smile_search: "A blank SMILE cannot be entered",
 	//attempt to delete atom
 	erase_atom_fail: "Atoms cannot be erased",
-	//more than frag limit (ver 1.0 has limit of 5 frags)
-	frag_limit_exceeded: "Fragmentation must only produce five or fewer fragments",
 	//SMILE parse error
 	fail_smile_parse: "There was an error with parsing the smile",
+	fail_inchi_parse: "There was an error with parsing the InChI",
+	fragmentation_limit_reached: "No more than 30 fragments can be parsed at a single time",
 	search_fail: "The database did not return any records",
 	search_notfound: "The database could not find any matches",
 	structure_search_fail: "Structure search has failed",

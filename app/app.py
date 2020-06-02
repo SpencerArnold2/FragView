@@ -47,6 +47,9 @@ def single_two_dimensional():
     content = request.get_json()
     smile = content['smile']
 
+    if(smile.find('.') and len(smile.split('.')) > 30):
+        return jsonify({ "error": "No more than 30 fragments can be parsed at a single time" }), 400
+
     output = []
 
     if(smile):
@@ -54,9 +57,49 @@ def single_two_dimensional():
         if m:
             output.append(Chem.MolToMolBlock(m))
         else:
-            return jsonify({ "error": f"Unable to generate mol from smile: {s}" }), 400
+            return jsonify({ "error": f"Unable to generate mol from smile: {smile}" }), 400
     else:
         return jsonify({ "error": "No smiles provided" }), 400
+    return jsonify({ "output": output })
+
+@app.route('/2dInchi', methods=["POST"])
+def inchi_two_dimensional():
+    content = request.get_json()
+    inchi = content["inchi"]
+    output = []
+    if(inchi):
+        molecule = Chem.MolFromInchi(inchi)
+        if(molecule):
+            output.append(Chem.MolToMolBlock(molecule))
+            output.append(Chem.MolToSmiles(molecule))
+        else:
+            return jsonify({ "error": f"Unable to generate mol from inchi: {inchi}" }), 400
+        # if(inchi.find('.')):
+        #     if(len(inchi.split('.')) <= 30):
+        #         smiles = []
+        #         for frag in inchi.split('.'):
+        #             if("InChI" in frag):
+        #                 molecule = Chem.MolFromInchi(frag)
+        #                 smiles.append(Chem.MolToSmiles(molecule))
+        #             #frag is actually a smile and not InChI
+        #             else:
+        #                 smiles.append(frag)
+        #         smile = '.'.join(smiles)
+        #         molecule = Chem.MolFromSmiles(smile)
+        #         output.append(Chem.MolToMolBlock(molecule))
+        #         output.append(smile)
+        #         return jsonify({ "output": output })
+        #     else:
+        #         return jsonify({ "error": "No more than 30 fragments can be parsed at a single time" }), 400
+        # else: 
+        #     molecule = Chem.MolFromInchi(inchi)
+        #     if(molecule):
+        #         output.append(Chem.MolToMolBlock(molecule))
+        #         output.append(Chem.MolToSmiles(molecule))
+        #     else:
+        #         return jsonify({ "error": f"Unable to generate mol from inchi: {inchi}" }), 400
+    else:
+        return jsonify({ "error": "No inchi provided" }), 400
     return jsonify({ "output": output })
 
 @app.route('/2dMol')

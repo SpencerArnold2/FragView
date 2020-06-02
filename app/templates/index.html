@@ -125,19 +125,19 @@ test note
         <div id="menu-bar" class="hstack">
             <form id="search" class="hstack">
                 <div class="input-wrapper">
-                    <input id="search-smile" placeholder="SMILE" name="q" type="text" autocomplete="off" spellcheck="false" />
+                    <input id="search-smile" placeholder="SMILE or InChI" name="q" type="text" autocomplete="off" spellcheck="false" />
                     <!-- <button id="search-button">New Tree</button> -->
-                    <button style="display: none;"><i class="fa fa-search"></i></button>
+                    <!-- <button style="display: none;"><i class="fa fa-search"></i></button> -->
                     <input id="search-input" name="q" type="text" autocomplete="off" spellcheck="false" />
                     <div class="input-focus"></div>
                 </div>
             </form>
             <ul id="main-menu" class="hstack">
                 <li class="tree-button">
-                    <button id="search-button" onclick="Actions.treeSmile('', true)" title="Create a New Tree">New</button>
+                    <a id="search-button" onclick="Actions.treeSmile('', true)" title="Create a New Tree">New</a>
                 </li>
                 <li class="tree-button">
-                    <button id="update-tree-button" onclick="Actions.updateTree()" title="Refresh Tree Image">Refresh</button>
+                    <a id="update-tree-button" onclick="Actions.updateTree()" title="Refresh Tree Image">Refresh</a>
                 </li>
                 <!-- <li class="tree-button">
                     <button id="redraw-tree-button" onclick="Actions.redrawTree()" title="Redraw Tree">Redraw</button>
@@ -152,7 +152,7 @@ test note
                 </li> -->
                 <li id="tools-dropdown" class="dropdown">
                     <a class="dropdown-toggle">Tools</a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-left">
                         <!-- <li class="menu-header">Link</li> -->
                         <!-- <li class="menu-item"><a id="action-share">Share</a></li> -->
                         <!-- <li class="menu-item"><a id="action-embed">Embed</a></li> -->
@@ -177,7 +177,7 @@ test note
                 </li>
                 <li id="model-dropdown" class="dropdown">
                     <a class="dropdown-toggle">Model</a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu dropdown-left">
                         <li class="menu-header">Representation</li>
                         <!-- Newly added buttons for isosurface, orbital display features by Jinyoung An-->
                         <li class="menu-item"><a id="action-isosurface-vdw" class="r-mode radio">Isosurface vdw ON/OFF</a></li>
@@ -199,14 +199,23 @@ test note
                         <li class="menu-item"><a id="action-open-console">Open Jmol Console</a></li> -->
                     </ul>
                 </li>
-                <li id="solo-menu-item" class="menu-item"><a id="action-about">About</a></li>
+                <!-- <li id="solo-menu-item" class="menu-item"><a id="action-about">About</a></li> -->
+                <!-- <li class="tree-button"><a id="action-about">About</a></li> -->
+                <li id="help-dropdown" class="dropdown">
+                    <a class="dropdown-toggle">Help</a>
+                    <ul class="dropdown-menu dropdown-left">
+                        <li class="menu-item"><a id="tutorial-link">Tutorial Video</a></li>
+                        <li class="menu-item"><a id="action-about">About</a></li>
+                    </ul>
+                </li>
                 <li id="file-upload-text" class="menu-item"><p></p></li>
-                
-            </ul>
-            <div class="updateItems">
-                <!-- <span id="updatingText">Updating</span> -->
                 <div id="loadModelAnim"></div>
-            </div>
+            </ul>
+            <!-- <div class="clear"></div> -->
+            <!-- <div class="updateItems">
+                <!-- <span id="updatingText">Updating</span> -->
+                <!-- <div id="loadModelAnim"></div> -->
+            </div> -->
             <div class="clear"></div>
         </div>
     </div>
@@ -674,7 +683,7 @@ test note
     <script type="text/javascript" src="{{ url_for('static', filename='js/Model.js') }}"></script>
 
 
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Request.js') }}"></script>
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/Request.js') }}"></script> -->
 
 
     <!-- molpad -->
@@ -696,18 +705,18 @@ test note
     <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPGraphics.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/molpad/MPEvents.js') }}"></script>
     <!-- app -->
-    <script type="text/javascript" src="{{ url_for('static', filename='js/History.js') }}"></script>
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/History.js') }}"></script> -->
     <script type="text/javascript" src="{{ url_for('static', filename='js/Sketcher.js') }}"></script>
 
 
-    <script type="text/javascript" src="{{ url_for('static', filename='js/SearchGrid.js') }}"></script>
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/SearchGrid.js') }}"></script> -->
 
 
     <script type="text/javascript" src="{{ url_for('static', filename='js/Loader.js') }}"></script>
     <script type="text/javascript" src="{{ url_for('static', filename='js/Actions.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Share.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/Link.js') }}"></script>
-    <script type="text/javascript" src="{{ url_for('static', filename='js/InfoCard.js') }}"></script>
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/Share.js') }}"></script> -->
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/Link.js') }}"></script> -->
+    <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/InfoCard.js') }}"></script> -->
     <!-- <script type="text/javascript" src="{{ url_for('static', filename='js/Spectroscopy.js') }}"></script> -->
 
 

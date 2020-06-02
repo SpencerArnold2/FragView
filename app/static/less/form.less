@@ -64,9 +64,12 @@
 .input-wrapper>input,
 .input-wrapper>button {
 	display: inline-block;
+	//display: table-cell;
 	padding: 0;
 	margin: 0;
-	min-width: 40px;
+	//min-width: 40px;
+	min-width: 20em;
+	//max-width: 50em;
 	height: 40px;
 
 	vertical-align: top;
@@ -88,7 +91,11 @@
 	left: 5px;
 	height: 1px;
 
-	background: @contrast;
+	background: @highlight-light;
+}
+
+#search-smile:focus ~ .input-focus {
+	background: @active;
 }
 
 input[type="text"] {

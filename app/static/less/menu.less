@@ -58,8 +58,16 @@
 	margin: 0;
 	padding: 0;
 	list-style: none;
+	//float: right;
 }
 
+#main-menu {
+	//float: right;
+}
+
+#main-menu li {
+	//float: left;
+}
 // #update-tree-button, #search-button {
 // 	display: block;
 // 	width: 5em;
@@ -74,7 +82,7 @@
 // }
 
 #loadModelAnim {
-	float: right;
+	//float: right;
 	border: 10px solid @highlight-light;
 	border-top: 10px solid @active;
 	border-radius: 50%;
@@ -116,13 +124,12 @@
 	position: relative;
 	display: block;
 	margin: 0;
-	//padding: 10px 15px;
 	padding: 0.6em;
-	height: 1.4em;
-	line-height: 1.3em;
-	width: 4em;
-	//height: 20px;
-	//line-height: 20px;
+	width: auto;
+	height: auto;
+	//height: 1.4em;
+	//width: 4em;
+	//line-height: 1.3em;
 }
 
 .dropdown-menu {
@@ -202,11 +209,12 @@ at least one other dropdown in order to:
 
 #search-smile {
 	font-family: 'Open Sans', sans-serif;
-	width: 300px;
+	//width: 300px;
+	width: 25em;
 	text-align: center;
 }
 
-#search-button:hover, #update-tree-button:hover, #action-about:hover {
+#search-button:hover, #update-tree-button:hover {
 	background-color: @highlight-light;
 }
 

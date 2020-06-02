@@ -96,8 +96,8 @@ var MolView = {
 
 		Preferences.init();
 		Progress.init();
-		History.init();
-		Link.init();
+		//History.init();
+		//Link.init();
 
 		Model.preloadQuery(this.query);
 		if (this.query.q || this.query.smiles || this.query.cid || this.query.pdbid || this.query.codid) {
@@ -108,7 +108,7 @@ var MolView = {
 		Autocomplete.init();
 		//Request.init();
 		Sketcher.init();
-		SearchGrid.init();
+		//SearchGrid.init();
 
 		if (this.touch && !Detector.webgl) {
 			this.macromolecules = false;
@@ -220,7 +220,7 @@ var MolView = {
 		this.addAction("help", "menu", true);
 		this.addAction("about", "menu", true);
 
-		this.addAction("share", "menu", true);
+		//this.addAction("share", "menu", true);
 		this.addAction("embed", "menu", true);
 		this.addAction("export_sketcher_png", "menu", true);
 		this.addAction("export_model_png", "menu", true);
@@ -282,18 +282,18 @@ var MolView = {
 		this.addAction("jmol_measure_angle", "menu", true);
 		this.addAction("jmol_measure_torsion", "menu", true);
 
-		this.addAction("search_pubchem", "menu", true);
-		this.addAction("search_rcsb", "menu", true);
-		this.addAction("search_cod", "menu", true);
+		// this.addAction("search_pubchem", "menu", true);
+		// this.addAction("search_rcsb", "menu", true);
+		// this.addAction("search_cod", "menu", true);
 		this.addAction("show_search_layer", "menu", true);
 		//New search bar
 		this.addAction("search_smile", "button", false);
 		this.addAction("treeSmile", "menu", true);
 		//New search button
-		this.addAction("search_button", "button", false);
-		this.addAction("load_more_pubchem", "button", true);
-		this.addAction("load_more_rcsb", "button", true);
-		this.addAction("load_more_cod", "button", true);
+		// this.addAction("search_button", "button", false);
+		// this.addAction("load_more_pubchem", "button", true);
+		// this.addAction("load_more_rcsb", "button", true);
+		// this.addAction("load_more_cod", "button", true);
 
 		this.addAction("mp_bond_single", "button", true);
 		this.addAction("mp_bond_double", "button", true);

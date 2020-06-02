@@ -3,9 +3,6 @@ function clearTreeMenu() {
 }
 //This function will create a new node in the MolTree
 function storeMOL(mol3d, mol2d, smiles, singleFlag=false, parentId, newTreeFlag=false, saveTreeFlag=false) {
-    console.log("mol2d: ", mol2d);
-    console.log("mol3d: ", mol3d);
-    console.log("id STOREBEFORE: ", parentId);
     let id;
     if(parentId) {
         id = parentId;
@@ -28,11 +25,8 @@ function storeMOL(mol3d, mol2d, smiles, singleFlag=false, parentId, newTreeFlag=
     else {
         id = parentId;
     }
-    console.log("saveTreeFlag: ", saveTreeFlag);
-    console.log("id STOREAFTER: ", id);
 
     let parent = MolTree.tree.getNodeDb().get(id);
-    //console.log("Parent id", id);
     let htmlid = "node-" + ((MolTree.tree.getNodeDb().db.length));
 
     let frag = {
@@ -44,12 +38,9 @@ function storeMOL(mol3d, mol2d, smiles, singleFlag=false, parentId, newTreeFlag=
         HTMLid: htmlid,
     };
 
-    console.log("populate tree called");
-
     populateTree(id, frag, mol3d, mol2d, smiles, singleFlag);
 
-}
-//check the SMILES returned from pubchem (now through application) and see if it has fragments. 
+} 
 function hasFragment(smile) {
     let hasFrag = false;
     for (let i = 0; i < smile.length; i++) {
@@ -144,16 +135,6 @@ function addClickHandler(element) {
                 setTimeout(() => resolve(cancelUpdateAnim()), 30);
             });
         })
-        // var listenerPromise = () => { return new Promise ((resolve, reject) => {
-        //     resolve(Model.loadMOL(node.get3d()));
-        // })}
-        // console.log("listenerPromise", listenerPromise);
-        // listenerPromise.then(function(results) {console.log("model loaded; sketcher loading")});
-        // listenerPromise.then(function(results) {Sketcher.loadMOL(node.get2d())});
-        // listenerPromise.then(function(results) {console.log("sketcher loaded")});
-        // setTimeout(function() {
-        //     Actions.updateTree();
-        // }, 100)
     });
 }
 
@@ -164,17 +145,8 @@ document.getElementById("search-smile").addEventListener("keyup", function(event
     }
 });
 
+//Get initial window width and initialize resize handler
 var winWidth = window.innerWidth;
-// var resizeListener = window.addEventListener("resize", function resizeHandler(event) {
-//     if(window.innerWidth >= (winWidth + 150) || window.innerWidth <= (winWidth - 150)) {
-//         console.log("Event: ", event);
-//         off('resize', resizeHandler);
-//         Actions.redrawTree();
-//         winWidth = window.innerWidth;
-//     }
-    
-// })
-
 window.addEventListener('resize', resizeHandler);
 
 singleRedraw = 0;
@@ -182,25 +154,19 @@ function resizeHandler(event) {
     //Do not let resizing occur if the browser has not moved a certain width and if
     // the tree-menu-container is still hidden
     if((window.innerWidth >= (winWidth + 150) || window.innerWidth <= (winWidth - 150)) && $("#tree-menu-container")[0].style.display !== "none") {
-        console.log("Event: ", event);
         window.removeEventListener('resize', resizeHandler);
         Actions.redrawTree();
-        //winWidth = window.innerWidth;
         return;
     }
     if((window.innerWidth <= 500 && !singleRedraw) && $("#tree-menu-container")[0].style.display !== "none") {
-        console.log("Event1: ");
         window.removeEventListener('resize', resizeHandler);
         Actions.redrawTree();
-        //winWidth = window.innerWidth;
         singleRedraw = 1;
         return;
     }
-    if((window.innerWidth >= 500 && singleRedraw) && $("#tree-menu-container")[0].style.display !== "none") {
-        console.log("Event2:");
+    if((window.innerWidth > 500 && singleRedraw) && $("#tree-menu-container")[0].style.display !== "none") {
         window.removeEventListener('resize', resizeHandler);
         Actions.redrawTree();
-        //winWidth = window.innerWidth;
         singleRedraw = 0;
         return;
     }
@@ -254,7 +220,6 @@ function simpleSmileThenStore(smile) {
         mymol[0] = "1";
         storeMOL(mymol.join("\n"), Sketcher.getMOL(), smile, singleFlag);
         let results = [mymol.join("\n")];
-        //cancelUpdateAnim();
         resolve(results);
     })
 }
@@ -274,18 +239,12 @@ function temp(index) {
 // for a single fragment will not have any staggering setTimeout
 //This is called in addClickHandler to create a new node and pass fragments to the MolList
 function populateTree(id, frag, mol3d, mol2d, smile, singleFlag=false) {
-    //id is === to parentId
-    console.log("id: ", id);
-    console.log("fragPT: ", frag);
-    console.log("mol2dPT: ", mol2d);
-    console.log("mol3dPT: ", mol3d);
+    //id is equal to parentId
     MolTree.tree.addNode(MolTree.tree.getNodeDb().get(id), frag);
     let parent = MolTree.tree.getNodeDb().get(id);
     let child = parent.childAt(parent.children.length - 1);
     let element = document.getElementById(child.nodeHTMLid);
     let elementId = element.id;
-    console.log("element: ", element);
-    console.log("elementID: ", elementId);
     let newNode = new MolNode(mol3d, mol2d, smile, id, parseInt(elementId.replace("node-",""), 10));
     MolDataList.pushNode(newNode);
     addClickHandler(element, elementId);
@@ -299,31 +258,6 @@ function populateTree(id, frag, mol3d, mol2d, smile, singleFlag=false) {
 
     var divId = document.getElementById(elementId);
     divId.title = smile;
-
-    // if(!singleFlag) {
-    //     setTimeout(function () {
-    //         var dataURL = Sketcher.toDataURL();
-    //         var blob = dataURItoBlob(dataURL);
-    //         var url = URL.createObjectURL(blob);
-    //         var imgTag = document.getElementById(elementId);
-    //         var imgId = "img" + elementId;
-    //         imgTag.innerHTML = "<img id=" + imgId.replace("node-", "") + " src=" + url + ">";
-    //     }, 50)
-    // }
-    // else {
-    //     var dataURL = Sketcher.toDataURL();
-    //     var blob = dataURItoBlob(dataURL);
-    //     var url = URL.createObjectURL(blob);
-    //     var imgTag = document.getElementById(elementId);
-    //     var imgId = "img" + elementId
-    //     imgTag.innerHTML = "<img id=" + imgId.replace("node-", "") + " src=" + url + ">";
-    // }
-
-    //WORKED BEFORE BUT MIGHT NOT NOW
-    // setTimeout(function () {
-    //     var divId = document.getElementById(elementId);
-    //     divId.title = smile;
-    // }, 500)
 }
 
 //This jump starts the system; added starting caffeine smile to textbox.
@@ -338,9 +272,6 @@ let DefaultNode = new MolNode(defaultMol3D, defaultMol2D, smileText.value);
 MolDataList.pushNode(DefaultNode);
 //Hide tree at the beginning
 document.getElementById("tree-menu-container").style.display = "none";
-// //Set textbox to default caffeine node
-// var smileText = document.getElementById("search-smile");
-// smileText.value = "N1(C(=O)C2=C(N=CN2C)N(C)C1=O)C";
 var textClicked = 0;
 smileText.onclick = function() {
     if(!textClicked) {
@@ -362,19 +293,10 @@ setTimeout(function () {
         //DomRootSmile = Sketcher.getSMILES();
         //DomRoot.title = DomRootSmile;
     }, 500);
-    //Actions.treeSmile("N1(C(=O)C2=C(N=CN2C)N(C)C1=O)C");
     document.title = "FragView";
     var loadingText = document.getElementById("welcome-loading-msg");
-    //var loadingAnim = document.getElementById("loadAnim");
     var updateAnim = document.getElementById("loadModelAnim");
-    // loadingText.innerText = "Loading complete";
-    //loadingAnim.style.display = "none";
     loadModelAnim.style.display = "none";
-    //enable eraser button from application load.
-    // var eraserButton = document.getElementById("action-mp-eraser");
-    // eraserButton.click();
-    // document.getElementById("closeWelcomeBannerBtn").disabled = false;
-    //MolTree.tree.positionNodes();
 }, 750);
 
 
@@ -390,12 +312,6 @@ function sketcherBlobURL(start=false) {
     }
     else {
         Sketcher.resize();
-    //     setTimeout(function() {
-    //         var dataURL = Sketcher.toDataURL();
-    //         var blob = dataURItoBlob(dataURL);
-    //         var url = URL.createObjectURL(blob);
-    //         return url;
-    //     }, 250);
     }
 }
 
@@ -425,7 +341,6 @@ var jsmolLoadCount = 0;
 
 function handleLoadCompletion() {
     if(jsmolLoadCount) {
-        //$("#welcome-loading-msg").hide();
         $("#welcome-button-bar").show();
         document.getElementById("action-mp-eraser").click();
         document.getElementById("closeWelcomeBannerBtn").disabled = false;
@@ -443,3 +358,10 @@ function startupSMILE(event) {
         Actions.treeSmile('', true);
     }
 }
+
+window.addEventListener('resize', function() {
+    var remaining = $("#menu-bar").width() - $("#main-menu").width() - $("#loadModelAnim").width() * 3;
+    document.getElementById("search-smile").style.width = (remaining).toString() + "px";
+})
+
+document.getElementById("search-smile").style.width = ($("#menu-bar").width() - $("#main-menu").width() - $("#loadModelAnim").width() * 3).toString() + "px";
