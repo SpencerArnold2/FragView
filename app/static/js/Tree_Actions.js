@@ -147,13 +147,14 @@ document.getElementById("search-smile").addEventListener("keyup", function(event
 
 //Get initial window width and initialize resize handler
 var winWidth = window.innerWidth;
+var winHeight = window.innerHeight;
 window.addEventListener('resize', resizeHandler);
 
 singleRedraw = 0;
 function resizeHandler(event) {
     //Do not let resizing occur if the browser has not moved a certain width and if
     // the tree-menu-container is still hidden
-    if((window.innerWidth >= (winWidth + 150) || window.innerWidth <= (winWidth - 150)) && $("#tree-menu-container")[0].style.display !== "none") {
+    if(((window.innerWidth >= (winWidth + 150) || window.innerWidth <= (winWidth - 150)) || (window.innerHeight >= (winHeight + 30) || window.innerHeight <= (winHeight - 30))) && $("#tree-menu-container")[0].style.display !== "none") {
         window.removeEventListener('resize', resizeHandler);
         Actions.redrawTree();
         return;
@@ -172,13 +173,14 @@ function resizeHandler(event) {
     }
 }
 
-$(window).resize(function() {
-    MolTree.tree.redraw();
-    MolTree.tree.positionNodes();
-    MolTree.tree.redraw();
-    nodesMT = MolTree.tree.getNodeDb().db;
-    nodesMTDB = MolTree.tree.getNodeDb();
-})
+//Test without
+// $(window).resize(function() {
+//     MolTree.tree.redraw();
+//     MolTree.tree.positionNodes();
+//     MolTree.tree.redraw();
+//     nodesMT = MolTree.tree.getNodeDb().db;
+//     nodesMTDB = MolTree.tree.getNodeDb();
+// })
 
 function convertSmileTo3d(smiles) {
     return new Promise(function (resolve, reject) {
@@ -343,10 +345,12 @@ function handleLoadCompletion() {
     if(jsmolLoadCount) {
         $("#welcome-button-bar").show();
         document.getElementById("action-mp-eraser").click();
-        document.getElementById("closeWelcomeBannerBtn").disabled = false;
+        //Never show close button
+        //document.getElementById("closeWelcomeBannerBtn").disabled = false;
         document.getElementById("welcome-loading-msg").innerText = "Loading complete";
         document.getElementById("loadAnim").style.display = "none";
         $("#closeWelcomeBannerBtn").on("click", startupSMILE);
+        $("#closeWelcomeBannerBtn").click();
     }
     jsmolLoadCount++;
 }
@@ -360,8 +364,10 @@ function startupSMILE(event) {
 }
 
 window.addEventListener('resize', function() {
-    var remaining = $("#menu-bar").width() - $("#main-menu").width() - $("#loadModelAnim").width() * 3;
+    //var remaining = $("#menu-bar").width() - $("#main-menu").width() - $("#loadModelAnim").width() * 5;
+    var remaining = $("#menu-bar").width() / 3;
     document.getElementById("search-smile").style.width = (remaining).toString() + "px";
 })
 
-document.getElementById("search-smile").style.width = ($("#menu-bar").width() - $("#main-menu").width() - $("#loadModelAnim").width() * 3).toString() + "px";
+//document.getElementById("search-smile").style.width = ($("#menu-bar").width() - $("#main-menu").width() - $("#loadModelAnim").width() * 5).toString() + "px";
+document.getElementById("search-smile").style.width = ($("#menu-bar").width() / 3).toString() + "px";

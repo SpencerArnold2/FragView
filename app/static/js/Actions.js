@@ -245,6 +245,7 @@ var Actions = {
 	},
 
 	redrawTree() {
+		winHeight = window.innerHeight;
 		document.getElementById("uploadDialogText").innerText = "Resizing tree..."
 		$("#uploadTreeDialog").show();
 		resetUpdateAnim();
@@ -481,17 +482,18 @@ var Actions = {
 				fileReader.readAsText(files[0]);
 			}
 			else {
-				//alert("File must be in JSON format");
+				alert("File must be in JSON format");
 			}
 		}
 		else {
-			//alert("File size must be less than 500KB");
+			alert("File size must be less than 500KB");
 		}
 	},
 
 	createSaveTree: function(nodesArr, count=-1) {
 		document.getElementById("uploadDialogText").innerText = "Uploading new tree...    ";
 		$("#uploadTreeDialog").show();
+		$("#loadModelAnim").show();
 
 		//Count starts at -1 to offset root ID
 		count++;
@@ -502,7 +504,7 @@ var Actions = {
 			firstNode.setSmile(nodesArr[0].smile);
 			var rootNode = document.getElementById("node-0");
 			addClickHandler(rootNode);
-			//Let Actions.updateTree() worry about setting image source
+			//Let Actions.updateTree() set image source
 			rootNode.title = nodesArr[0].smile;
 			rootNode.innerHTML = '<img id="img0">';
 
@@ -549,6 +551,9 @@ var Actions = {
 						}
 
 						$("#uploadTreeDialog").hide();
+						$("#loadModelAnim").hide();
+						//Change the value of the file stored in the file-dialog to trigger on-change for next upload
+						$("#file-dialog")[0].value = "";
 
 					}
 				})
