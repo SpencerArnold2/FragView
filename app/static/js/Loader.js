@@ -879,6 +879,8 @@ var Loader = {
 			Model.loadMOL(node.get3d());
 			Messages.clear();
 		}
+
+		Jmol.script(JSmol, "SELECT hydrogen; delete selected")
 		cancelUpdateAnim();
 		$("#uploadTreeDialog").hide();
 	},

@@ -124,7 +124,7 @@ function addClickHandler(element) {
             resolve(resetUpdateAnim());
         }).then(function(results) {
             return new Promise((resolve, reject) => {
-                setTimeout(() => resolve(Model.loadMOL(node.get3d())), 10);
+                setTimeout(() => resolve(Model.loadMOL(node.get3d())), 20);
             })
         }).then(function(results) {
             return new Promise((resolve, reject) => {
@@ -132,7 +132,11 @@ function addClickHandler(element) {
             });
         }).then(function(results) {
             return new Promise((resolve, reject) => {
-                setTimeout(() => resolve(cancelUpdateAnim()), 30);
+                setTimeout(() => resolve(Jmol.script(JSmol, "SELECT hydrogen; delete selected")), 20);
+            });
+        }).then(function(results) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => resolve(cancelUpdateAnim()), 20);
             });
         })
     });

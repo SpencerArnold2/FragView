@@ -294,7 +294,6 @@ var Actions = {
 		}
 		else {
 			newNodes = MolDataList.molList;
-			console.log("CHECK THIS: ", nodes[0]);
 			if(nodes[0]["smile"].contains(".")) {
 				Sketcher.loadMOL(nodes[1]["mol2d"]);
 				Model.loadMOL(nodes[1]["mol3d"]);
@@ -549,6 +548,8 @@ var Actions = {
 							Sketcher.loadMOL(node.get2d());
 							Model.loadMOL(node.get3d());
 						}
+
+						Jmol.script(JSmol, "SELECT hydrogen; delete selected")
 
 						$("#uploadTreeDialog").hide();
 						$("#loadModelAnim").hide();
