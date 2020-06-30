@@ -132,7 +132,7 @@ function addClickHandler(element) {
             });
         }).then(function(results) {
             return new Promise((resolve, reject) => {
-                setTimeout(() => resolve(Jmol.script(JSmol, "SELECT hydrogen; delete selected")), 20);
+                setTimeout(() => resolve(Jmol.script(JSmol, "SELECT hydrogen; delete selected")), 10);
             });
         }).then(function(results) {
             return new Promise((resolve, reject) => {
