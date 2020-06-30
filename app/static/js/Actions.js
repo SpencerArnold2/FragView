@@ -271,7 +271,7 @@ var Actions = {
 				}
 				else {
 					return new Promise((resolve, reject) => {
-						setTimeout(() => resolve(storeMOL(nodes[count]["mol3d"], nodes[count]["mol2d"], nodes[count]["smile"], false, nodes[count]["parentId"])), 25);
+						setTimeout(() => resolve(storeMOL(nodes[count]["mol3d"], nodes[count]["mol2d"], nodes[count]["smile"], false, nodes[count]["parentId"])), 100);
 					})
 				}
 			}).then(function (results) {
