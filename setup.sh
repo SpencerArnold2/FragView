@@ -114,5 +114,10 @@ if [[ $response = 'n' || $response = 'N' ]]; then
     echo Created /etc files successfully deleted
 
 else
+    echo Enter name of last version to prevent it from being started by the server on boot-up
+    read lastVersionNumber
+    systemctl disable $lastVersionNumber
+    echo Start service on boot-up for FragView$lastVersionNumber is:
+    systemctl is-enabled $lastVersionNumber
     echo Site setup successfully
 fi

@@ -26,6 +26,19 @@
 	background-position: center;
 }
 
+#tools-dropdown>.dropdown-toggle, #model-dropdown>.dropdown-toggle, #help-dropdown>.dropdown-toggle {
+	padding-left: 0.2em;
+}
+
+#tools-dropdown>.dropdown-toggle {
+	padding-left: 0.5em !important;
+}
+
+#search-button, #update-tree-button {
+	padding-left: 0.7em !important;
+	padding-right: 0.7em !important;
+}
+
 // .dropdown-toggle {
 // 	border-left: 1px solid @menu-bar-bg;
 // 	border-right: 1px solid @menu-bar-bg;
@@ -42,40 +55,45 @@
 	color: #FFF;
 }
 
-#search-button, #update-tree-button, #action-about {
+// #search-button, #update-tree-button, #action-about {
+#search-button, #update-tree-button {
 	font-family: 'Open Sans', sans-serif;
 	position: relative;
-	bottom: 0.75em;
+	//bottom: 0.75em;
 	font-size: 1em;
 	color: #000;
 	border: none;
+	padding: 3em 0.5em 0.6em 0.5em;
 	background-color: #FFF;
-	width: 5em;
-	height: 2.8em;
-	line-height: 1.3em;
+	width: auto;
+	height: auto;
+
+	//width: 5em;
+	//height: 2.8em;
+	//line-height: 1.3em;
 	//margin: 0 9% 0 0;
 	//padding: 0 0 5px 0;
 	//border: none;
 }
 
-#search-button {
+#update-tree-button {
 	width: 4.5em;
 }
 
-#search-button:active, #update-tree-button:active, #action-about:active {
+#search-button:active, #update-tree-button:active {
 	background-color: @active;
 	color: #FFF;
 }
 
-#action-about {
-	bottom: 0.35em;
-	padding: 10% 0 0 0;
-}
+// #action-about {
+// 	bottom: 0.35em;
+// 	padding: 10% 0 0 0;
+// }
 
-#action-about:before {
-	//display: none;
-	width: 1.3em;
-}
+// #action-about:before {
+// 	//display: none;
+// 	width: 1.3em;
+// }
 
 .dropdown.open>.dropdown-toggle, .dropdown-toggle:hover {
 	background-color: @active  !important;
@@ -205,6 +223,7 @@ Menu-item icons
 #newTree, #fileTree {
 	font-family: 'Chewy';
 	color: @active;
+	padding-left: 10%;
 }
 
 // #fileTree {

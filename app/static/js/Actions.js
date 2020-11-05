@@ -113,11 +113,8 @@ var Actions = {
 		Sketcher.center();
 		url = sketcherBlobURL();
 		nodeId = document.getElementsByClassName("active")[0].id;
-		console.log("nodeId: ", nodeId);
 		nodeId = nodeId.replace("node-", "");
 		selectedNode = document.getElementById("img" + nodeId);
-		console.log("url: ", url);
-		console.log("selectedNode: ", selectedNode);
 
 		try {
 			selectedNode.src = url
@@ -132,25 +129,15 @@ var Actions = {
 		$(".r-mode").removeClass("checked");
 		document.getElementById("action-model-balls").classList.add("checked");
 		let smile = document.getElementById("search-smile").value;
-		let splitVer, fragFlag;
+		let splitVer, fragFlag, inchiFlag;
 		if (root.contains(".")) {
 			splitVer = smile.split(".");
 			fragFlag = true;
 		}
-		//Not needed anymore because frag limit is checked before AJAX
-		// if(true) {
-		// 	var totalNodes = MolTree.tree.getNodeDb().db.length;
-		// 	for (i = 1; i < totalNodes; i++) {
-		// 		let currentNode = MolDataList.getNode(i.toString());
-		// 		MolDataList.delNode(i.toString());
-		// 	}
-		// }
-		// clearTreeMenu();
+		if(smile.contains("InChI")) {
+			inchiFlag = true;
+		}
 
-		//Sketcher.clear();
-		//Use S to differentiate search smiles for loader
-		// let smile = document.getElementById("search-smile").value;
-		//console.log("newTreeFlag", newTreeFlag);
 		if (smile === "" && root !== "") {
 			smile = root;
 		}
@@ -161,17 +148,11 @@ var Actions = {
 			resetUpdateAnim();
 			MolDataList.molList[0].smile = smile;
 			document.getElementById("file-upload-text").innerHTML = "<p id='newTree'></p>";
-			// document.getElementById("tree-menu-container").style.display = "";
-			Loader.loadSMILES(smile, fragFlag, newTreeFlag);
+			Loader.loadSMILES(smile, fragFlag, newTreeFlag, inchiFlag);
 		}
-		//}
-		//else {
-		//	Messages.alert("frag_limit_exceeded");
-		//}
 	},
 	treeSmileCont: function (ajaxData, mol3d, mol2d) {
 		//ajaxData["output"] is joined fragments 2D molfile
-		//console.log("Smiles retrieved", ajaxData["output"])
 		smile = document.getElementById("search-smile").value;
 		//[ATOM] specifies it is explicit (no hydrogens are drawn) so
 		// if this does not exist, implicit hydrogens only exist
@@ -179,33 +160,10 @@ var Actions = {
 		// 	implicitFlag = true;
 		// }
 
-
-
-		// setTimeout(function () {
-		// 	//mol2d = Sketcher.getMOL();
-		// 	//mol3d = Model.data.mol;
-		// 	var molInfo = [mol2d, mol3d];
-		// 	var DomRoot = document.getElementById("node-0");
-		// 	var DomRootURL = sketcherBlobURL();
-		// 	DomRoot.title = smile;
-		// 	console.log("DOMROOT title: ", DomRoot.title);
-		// 	console.log("smile: ", smile);
-		// 	DomRoot.innerHTML = "<img id=img0 src=" + DomRootURL + ">";
-		// 	addClickHandler(DomRoot);
-		// 	let rootNode = MolDataList.getNode("0");
-		// 	rootNode.set2d(molInfo[0]);
-		// 	rootNode.set3d(molInfo[1]);
-		// 	//Causes undefined mol on fragments with new tree
-		// 	//Sketcher.loadMOL(ajaxData["output"][0]);
-		// }, 100)
-
-
 		var molInfo = [mol2d, mol3d];
 		var DomRoot = document.getElementById("node-0");
 		var DomRootURL = sketcherBlobURL();
 		DomRoot.title = smile;
-		console.log("DOMROOT title: ", DomRoot.title);
-		console.log("smile: ", smile);
 		DomRoot.innerHTML = "<img id=img0 src=" + DomRootURL + ">";
 		addClickHandler(DomRoot);
 		let rootNode = MolDataList.getNode("0");
@@ -214,29 +172,12 @@ var Actions = {
 		
 		if (hasFragment(smile)) {
 
-			console.log("HAS FRAGMENT")
-
-			// result = ajaxData;
-			// result["output"].shift();
-			// frags = smileSplitter(smile);
-
 			setTimeout(function () {
-				// term = 1;
-				// term = Actions.promiseFrags(frags, result);
 				rootNodeH = document.getElementById("node-0");
 				DomRoot = document.getElementById("node-0");
 				DomRoot.style.pointerEvents = "none";
 
 			}, 300)
-			//to revert back to root node
-			// setTimeout(function () {
-			// 	// var node = MolDataList.getNode(1);
-			// 	// Model.loadMOL(node.get3d());
-			// 	// Sketcher.loadMOL(node.get2d());
-			// 	// rootNodeH.className = "node";
-			// 	// firstFrag = document.getElementById("node-1");
-			// 	// firstFrag.className = "node active";
-			// }, 1800)
 		}
 		else {
 			cancelUpdateAnim();
@@ -262,9 +203,8 @@ var Actions = {
 	//This is not supposed to load the 3d model because
 	// it will be used for generating fragments only. The
 	// 3d will hold the root node and only switch to the first
-	// child node should the new tree contain framents in initial smile
+	// child node should the new tree contain fragments in initial smile
 	convert3d(smiles) {
-		//console.log("3d smiles", smiles);
 		Progress.increment();
 		var rdkitMolecule = RDKit.Molecule.fromSmiles(smiles);
 		rdkitMolecule.addHs();
@@ -277,8 +217,6 @@ var Actions = {
 		return results;
 	},
 	convert2d(smiles, mol3d, mol2d) {
-		// console.log("mol2d", mol2d);
-		// console.log("mol3d", mol3d);
 		Progress.increment();
 		Sketcher.loadMOL(mol2d);
 		Progress.complete();
@@ -307,27 +245,20 @@ var Actions = {
 	},
 
 	redrawTree() {
+		winHeight = window.innerHeight;
 		document.getElementById("uploadDialogText").innerText = "Resizing tree..."
 		$("#uploadTreeDialog").show();
 		resetUpdateAnim();
 		clearTreeMenu();
 		originalHTML = document.getElementById("tree-menu").innerHTML;
 		onlyNodes = originalHTML.split("</svg>");
-		console.log("onlyNodes: ", onlyNodes);
 		count = 0;
 		nodeArr = MolDataList.molList;
 		nodeArrLen = nodeArr.length - 1;
-		console.log("nodeArr: ", nodeArr);
 		Actions.recursiveCreate(count, nodeArr, nodeArrLen);
-		//console.log("original ", originalHTML);
-		//originalHTML.replace('"width="')
-		//console.log("Cleared tree: ", MolTree.tree);
 	},
 
 	recursiveCreate(count, nodes, len) {
-		console.log("count: ", count);
-		console.log("len: ", len);
-		console.log("nodes: ", nodes);
 		if(count <= len) {
 			new Promise((resolve, reject) => {
 				setTimeout(() => resolve(Sketcher.loadMOL(nodes[count]["mol2d"])), 25);
@@ -340,18 +271,12 @@ var Actions = {
 				}
 				else {
 					return new Promise((resolve, reject) => {
-						setTimeout(() => resolve(storeMOL(nodes[count]["mol3d"], nodes[count]["mol2d"], nodes[count]["smile"], false, nodes[count]["parentId"])), 25);
+						setTimeout(() => resolve(storeMOL(nodes[count]["mol3d"], nodes[count]["mol2d"], nodes[count]["smile"], false, nodes[count]["parentId"])), 100);
 					})
 				}
 			}).then(function (results) {
-				//console.log("MOLDATALIST CHECK: ", MolDataList.molList);
-				// return new Promise((resolve, reject) => {
-				// 	setTimeout(() => resolve(MolDataList.molList.splice(nodes.length-1,1)), 500);
-				// 	//setTimeout(() => resolve(console.log("MOLDATALIST CHECK: ", MolDataList.molList)), 100);
-				// })
-
 				//The root node is never deleted, only overwritten so it should not be cut from
-				// the array. Instead, when node is appended to the array, cut that node, which
+				// the array. Instead, when a node is appended to the array, cut that node, which
 				// will always be in index one for that iteration
 				if(count !== 0) {
 					return new Promise((resolve, reject) => {
@@ -360,8 +285,6 @@ var Actions = {
 				}
 				
 			}).then(function (results) {
-				console.log("CALLBACK");
-
 				return new Promise((resolve, reject) => {
 					count += 1;
 					setTimeout(() => resolve(Actions.recursiveCreate(count, nodes, len)), 25);
@@ -371,7 +294,6 @@ var Actions = {
 		}
 		else {
 			newNodes = MolDataList.molList;
-			console.log("CHECK THIS: ", nodes[0]);
 			if(nodes[0]["smile"].contains(".")) {
 				Sketcher.loadMOL(nodes[1]["mol2d"]);
 				Model.loadMOL(nodes[1]["mol3d"]);
@@ -401,178 +323,7 @@ var Actions = {
 	//Settimeouts take place before execution; therefore, it is critical
 	// that these are continuously placed after a promise
 	promiseFrags(frags, result, rootNode = "") {
-		//console.log("rootNode", rootNode);
 		let parentId = document.getElementsByClassName("active")[0].id;
-		//console.log("load 3d mol 0");
-		// var timeoutMS = 1000;
-		// var promiseArr = [];
-
-		// for (var i = 0; i < frags.length; i++) {
-		// 	console.log("starting frags ", i);
-		// 	// promiseArr[i] = new Promise(function(resolve, reject) {
-		// 	// var promise = new Promise(function(resolve, reject) {
-		// 	// 	Actions.fragPromise(frags[i], result["output"][i], parentId, frags);
-		// 	// })
-
-
-		// 	// var promise = new Promise((resolve, reject) => {
-		// 	// 	resolve(Actions.fragPromise(frags[i], result["output"][i], parentId, frags));
-		// 	// })
-		// 	promiseArr.push(Actions.fragPromise(frags[i], result["output"][i], parentId, frags).then ((result) => {
-		// 		console.log("result: ", result);
-		// 		return result;
-		// 	}));
-
-
-
-
-
-
-		// 	// new Promise(function(resolve, reject) {
-		// 	// 	setTimeout(() => resolve(Actions.convert3d(frags[i])), timeoutMS);
-		// 	// }).then(function(results) {
-		// 	// 	console.log("load sketcher mol ", i);
-
-		// 	// 	return new Promise((resolve, reject) => {
-		// 	// 		setTimeout(() => resolve(Actions.convert2d(frags[i], results[i], result["output"][i])), timeoutMS);
-		// 	// 	});
-		// 	// }).then(function(results) {
-		// 	// 	console.log("store mol ", i);
-
-		// 	// 	return new Promise((resolve, reject) => {
-		// 	// 		setTimeout(() => resolve(storeMOL(results[i], result["output"][i], frags[i], false, parentId)), timeoutMS);
-		// 	// 	});
-		// 	// });
-
-
-		// }
-		// console.log("promise: ", promiseArr);
-
-		// Promise.all(promiseArr).then(function(values) {
-		// 	console.log("values: ", values);
-		// });
-
-		// new Promise(function(resolve, reject) {
-		// 	setTimeout(() => resolve(Actions.convert3d(frags[0])), 100);
-		// }).then(function(results) {
-		// 	//console.log("load sketcher mol 0");
-
-		// 	return new Promise((resolve, reject) => {
-		// 		setTimeout(() => resolve(Actions.convert2d(frags[0], results[0], result["output"][0])), 100);
-		// 	});
-		// }).then(function(results) {
-		// 	//console.log("store mol 0");
-
-		// 	return new Promise((resolve, reject) => {
-		// 		setTimeout(() => resolve(storeMOL(results[0], result["output"][0], frags[0], false, parentId)), 100);
-		// 	});
-		// }).then(function(results) {
-		// 	//console.log("load 3d mol 1");
-
-		// 	return new Promise((resolve, reject) => {
-		// 		setTimeout(() => resolve(Actions.convert3d(frags[1])), 100);
-		// 	});
-		// }).then(function(results) {
-		// 	//console.log("load sketcher mol 1");
-
-		// 	return new Promise((resolve, reject) => {
-		// 		setTimeout(() => resolve(Actions.convert2d(frags[1], results[0], result["output"][1])), 100);
-		// 	});
-		// }).then(function (results) {
-		// 	//console.log("store mol 1");
-
-		// 	return new Promise((resolve, reject) => {
-		// 		setTimeout(() => resolve(storeMOL(results[0], result["output"][1], frags[1], false, parentId)), 100);
-		// 	});
-		// }).then(function(results) {
-		// 	if(frags.length > 2) {
-		// 		//console.log("load 3d mol 2");
-
-		// 		return new Promise((resolve, reject) => {
-		// 			setTimeout(() => resolve(Actions.convert3d(frags[2])), 100);
-		// 		});
-		// 	}
-		// }).then(function(results) {
-		// 	if(frags.length > 2) {
-		// 		//console.log("sketcher load mol 2");
-
-		// 		return new Promise((resolve, reject) => {
-		// 			setTimeout(() => resolve(Actions.convert2d(frags[2], results[0], result["output"][2])), 100);
-		// 		});
-		// 	}
-		// }).then(function(results) {
-		// 	if(frags.length > 2) {
-		// 		//console.log("store mol 2");
-
-		// 		return new Promise((resolve, reject) => {
-		// 			setTimeout(() => resolve(storeMOL(results[0], result["output"][2], frags[2], false, parentId)), 100);
-		// 		});
-		// 	}
-		// }).then(function(results) {
-		// 	if(frags.length > 3) {
-		// 		//console.log("load 3d mol 3");
-
-		// 		return new Promise((resolve, reject) => {
-		// 			setTimeout(() => resolve(Actions.convert3d(frags[3])), 100);
-		// 		});
-		// 	}
-		// }).then(function(results) {
-		// 	if(frags.length > 3) {
-		// 		//console.log("sketcher load mol 3");
-
-		// 		return new Promise((resolve, reject) => {
-		// 			setTimeout(() => resolve(Actions.convert2d(frags[3], results[0], result["output"][3])), 100);
-		// 		});
-		// 	}
-		// }).then(function(results) {
-		// 	if(frags.length > 3) {
-		// 		//console.log("store mol 3");
-
-		// 		return new Promise((resolve, reject) => {
-		// 			setTimeout(() => resolve(storeMOL(results[0], result["output"][3], frags[3], false, parentId)), 100);
-		// 		});
-		// 	}
-		// }).then(function(results) {
-		// 	if(frags.length > 4) {
-		// 		//console.log("load 3d mol 4");
-
-		// 		return new Promise((resolve, reject) => {
-		// 			setTimeout(() => resolve(Actions.convert3d(frags[4])), 100);
-		// 		});
-		// 	}
-		// }).then(function(results) {
-		// 	if(frags.length > 4) {
-		// 		//console.log("sketcher load mol 4");
-
-		// 		return new Promise((resolve, reject) => {
-		// 			setTimeout(() => resolve(Actions.convert2d(frags[4], results[0], result["output"][4])), 100);
-		// 		});
-		// 	}
-		// }).then(function(results) {
-		// 	if(frags.length > 4) {
-		// 		//console.log("store mol 4");
-
-		// 		return new Promise((resolve, reject) => {
-		// 			setTimeout(() => resolve(storeMOL(results[0], result["output"][4], frags[4], false, parentId)), 100);
-		// 		});
-		// 	}
-		// }).then(function(results) {
-		// 	if(!rootNode && frags.length > 1) { //Root node is empty for new trees
-		// 		//console.log("new tree");
-
-		// 		return new Promise((resolve, reject) => {
-		// 			setTimeout(() => resolve(Actions.revertFirstNodeNew()), 100);
-		// 		});
-		// 	}
-		// 	else {
-		// 		//console.log("else");
-		// 		return new Promise((resolve, reject) => {
-		// 			setTimeout(() => resolve(Actions.revertRootNode(rootNode)), 100)
-		// 		});
-		// 	}
-		// });
-
-		//console.log("Executing");
 		let index = document.getElementsByClassName("active")[0].id;
 		index = index.replace("node-", "");
 		index = parseInt(index, 10);
@@ -698,21 +449,8 @@ var Actions = {
 	},
 
 	upload_tree: function () {
-		//$("#file-dialog").reset();
-		//console.log("CHECK: ", document.getElementById("file-dialog")[0] = "");
-		//document.getElementById("file-dialog")[0] = "";
-		//console.log("file dialog: ", $("#file-dialog"));
 		$("#file-dialog").trigger("click");
 		var fileDialog = document.getElementById("file-dialog");
-		//fileDialog.value = "";
-		//fileReader.result = "";
-		console.log("file Reader: ", fileDialog);
-		// fileDialog.addEventListener('change', (a) => {
-		// 	Actions.handleFileUpload(a);
-		// })
-		//$("#file-dialog").change(Actions.handleFileUpload);
-		//console.log("fileDialog.files: ", fileDialog.files);
-		// $("#file-dialog").change(Actions.handleFileUpload);
 	},
 
 	dialogChange: function () {
@@ -722,21 +460,13 @@ var Actions = {
 	},
 
 	handleFileUpload: function (a) {
-		//console.log("handleFileUpload()");
 		var files = a.target.files;
-		console.log("files:", files);
-		// console.log("file type: ", files[0]["type"]);
-		// console.log(files[0]);
-		// console.log("file is being handled: ", files);
 		if (files.length < 1) {
-			//alert("No file was selected");
 			return;
 		}
 		if (files[0].size < 500000) {
 			if (files[0]["type"].contains("application/json")) {
 				document.getElementById("file-upload-text").innerHTML = "<p id='fileTree'>" + files[0].name.split(".json")[0] + "</p>";
-				//console.log("not broken");
-				// var fileReader = new FileReader();
 				var fileData
 				var count = -1;
 				for (var i = 1; i < MolTree.tree.nodeDB.db.length; i++) {
@@ -746,67 +476,34 @@ var Actions = {
 				// is essential in centering tree
 				document.getElementById("tree-menu-container").style.display = "";
 				clearTreeMenu();
-				// fileReader.addEventListener("load", b => {
-				// 	Actions.createSaveTree(JSON.parse(fileReader.result), count);
-				// 	//console.log(b.target.result, JSON.parse(fileReader.result));
-				// 	// for(var i = 1; i < MolTree.tree.nodeDB.db.length; i++) {
-				// 	// 	MolDataList.delNode(i.toString());
-				// 	// }
-				// 	// clearTreeMenu();
-				// 	// document.getElementById("tree-menu-container").style.display = "";
-				// 	// JSON.parse(fileReader.result).forEach(node => {
-				// 	// 	console.log("Node: ", node);
-				// 	// 	if(count === 0) {
-				// 	// 		var firstNode = MolDataList.getNode("0");
-				// 	// 		firstNode.set2d(node.mol2d);
-				// 	// 		firstNode.set3d(node.mol3d);
-				// 	// 	}
-				// 	// 	else {
-				// 	// 		storeMOL(node.mol3d, node.mol2d, node.smile, false, node.parentId, false, true);
-				// 	// 	}
-
-				// 	// 	// storeMOL(node.mol3d, node.mol2d, node.smile, false, node.parentId, false, true);
-				// 	// 	count++;
-				// 	// })
-				// 	// fileData = JSON.parse(fileReader.result)
-				// });
-				//console.log(fileReader.result);
+				
 				//Reads the file and triggers the load event on the fileReader
 				fileReader.readAsText(files[0]);
-				// fileReader.dispatchEvent(new CustomEvent("load", function() {
-				// 	console.log("event dispatched");
-				// }));
-				//console.log("File data: ", fileData);
-				// fileReader.readAsText(files[0]).forEach(node => {
-				// 	console.log("Node: ", node);
-				// })
 			}
 			else {
-				//alert("File must be in JSON format");
+				alert("File must be in JSON format");
 			}
 		}
 		else {
-			//alert("File size must be less than 500KB");
+			alert("File size must be less than 500KB");
 		}
 	},
 
 	createSaveTree: function(nodesArr, count=-1) {
 		document.getElementById("uploadDialogText").innerText = "Uploading new tree...    ";
 		$("#uploadTreeDialog").show();
+		$("#loadModelAnim").show();
 
 		//Count starts at -1 to offset root ID
 		count++;
-		console.log("nodesArr: ", nodesArr);
-		console.log("Node: ", nodesArr[count]);
 		if (count === 0) {
 			var firstNode = MolDataList.getNode("0");
 			firstNode.set2d(nodesArr[0].mol2d);
 			firstNode.set3d(nodesArr[0].mol3d);
 			firstNode.setSmile(nodesArr[0].smile);
 			var rootNode = document.getElementById("node-0");
-			//console.log("rootNode: ", rootNode);
 			addClickHandler(rootNode);
-			//Let Actions.updateTree() worry about setting image source
+			//Let Actions.updateTree() set image source
 			rootNode.title = nodesArr[0].smile;
 			rootNode.innerHTML = '<img id="img0">';
 
@@ -818,7 +515,6 @@ var Actions = {
 				});
 			}).then(function (results) {
 				if (count < nodesArr.length) {
-					//console.log("root made recursive call to saveTree");
 					Actions.createSaveTree(nodesArr, count);
 				}
 			})
@@ -835,7 +531,6 @@ var Actions = {
 					});
 				}).then(function (results) {
 					if (count < nodesArr.length - 1) {
-						//console.log("calling recursive saveTree");
 						Actions.createSaveTree(nodesArr, count);
 					}
 					else {
@@ -854,17 +549,17 @@ var Actions = {
 							Model.loadMOL(node.get3d());
 						}
 
+						Jmol.script(JSmol, "SELECT hydrogen; delete selected")
+
 						$("#uploadTreeDialog").hide();
+						$("#loadModelAnim").hide();
+						//Change the value of the file stored in the file-dialog to trigger on-change for next upload
+						$("#file-dialog")[0].value = "";
 
 					}
 				})
-				//storeMOL(node.mol3d, node.mol2d, node.smile, false, node.parentId, false, true);
 			}
 		}
-
-		// storeMOL(node.mol3d, node.mol2d, node.smile, false, node.parentId, false, true);
-
-		//})
 	},
 
 	data_infocard: function () {
@@ -900,62 +595,62 @@ var Actions = {
 		Spectroscopy.resize();
 	},
 
-	search_substructure: function () {
-		MolView.hideDialogs();
-		MolView.setLayer("main");
-		Messages.process(function () {
-			if (Sketcher.metadata.cid) {
-				Loader.PubChem.structureSearch("cid", Sketcher.metadata.cid, "substructure");
-			} else {
-				var smiles;
-				try {
-					smiles = Sketcher.getSMILES();
-				} catch (error) {
-					Messages.alert("smiles_load_error_force", error);
-					return;
-				}
-				Loader.PubChem.structureSearch("smiles", smiles, "substructure");
-			}
-		}, "search");
-	},
+	// search_substructure: function () {
+	// 	MolView.hideDialogs();
+	// 	MolView.setLayer("main");
+	// 	Messages.process(function () {
+	// 		if (Sketcher.metadata.cid) {
+	// 			Loader.PubChem.structureSearch("cid", Sketcher.metadata.cid, "substructure");
+	// 		} else {
+	// 			var smiles;
+	// 			try {
+	// 				smiles = Sketcher.getSMILES();
+	// 			} catch (error) {
+	// 				Messages.alert("smiles_load_error_force", error);
+	// 				return;
+	// 			}
+	// 			Loader.PubChem.structureSearch("smiles", smiles, "substructure");
+	// 		}
+	// 	}, "search");
+	// },
 
-	search_superstructure: function () {
-		MolView.hideDialogs();
-		MolView.setLayer("main");
-		Messages.process(function () {
-			if (Sketcher.metadata.cid) {
-				Loader.PubChem.structureSearch("cid", Sketcher.metadata.cid, "superstructure");
-			} else {
-				var smiles;
-				try {
-					smiles = Sketcher.getSMILES();
-				} catch (error) {
-					Messages.alert("smiles_load_error_force", error);
-					return;
-				}
-				Loader.PubChem.structureSearch("smiles", smiles, "superstructure");
-			}
-		}, "search");
-	},
+	// search_superstructure: function () {
+	// 	MolView.hideDialogs();
+	// 	MolView.setLayer("main");
+	// 	Messages.process(function () {
+	// 		if (Sketcher.metadata.cid) {
+	// 			Loader.PubChem.structureSearch("cid", Sketcher.metadata.cid, "superstructure");
+	// 		} else {
+	// 			var smiles;
+	// 			try {
+	// 				smiles = Sketcher.getSMILES();
+	// 			} catch (error) {
+	// 				Messages.alert("smiles_load_error_force", error);
+	// 				return;
+	// 			}
+	// 			Loader.PubChem.structureSearch("smiles", smiles, "superstructure");
+	// 		}
+	// 	}, "search");
+	// },
 
-	search_similarity: function () {
-		MolView.hideDialogs();
-		MolView.setLayer("main");
-		Messages.process(function () {
-			if (Sketcher.metadata.cid) {
-				Loader.PubChem.structureSearch("cid", Sketcher.metadata.cid, "similarity");
-			} else {
-				var smiles;
-				try {
-					smiles = Sketcher.getSMILES();
-				} catch (error) {
-					Messages.alert("smiles_load_error_force", error);
-					return;
-				}
-				Loader.PubChem.structureSearch("smiles", smiles, "similarity");
-			}
-		}, "search");
-	},
+	// search_similarity: function () {
+	// 	MolView.hideDialogs();
+	// 	MolView.setLayer("main");
+	// 	Messages.process(function () {
+	// 		if (Sketcher.metadata.cid) {
+	// 			Loader.PubChem.structureSearch("cid", Sketcher.metadata.cid, "similarity");
+	// 		} else {
+	// 			var smiles;
+	// 			try {
+	// 				smiles = Sketcher.getSMILES();
+	// 			} catch (error) {
+	// 				Messages.alert("smiles_load_error_force", error);
+	// 				return;
+	// 			}
+	// 			Loader.PubChem.structureSearch("smiles", smiles, "similarity");
+	// 		}
+	// 	}, "search");
+	// },
 
 	/*
 	Model menu
@@ -1131,9 +826,9 @@ var Actions = {
 		MolView.setLayer("search");
 	},
 
-	load_more_pubchem: function () {
-		Loader.PubChem.loadNextSet();
-	},
+	// load_more_pubchem: function () {
+	// 	Loader.PubChem.loadNextSet();
+	// },
 
 	load_more_rcsb: function () {
 		Loader.RCSB.loadNextSet();

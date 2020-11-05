@@ -339,55 +339,55 @@ var Autocomplete = {
 	 * Submits autocomplete selection
 	 */
 	submit: function () {
-		MolView.pushEvent("input", "submit", "autocomplete", 0);
+		// MolView.pushEvent("input", "submit", "autocomplete", 0);
 
-		if ($("#search-input").val() === "") {
-			$("#search-input").focus();
-			MolView.alertEmptyInput();
-		} else {
-			this.hide();
-			$("#search-input").blur();
-			MolView.hideDialogs();
-			MolView.setLayer("main");
+		// if ($("#search-input").val() === "") {
+		// 	$("#search-input").focus();
+		// 	MolView.alertEmptyInput();
+		// } else {
+		// 	this.hide();
+		// 	$("#search-input").blur();
+		// 	MolView.hideDialogs();
+		// 	MolView.setLayer("main");
 
-			if (this.i === -1) //try to find a record match
-			{
-				for (var i = 0; i < this.records.length; i++) {
-					if (this.records[i].name.toLowerCase() ==
-						$("#search-input").val().toLowerCase()) {
-						this.i = i;
-						break;
-					}
-				}
-			}
+		// 	if (this.i === -1) //try to find a record match
+		// 	{
+		// 		for (var i = 0; i < this.records.length; i++) {
+		// 			if (this.records[i].name.toLowerCase() ==
+		// 				$("#search-input").val().toLowerCase()) {
+		// 				this.i = i;
+		// 				break;
+		// 			}
+		// 		}
+		// 	}
 
-			if (this.i === -1) //fast search using CIR
-			{
-				var val = $("#search-input").val();
-				if (Autocomplete.cache[val] === undefined) {
-					Loader.PubChem.loadName(val, true);
-				} else {
-					Messages.process(Loader.CIRsearch, "search");
-				}
-			} else {
-				$("#search-input").val(this.records[this.i].label);
+		// 	if (this.i === -1) //fast search using CIR
+		// 	{
+		// 		var val = $("#search-input").val();
+		// 		if (Autocomplete.cache[val] === undefined) {
+		// 			Loader.PubChem.loadName(val, true);
+		// 		} else {
+		// 			Messages.process(Loader.CIRsearch, "search");
+		// 		}
+		// 	} else {
+		// 		$("#search-input").val(this.records[this.i].label);
 
-				if (this.records[this.i].pdbids) //RCSB macromolecule
-				{
-					Loader.RCSB.loadPDBID(this.records[this.i].pdbids[0],
-						this.records[this.i].label);
-				} else if (this.records[this.i].codid) //COD mineral
-				{
-					Loader.COD.loadCODID(this.records[this.i].codid,
-						this.records[this.i].label, this.records[this.i].PubChem_name);
-				} else //PubChem compound
-				{
-					Loader.PubChem.loadName(this.records[this.i].label);
-				}
+		// 		if (this.records[this.i].pdbids) //RCSB macromolecule
+		// 		{
+		// 			Loader.RCSB.loadPDBID(this.records[this.i].pdbids[0],
+		// 				this.records[this.i].label);
+		// 		} else if (this.records[this.i].codid) //COD mineral
+		// 		{
+		// 			Loader.COD.loadCODID(this.records[this.i].codid,
+		// 				this.records[this.i].label, this.records[this.i].PubChem_name);
+		// 		} else //PubChem compound
+		// 		{
+		// 			Loader.PubChem.loadName(this.records[this.i].label);
+		// 		}
 
-				this.refresh();
-			}
-		}
+		// 		this.refresh();
+		// 	}
+		// }
 	},
 
 	/**
