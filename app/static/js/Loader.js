@@ -661,7 +661,7 @@ var Loader = {
 	 * @param {String} title  New document title
 	 */
 	loadSMILES: function (smiles, fragFlag = false, newTreeFlag = false, inchiFlag = false) {
-		console.log("INCHI", inchiFlag);
+		//console.log("INCHI", inchiFlag);
 		Progress.reset(4);
 
 		var start = smiles;

@@ -220,6 +220,10 @@ function AJAX(obj) {
 		}
 	}
 
+	if(["/2d", "/2dSingle", "2dInchi", "2dMol"].includes(obj.url)) {
+		obj.url = "/fragview"+obj.url;
+	}
+	
 	if (obj.primary) {
 		xhr = $.ajax(obj);
 		return xhr;

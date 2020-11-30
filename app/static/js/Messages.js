@@ -116,8 +116,8 @@ var Messages = {
 		if (!(what === "model_update" && !Messages.isEmpty())) {
 			Messages.clear();
 
-			console.log("what: ", what);
-			console.log("messages[what]: ", Messages[what]);
+			//console.log("what: ", what);
+			//console.log("messages[what]: ", Messages[what]);
 
 			if (what && what !== "" && Messages[what] && Messages[what] !== "") {
 				$("body").addClass("progress-cursor");

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, user-scalable=no" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <title>FragView - Manual</title>
+
+    <link type="text/css" rel="stylesheet"
+        href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.2.0/css/font-awesome.css" />
+    <link type="text/css" rel="stylesheet"
+        href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,400,300,700" />
+
+    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/vars.less')}}" />
+    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/global.less')}}" />
+    <link type="text/css" rel="stylesheet/less" href="{{ url_for('static', filename='less/external.less')}}" />
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Chewy&display=swap" />
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/less.js/3.9.0/less.min.js"></script>
+</head>
+
+<body>
+    <div id="extTitle">
+        <a class="extLink" href="/">
+            <h1>FragView</h1>
+        </a>
+    </div>
+
+    <div id="main">
+        <h3>Layout</h3>
+        <p>The FragView layout consists of several toolbox and dropdown options to render and fragment molecules. The following image depicts the possible toolbox options that allow for erasing bonds, fragment a molecule, undo, redo, and 2D center buttons.</p>
+        <img class="manualImgSmall" src="{{ url_for('static', filename='img/manual/toolbar.png')}}" alt="Toolbar image">
+
+        <ul>
+            <li>Eraser: Allows for bonds connecting atoms in the 2D model to be deleted, which can then be set as a child node by clicking the Frag button. Note, the eraser does not allow for the deletion of atoms, only bonds.</li>
+            <li>Frag: To create a new child node from the current node selected in the tree view on the right of the screen, press the Frag button. Any changes made to the molecule in the 2D view will be saved in the newly created node.</li>
+            <li>Undo: To undo a change made to the 2D structure, including deleting a bond or loading another 2D structure by clicking a node on the tree, press button pointing to the left.</li>
+            <li>Redo: To reverse an undo, the redo button allows for the 2D view of the model to be
+                returned to a more recent state.</li>
+            <li>Center: If the molecule ever becomes improperly centered in the 2D view, the center
+                button allows for the focus to be brought to the molecule correctly.</li>
+        </ul>
+
+        <p>Additional buttons and drop-down options can be found in the image below with their 
+            purposes described.</p>
+        
+        <img class="manualImg" src="{{ url_for('static', filename='img/manual/smilebar.png')}}" alt="Smilebar image">
+
+        <ul>
+            <li>Smile bar: The textbox shown on the far left of the image above is where the smile or smiles to be created will be entered. A new tree with one root node is created by specifying a single smile, while multiple children nodes can be generated along with the root by separating the smiles with periods.</li>
+            <li>New: The new button will create a new tree using the smile or smiles in the smile bar. Note that the current tree will be replaced by the new tree, so if you want to save the data, make sure to go to Tools > Save tree data.</li>
+            <li>Refresh: The refresh button will retake the current screenshot of the 2D view of the molecule and replace the node image in the tree view with the newly taken image. If the tree image is ever distorted, the node image can be recreated using this button.</li>
+            <li>Tools: Various options for saving files related to the molecule.</li>
+            <li>Model: Options that will change how the models are shown to the user.</li>
+            <li>Help: Includes the link to the tutorial video and about page.</li>
+            <li>The tree view on the right side of the applications will show a 2D image for the molecule
+                of that node and allow the user to quickly navigate to parent or children nodes created. If multiple children nodes are created simultaneously in the smile bar using periods to 
+                separate children nodes from the root node, the root node cannot be loaded. To properly navigate to this node, the full root node must be created alone and then the fragments made individually. The currently active node will be represented by a purple box and clicking on another node will load the 2D and 3D models into their respective views.</li>
+        </ul>
+
+        <h3>Creating Trees</h3>
+        <ul>
+            <li>FragView allows for trees to be created in two ways, including typing a smile or InChI
+                into the smile bar, textbox in the top left corner of the application, or loading a previously saved tree. RDKit is used for the generation of molecule files, which means the program does not rely on a database service, such as Pubchem. Any smile can be entered into the textbox to create a new tree with the root node having a molecule with that smile. Furthermore, the tree can automatically be created with children by
+                delimiting multiple smiles with periods. For instance, the NCNNCCON molecule might be the root node but typing NCNN.CCON in the smile/InChI bar will have a root node of NCNNCCON with two children molecules of NCNN and CCON. After the smile has been entered in the smile bar, press the new button to replace the current tree with the new tree specified by the smile or smiles in the textbox.</li>
+        </ul>
+        <img class="manualImg" src="{{ url_for('static', filename='img/manual/molecule.png')}}" alt="Specifying a root string that is already fragmented">
+        <ul>
+            <li>To save a tree structure to work on it later go to Tools > Save tree data.</li>
+            <li>Once you have the file saved, it can be uploaded to create a new tree using the Tools >
+                Upload Tree Data feature.</li>
+        </ul>
+
+        <h3>STL Printing</h3>
+
+        <ul>
+            <li>FragView is able to generate an STL file for the currently showing molecule in the 3D
+                viewer by navigating to the Tools > STL File for 3D Printing option. From there, a splicer software can be used to generate the gcode file and 3D print the molecule. The following image shows an example of the STL file retrieved from FragView.</li>
+        </ul>
+        <img class="manualImg" src="{{ url_for('static', filename='img/manual/stlView.png')}}" alt="Image of an STL file downloaded from FragView">
+    </div>
+</body>
+</html>
