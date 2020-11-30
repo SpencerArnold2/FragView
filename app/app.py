@@ -7,9 +7,7 @@ app = Flask(__name__, static_url_path='/static')
 CORS(app, resources={r"/*": {"origins": "*"}})
 from rdkit import Chem
 
-homeRoute = "/fragview"
-
-@app.route(homeRoute+'/', methods=['GET'])
+@app.route('/', methods=['GET'])
 #@cross_origin()
 def root():
     #return render_template('index.html')
@@ -24,7 +22,7 @@ def static_file(path):
     return app.send_static_file(path)
 
 
-@app.route(homeRoute+'/2d', methods=['POST'])
+@app.route('/2d', methods=['POST'])
 #@cross_origin()
 def two_dimensional():
     content = request.get_json() 
@@ -44,7 +42,7 @@ def two_dimensional():
 
     return jsonify({ "output": output })
 
-@app.route(homeRoute+'/2dSingle', methods=["POST"])
+@app.route('/2dSingle', methods=["POST"])
 def single_two_dimensional():
     content = request.get_json()
     smile = content['smile']
@@ -64,7 +62,7 @@ def single_two_dimensional():
         return jsonify({ "error": "No smiles provided" }), 400
     return jsonify({ "output": output })
 
-@app.route(homeRoute+'/2dInchi', methods=["POST"])
+@app.route('/2dInchi', methods=["POST"])
 def inchi_two_dimensional():
     content = request.get_json()
     inchi = content["inchi"]
@@ -104,7 +102,7 @@ def inchi_two_dimensional():
         return jsonify({ "error": "No inchi provided" }), 400
     return jsonify({ "output": output })
 
-@app.route(homeRoute+'/2dMol')
+@app.route('/2dMol')
 def two_dimensionalMol():
     smile = request.args.get('smile', 0, str)
     if(len(smile) > 0):
@@ -120,17 +118,13 @@ def two_dimensionalMol():
     #Return a JSONified object, not a list
     return(jsonify(mol2D=molFiles), 200, {'Content-Type': 'text/plain'})
 
-@app.route(homeRoute+'/licenses')
+@app.route('/licenses')
 def loadLicense():
     return render_template('licenses.html')
 
-@app.route(homeRoute+'/terms')
+@app.route('/terms')
 def loadTerms():
     return render_template('terms.html')
-
-@app.route(homeRoute+'/manual')
-def loadManual():
-    return render_template('manual.html')
 
 if(__name__ == "__main__"):
     app.run(host='0.0.0.0')
