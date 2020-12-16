@@ -78,3 +78,9 @@ install and setup the application.
 
 YouTube video link: INSERT HERE
 
+Run the Application on a Different Port Locally
+
+To run the application on another port use the flask run command with the -p flag that and specify the port number (ex. flask run -p 5050)
+
+_NOTE: You must give permission to run the application on port 80 locally_
+
