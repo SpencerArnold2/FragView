@@ -880,7 +880,7 @@ var Loader = {
 			Messages.clear();
 		}
 
-		Jmol.script(JSmol, "SELECT hydrogen; delete selected")
+		//Jmol.script(JSmol, "SELECT hydrogen; delete selected")
 		cancelUpdateAnim();
 		$("#uploadTreeDialog").hide();
 	},

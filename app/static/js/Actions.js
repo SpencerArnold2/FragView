@@ -97,6 +97,7 @@ var Actions = {
 		Jmol.script(JSmol, "color hbonds TYPE");
 	},
 
+	
 	toggle_hydrogens: function () {
 		var setting = document.getElementById("action-models-toggle-hydrogens");
 		if (setting.classList.contains("checked")) {
@@ -104,10 +105,11 @@ var Actions = {
 			setting.classList.remove("checked");
 		}
 		else {
-			Jmol.script(JSmol, "SELECT hydrogen; delete selected");
+			//Jmol.script(JSmol, "SELECT hydrogen; delete selected");
 			setting.classList.add("checked");
 		}
 	},
+	
 
 	updateTree: function () {
 		Sketcher.center();
@@ -549,7 +551,7 @@ var Actions = {
 							Model.loadMOL(node.get3d());
 						}
 
-						Jmol.script(JSmol, "SELECT hydrogen; delete selected")
+						//Jmol.script(JSmol, "SELECT hydrogen; delete selected")
 
 						$("#uploadTreeDialog").hide();
 						$("#loadModelAnim").hide();
