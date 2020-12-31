@@ -131,9 +131,9 @@ function addClickHandler(element) {
                 setTimeout(() => resolve(Sketcher.loadMOL(node.get2d())), 20);
             });
         }).then(function(results) {
-            return new Promise((resolve, reject) => {
-                //setTimeout(() => resolve(Jmol.script(JSmol, "SELECT hydrogen; delete selected")), 10);
-            });
+            /* return new Promise((resolve, reject) => {
+                setTimeout(() => resolve(Jmol.script(JSmol, "SELECT hydrogen; delete selected")), 10);
+            }); */
         }).then(function(results) {
             return new Promise((resolve, reject) => {
                 setTimeout(() => resolve(cancelUpdateAnim()), 20);

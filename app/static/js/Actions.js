@@ -105,7 +105,7 @@ var Actions = {
 			setting.classList.remove("checked");
 		}
 		else {
-			//Jmol.script(JSmol, "SELECT hydrogen; delete selected");
+			Jmol.script(JSmol, "SELECT hydrogen; delete selected");
 			setting.classList.add("checked");
 		}
 	},
