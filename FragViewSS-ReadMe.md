@@ -41,6 +41,9 @@ After the code has been updated, the server should reflect the new code with no 
 the server. If the changes do not appear to have been implemented, restart the service, as described
 below, and refresh the browser cache.
 
+### Applying Hotfixes:
+Hotfixes are applied by simply updating the server's necessary files. Note that hotfixes cannot be utilized if the setup.sh script has to be run again due to updating the conda environment
+
 ### Known Issues:
 1. If running the script results in a green light for the app and nginx but there is a bad gateway
     error and the .sock file is not visible in the app directory, try restarting the service 
