@@ -86,7 +86,8 @@ var MolFollower = {
     },
     alignChild: function (newMol, brokenMol, childMol){ //WIP
         var affectedAtoms = this.findBrokenBonds(newMol, brokenMol);
-        var allConnections = [];
+        var allConnectionsBroken = [];
+        var allConnectionsChild = [];
         for(i=0;i<affectedAtoms.length;i++){ //affectedAtoms loop
             var firstConnections = brokenMol[affectedAtoms[i]][1];
             var firstConnectionsID = [];
@@ -111,12 +112,71 @@ var MolFollower = {
                     }
                     connectedElementsListB.sort();
                     if (JSON.stringify(connectedElementsListB)==JSON.stringify(connectedElementsListA)){
-                        allConnections.push(affectedAtoms[i]);
+                        allConnectionsBroken.push(affectedAtoms[i]);
+                        allConnectionsChild.push(j);
                     }
                 }
-                
             }
         }
-        return allConnections; // returns which affected atom is in the child.
-    } 
+
+        // Second layer check
+        var verifiedConnections = [];
+        for(i=0;i<allConnectionsChild.length;i++){
+            var currentConnectionChildID = allConnectionsChild[i]; //current element id that needs to be found in child mol
+            var currentConnectionBrokenID = allConnectionsBroken[i]; // current element id that needs to be found in broken mol
+
+            var currentConnectionChild = childMol[currentConnectionChildID][1]; //current connection array in child
+            var currentConnectionBroken = brokenMol[currentConnectionBrokenID][1]; //current connection array in broken
+
+            currentConnectionChild.sort(); //sorts both arrays so that both are in same order
+            currentConnectionBroken.sort();
+
+            if(currentConnectionChild.length==currentConnectionBroken.length){ //makes sure that the arrays are the same length
+                for(j=0;j<currentConnectionChild.length;j++){
+
+                    var childConnectionsID = []; // holds ids of each element in connections
+                    for(k=0; k<currentConnectionChild.length; k++){ //gets ids of each element in connections
+                        var tmp = currentConnectionChild[k]; 
+                        tmp = tmp.replace(/[^0-9\.]+/g,"");
+                        childConnectionsID.push(parseInt(tmp)-1);
+                    }
+
+                    var brokenConnectionsID = []; // holds ids of each element in connections
+                    for(k=0; k<currentConnectionBroken.length; k++){ //gets ids of each element in connections
+                        var tmp = currentConnectionBroken[k]; 
+                        tmp = tmp.replace(/[^0-9\.]+/g,"");
+                        brokenConnectionsID.push(parseInt(tmp)-1);
+                    }
+
+                    for(k=0;k<childConnectionsID.length;k++){
+                        var nextConnectionsChild = [];
+                        for(l=0;l<childMol[childConnectionsID[k]][1].length;l++){
+                            nextConnectionsChild.push(childMol[childConnectionsID[k]][1][l][0]); //pushes the atomic symbol for the connection
+                        }
+
+                        for(l=0;l<currentConnectionBroken.length;l++){
+                            var nextConnectionsBroken = [];
+                            for(m=0;m<brokenMol[brokenConnectionsID[l]][1].length;m++){
+                                nextConnectionsBroken.push(brokenMol[brokenConnectionsID[l]][1][m][0])
+                            }
+                            if(JSON.stringify(nextConnectionsBroken)==JSON.stringify(nextConnectionsChild)){
+                                verifiedConnections.push(allConnectionsChild[i]);
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+        var uniqueConnections=[];
+        for(i=0;i<verifiedConnections.length;i++){ // removes duplicate values
+            if(!uniqueConnections.includes(verifiedConnections[i])){
+                uniqueConnections.push(verifiedConnections[i]);
+            }
+        }
+        verifiedConnections = uniqueConnections.sort();
+        return verifiedConnections; // returns a list of where the affected atoms are in the child mol.
+    }
+    
+
 }

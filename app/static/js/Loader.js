@@ -734,7 +734,7 @@ var Loader = {
 			};
 		}
 		frag = JSON.stringify(fragInfo);
-
+		MolFollower.storeMol(Sketcher.getMOL(), "broken")
 		if (newTreeFlag && document.getElementById("search-smile").value.contains('.')) {
 			fragFlag = true;
 		}
