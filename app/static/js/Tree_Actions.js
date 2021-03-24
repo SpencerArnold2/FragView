@@ -143,11 +143,11 @@ function addClickHandler(element) {
 }
 
 function colorHydrogens(childMol){
-    MolFollower.storeMol(childMol, "child");
-    var affectedAtoms = MolFollower.alignChild(MolFollower.newMol, MolFollower.brokenMol, MolFollower.childMol);
-    for(i=0;i<affectedAtoms.length;i++){
-        Jmol.script(JSmol, "SELECT connected(" + MolFollower.childMol[affectedAtoms[i]][0] + (affectedAtoms[i]+1) + ") and Hydrogen; color orange");
-    }
+    MolGraph.storeMol(childMol, "child");
+    console.log(MolGraph.alignSubgraph(MolGraph.brokenMol, MolGraph.childMol)); // Just prints the possible matches
+    // for(i=0;i<affectedAtoms.length;i++){
+    //     //Jmol.script(JSmol, "SELECT connected(" + MolFollower.childMol[affectedAtoms[i]][0] + (affectedAtoms[i]+1) + ") and Hydrogen; color orange");
+    // }
 }
 
 //Every time a key is released, check to see if it is return. If it is the enter key, create new tree
