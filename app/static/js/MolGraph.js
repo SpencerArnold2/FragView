@@ -54,23 +54,40 @@ class Graph {
         }
         return elementList.sort();
     }
+    getAdjList(vID){
+        var adjList = [];
+        for(var i=0;i<this.adjMatrix[vID].length;i++){
+            if(this.adjMatrix[vID][i]==1){
+                adjList.push(i);
+            }
+        }
+        return adjList;
+    }
 
 }
 
 var MolGraph = {
     newMol : "",
+    newHMol : "",
     brokenMol : "",
     childMol : "",
+    childHMol : "",
 
     storeMol: function (mol, state){
         if (state == "new"){
             this.newMol = this.organizeMol(mol);
+        }
+        else if (state == "newH"){
+            this.newHMol = this.organizeMol(mol);
         }
         else if (state == "broken"){
             this.brokenMol = this.organizeMol(mol);
         }
         else if (state == "child"){
             this.childMol = this.organizeMol(mol);
+        }
+        else if (state == "childH"){
+            this.childHMol = this.organizeMol(mol);
         }
     },
 
@@ -157,6 +174,16 @@ var MolGraph = {
             return JSON.stringify(childConnections) == JSON.stringify(brokenConnection);
         }
         
+        function findNextVertex(vID, visited, graph){
+            var adjList = graph.getAdjList(vID);
+            var nextVertex = vID;
+            for(var i = 0; i< adjList.length; i++){
+                if(!visited.includes(adjList[i])){
+                    nextVertex = adjList[i];
+                }
+            }
+            return nextVertex;
+        }
 
         // // var checkListChild = new Array(G_subgraph.numOfVertices).fill(0);
         // // var checkListParent = new Array(G_broken.numOfVertices).fill(0);
@@ -172,41 +199,96 @@ var MolGraph = {
 
             // possible solution
             if(confirmed.length>1){
-                var nextChildLayer = G_subgraph.checkNextLayer(i)[0][0];
-                var nextBrokenLayer = G_broken.checkNextLayer(confirmed[0])[0][0];
-                var previousCLayers = [i];
-                var currentConfirmedID = 0;
-                var currentBLayer = G_broken.checkNextLayer(confirmed[0]);
-                var currentCLayer = G_subgraph.checkNextLayer(i);  
-                for(var l=0; l<confirmed.length; l++){
-                    previousCLayers = [i];
-                    for(var j=0;j<G_broken.numOfVertices;j++){
-                        if(compareLayer(nextBrokenLayer, nextChildLayer)){
-                            currentBLayer = G_broken.checkNextLayer(nextBrokenLayer);
-                            currentCLayer = G_subgraph.checkNextLayer(nextChildLayer);
-                            var cID = currentCLayer.length-1;
-                            for(var k=0;k<currentBLayer.length;k++){
-                                if(previousCLayers.includes(currentCLayer[cID][0]) && cID!=0){
-                                    cID= cID-1;
-                                }
-                                if((JSON.stringify(currentBLayer[k][1])==JSON.stringify(currentCLayer[cID][1]))){ // makes page unresponsive???
-                                    previousCLayers.push(nextChildLayer);
-                                    nextChildLayer = currentCLayer[cID][0];
-                                    nextBrokenLayer = currentBLayer[k][0];
-                                    console.log(currentCLayer);
-                                    console.log(currentBLayer);
-                                    console.log(previousCLayers);
-                                    console.log(nextChildLayer);
-                                    console.log(nextBrokenLayer);
-                                }
-                            }
+                // Need to do a search through each vertex connected to each vertex in confirmed.
+                // 1. Loop through confirmed in order to validate each item
+                // 2. Do a bfs through each graph starting at the current confirmed element.
+                // 3. During the search, if any vertices do not match up, remove from confirmed.
+                // 4. 
+
+                var cVertex = i;
+                var bVertex = confirmed[0];
+                var vistitedC = [];
+                var vistitedB = [];
+                var tmpVisitedCounter = 0;
+                let cVertexAdjList, bVertexAdjList;
+                let lastVertex, lastAdjList;
+                for(var j = 0; j<confirmed.length;j++){
+                    vistitedC = [];
+                    vistitedB = [];
+                    bVertex = confirmed[j];
+                    cVertex = i;
+
+                    while(vistitedC.length < G_subgraph.numOfVertices){
+                        if (compareLayer(bVertex, cVertex)){
+                            vistitedC.push(cVertex);
+                            vistitedB.push(bVertex);
+                            // console.log(bVertex + " " + cVertex);
+                            cVertex = findNextVertex(cVertex, vistitedC, G_subgraph);
+                            bVertex = findNextVertex(bVertex, vistitedB, G_broken);
                         }
                         else{
-                            confirmed.splice(currentConfirmedID, 1);
+                            vistitedB.push(bVertex);
+                            lastVertex = vistitedB[vistitedB.length-2];
+                            lastAdjList = G_broken.getAdjList(lastVertex);
+                            var found = false;
+                            for(var k=0; k<lastAdjList.length; k++){
+                                if(!vistitedB.includes(lastAdjList[k]) && !found){
+                                    if(compareLayer(lastAdjList[k], cVertex)){
+                                        vistitedB.splice(vistitedB.length-1, 1);
+                                        vistitedB.push(lastAdjList[k]);
+                                        bVertex = findNextVertex(lastAdjList[k], vistitedB, G_broken);
+                                        vistitedC.push(cVertex);
+                                        cVertex = findNextVertex(cVertex, vistitedC, G_subgraph);
+                                        found=true;
+                                    }
+                                }
+                            }
+                            if(!found){
+                                confirmed.splice(j, 1);
+                                break;
+                            }
                         }
                     }
-                    currentConfirmedID++;
                 }
+
+
+
+
+                // var nextChildLayer = G_subgraph.checkNextLayer(i)[0][0];
+                // var nextBrokenLayer = G_broken.checkNextLayer(confirmed[0])[0][0];
+                // var previousCLayers = [i];
+                // var currentConfirmedID = 0;
+                // var currentBLayer = G_broken.checkNextLayer(confirmed[0]);
+                // var currentCLayer = G_subgraph.checkNextLayer(i);  
+                // for(var l=0; l<confirmed.length; l++){
+                //     previousCLayers = [i];
+                //     for(var j=0;j<G_broken.numOfVertices;j++){
+                //         if(compareLayer(nextBrokenLayer, nextChildLayer)){
+                //             currentBLayer = G_broken.checkNextLayer(nextBrokenLayer);
+                //             currentCLayer = G_subgraph.checkNextLayer(nextChildLayer);
+                //             var cID = currentCLayer.length-1;
+                //             for(var k=0;k<currentBLayer.length;k++){
+                //                 if(previousCLayers.includes(currentCLayer[cID][0]) && cID!=0){
+                //                     cID= cID-1;
+                //                 }
+                //                 if((JSON.stringify(currentBLayer[k][1])==JSON.stringify(currentCLayer[cID][1]))){
+                //                     previousCLayers.push(nextChildLayer);
+                //                     nextChildLayer = currentCLayer[cID][0];
+                //                     nextBrokenLayer = currentBLayer[k][0];
+                //                     console.log(currentCLayer);
+                //                     console.log(currentBLayer);
+                //                     console.log(previousCLayers);
+                //                     console.log(nextChildLayer);
+                //                     console.log(nextBrokenLayer);
+                //                 }
+                //             }
+                //         }
+                //         else{
+                //             confirmed.splice(currentConfirmedID, 1);
+                //         }
+                //     }
+                //     currentConfirmedID++;
+                // }
             }
             
             possibleMatches[i][1]=confirmed;
@@ -287,7 +369,46 @@ var MolGraph = {
         // }
         
         return possibleMatches;
+    },
+
+    findBrokenBonds: function (G_new, G_broken){
+        var newAdjMatrix = G_new.adjMatrix;
+        var brokenAdjMatrix = G_broken.adjMatrix;
+        var affectedAtoms = [];
+
+        if(newAdjMatrix.length!=brokenAdjMatrix.length){
+            return null;
+        }
+        else{
+            for(var i=0; i<newAdjMatrix.length; i++){
+                for(var j=0; j<newAdjMatrix.length; j++){
+                    if(newAdjMatrix[i][j]==1){
+                        if(brokenAdjMatrix[i][j]==0){
+                            affectedAtoms.push(j);
+                        }
+                    }
+                }
+            }
+        }
+        return affectedAtoms.sort();
+    },
+
+    colorHydrogens: function(G_new, G_broken, G_subgraph){
+        var affectedAtoms = this.findBrokenBonds(G_new, G_broken);
+        var alignment = this.alignSubgraph(G_broken, G_subgraph);
+        var atomsWithH = [];    //represents atoms that had their bond broken and has Hydrogen atoms needed to color. 
+        for(var i = 0; i<alignment.length; i++){
+            if(affectedAtoms.includes(alignment[i][1][0])){
+                atomsWithH.push(i);
+            }
+        }
+        return atomsWithH;
+        // for(var i=0;i<atomsWithH.length;i++){
+        //         Jmol.script(JSmol, "SELECT connected(" + atomsWithH[i] + (affectedAtoms[i]+1) + ") and Hydrogen; color orange");
+        // }
     }
+
+
 
     
 
