@@ -143,8 +143,11 @@ function addClickHandler(element) {
 }
 
 function colorHydrogens(childMol){
-    MolGraph.storeMol(childMol, "child");
-    console.log(MolGraph.alignSubgraph(MolGraph.brokenMol, MolGraph.childMol)); // Just prints the possible matches
+    if(JSON.stringify(MolGraph.organizeMol(childMol)) != JSON.stringify(MolGraph.newMol)){
+        MolGraph.storeMol(childMol, "child");
+        MolGraph.colorHydrogens(MolGraph.newMol, MolGraph.newHMol, MolGraph.brokenMol, MolGraph.childMol, MolGraph.childHMol);
+    }
+    
     // for(i=0;i<affectedAtoms.length;i++){
     //     //Jmol.script(JSmol, "SELECT connected(" + MolFollower.childMol[affectedAtoms[i]][0] + (affectedAtoms[i]+1) + ") and Hydrogen; color orange");
     // }
