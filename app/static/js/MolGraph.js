@@ -406,37 +406,43 @@ var MolGraph = {
         }
         // return atomsWithH;
         for(var i=0;i<atomsWithH.length;i++){
-            var atomWithH = G_child.vertexList[atomsWithH[i]];
-            atomWithH = atomWithH.charAt(0) + (parseInt(atomWithH.charAt(1)) + 1); // example: C0
-            
-            Jmol.script(JSmol, "SELECT connected(" + atomWithH + ") and Hydrogen; color orange");
+            var atomWithH = atomsWithH[i];
+            var brokenAtomWithH = brokenAtomsWithH[i];
+            var HtoColor = this.checkHydrogenLevels(G_newH, G_childH, brokenAtomWithH, atomWithH);
+            console.log(HtoColor);
+            Jmol.script(JSmol, "SELECT " + HtoColor + "; color orange");
         }
     },
 
-    // checkHydrogenLevels: function(G_newH, G_childH, brokenVID, childVID){
-    //     var originalElements = G_newH.getListOfElementsConnected(brokenVID);
-    //     var newHCounter = 0;
-    //     var childHCounter = 0;
-    //     var childElements = G_childH.getListOfElementsConnected(childVID);
-    //     for(var i = 0; i<originalElements.length; i++){
-    //         if(originalElements[i] == "H"){
-    //             newHCounter++;
-    //         }
-    //     }
-    //     for(var i = 0; i<childElements.length; i++){
-    //         if(childElements[i] == "H"){
-    //             childHCounter++;
-    //         }
-    //     }
-    //     return childHCounter - newHCounter; //returns how many hydrogens were added
-    //     // var HList = [];
-    //     // for(var i = 0; i<G_childH.getAdjList(childVID); i++){
-    //     //     if(G_childH.getVertexElement(G_childH.getAdjList((childVID)[i])) == "H"){
-    //     //         HList.push("H" + (G_childH.getAdjList((childVID)[i])+1));
-    //     //     }
-    //     // }
-    //     // return HList;
-    // }
+    checkHydrogenLevels: function(G_newH, G_childH, brokenVID, childVID){
+        var originalElements = G_newH.getListOfElementsConnected(brokenVID);
+        var newHCounter = 0;
+        var childHCounter = 0;
+        var childElements = G_childH.getListOfElementsConnected(childVID);
+        for(var i = 0; i<originalElements.length; i++){
+            if(originalElements[i] == "H"){
+                newHCounter++;
+            }
+        }
+        for(var i = 0; i<childElements.length; i++){
+            if(childElements[i] == "H"){
+                childHCounter++;
+            }
+        }
+        // return childHCounter - newHCounter; //returns how many hydrogens were added
+        var HList = [];
+        var cAdjList = G_childH.getAdjList(childVID);
+        for(var i = 0; i<cAdjList.length; i++){
+            if(G_childH.getVertexElement(cAdjList[i]) == "H"){
+                var tmpH = "H" + (cAdjList[i]);
+                tmpH = tmpH.replace( /^\D+/g, '');
+                tmpH = parseInt(tmpH) + 1;
+                tmpH = "H" + tmpH;
+                HList.push(tmpH);
+            }
+        }
+        return HList;
+    }
 
 
     

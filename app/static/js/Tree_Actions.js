@@ -132,7 +132,8 @@ function addClickHandler(element) {
             });
         }).then(function(results) {
             return new Promise((resolve, reject) => {
-                setTimeout(() => resolve(colorHydrogens(node["mol2d"])), 10);
+                console.log(MolDataList.getNode(index));
+                setTimeout(() => resolve(colorHydrogens(index)), 20);
             }); 
         }).then(function(results) {
             return new Promise((resolve, reject) => {
@@ -142,11 +143,17 @@ function addClickHandler(element) {
     });
 }
 
-function colorHydrogens(childMol){
-    if(JSON.stringify(MolGraph.organizeMol(childMol)) != JSON.stringify(MolGraph.newMol)){
-        MolGraph.storeMol(childMol, "child");
-        MolGraph.colorHydrogens(MolGraph.newMol, MolGraph.newHMol, MolGraph.brokenMol, MolGraph.childMol, MolGraph.childHMol);
-    }
+function colorHydrogens(nodeId){
+    var node = MolDataList.getNode(nodeId);
+    MolGraph.storeMol(node.mol2d, "child");
+    MolGraph.storeMol(node.mol3d, "childH");
+    var parentId = node.parentId;
+    MolGraph.storeMol(MolDataList.getNode(parentId)["mol2d"], "new");
+    MolGraph.storeMol(MolDataList.getNode(parentId)["mol3d"], "newH");
+    MolGraph.colorHydrogens(MolGraph.newMol, MolGraph.newHMol, MolGraph.brokenMol, MolGraph.childMol, MolGraph.childHMol);
+    // if(JSON.stringify(MolGraph.organizeMol(childMol)) != JSON.stringify(MolGraph.newMol)){
+        
+    // }
     
     // for(i=0;i<affectedAtoms.length;i++){
     //     //Jmol.script(JSmol, "SELECT connected(" + MolFollower.childMol[affectedAtoms[i]][0] + (affectedAtoms[i]+1) + ") and Hydrogen; color orange");
