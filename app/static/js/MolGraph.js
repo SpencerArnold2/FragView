@@ -1,8 +1,10 @@
 class Graph {
-    constructor(numOfVertices){
+    constructor(numOfVertices, parentId, nodeId){
         this.numOfVertices = numOfVertices; // stores number of vertices
         this.adjMatrix = new Array(numOfVertices).fill(0).map(() => new Array(numOfVertices).fill(0)); //creates empty adjMatrix
         this.vertexList = new Array(numOfVertices); // stores all vertices
+        this.parentId = parentId;
+        this.nodeId = nodeId;
     }
 
     addVertex (v, id){
@@ -67,31 +69,22 @@ class Graph {
 }
 
 var MolGraph = {
-    newMol : "",
-    newHMol : "",
-    brokenMol : "",
-    childMol : "",
-    childHMol : "",
+    molBrokenList: [],
+    mol2dList: [],
+    mol3dList: [],
 
-    storeMol: function (mol, state){
-        if (state == "new"){
-            this.newMol = this.organizeMol(mol);
-        }
-        else if (state == "newH"){
-            this.newHMol = this.organizeMol(mol);
-        }
-        else if (state == "broken"){
-            this.brokenMol = this.organizeMol(mol);
-        }
-        else if (state == "child"){
-            this.childMol = this.organizeMol(mol);
-        }
-        else if (state == "childH"){
-            this.childHMol = this.organizeMol(mol);
+    storeMol: function (mol, state, parentId, nodeId){
+        var tmpMol = this.organizeMol(mol, parentId, nodeId);
+        if(state=="broken" && tmpMol.numOfVertices > 0 && !this.molBrokenList.includes(tmpMol)){
+            this.molBrokenList.push(tmpMol);
+        }else if(state == "2d" && tmpMol.numOfVertices > 0 && !this.mol2dList.includes(tmpMol)){
+            this.mol2dList.push(tmpMol);
+        }else if(state == "3d" && tmpMol.numOfVertices > 0 && !this.mol3dList.includes(tmpMol)){
+            this.mol3dList.push(tmpMol);
         }
     },
 
-    organizeMol: function (mol){
+    organizeMol: function (mol, parentId, nodeId){
         var lines = mol.split("\n");
         var splitMol = [];
         for (i = 0; i < lines.length; i++){ // After loop, splitMol = array with all lines with all emptiness filtered
@@ -101,7 +94,7 @@ var MolGraph = {
         var numOfVertices = parseInt(splitMol[3][0]);
         var numOfEdges = parseInt(splitMol[3][1]);
 
-        var MolGraph = new Graph(numOfVertices);
+        var MolGraph = new Graph(numOfVertices, parentId, nodeId);
         for(i=0; i<numOfVertices;i++){
             var v = splitMol[i+4][3];
             v = v + i;
@@ -393,7 +386,38 @@ var MolGraph = {
         return affectedAtoms.sort();
     },
 
-    colorHydrogens: function(G_new, G_newH, G_broken, G_child, G_childH){
+    findGraph: function(nodeId, state){
+        if(state=="broken"){
+            for(var i = 0; i<this.molBrokenList.length; i++){
+                if(this.molBrokenList[i].nodeId == nodeId){
+                    return this.molBrokenList[i];
+                }
+            }
+        }else if(state=="2d"){
+            for(var i = 0; i<this.mol2dList.length; i++){
+                if(this.mol2dList[i].nodeId == nodeId){
+                    return this.mol2dList[i];
+                }
+            }
+        }else if(state=="3d"){
+            for(var i = 0; i<this.mol3dList.length; i++){
+                if(this.mol3dList[i].nodeId == nodeId){
+                    return this.mol3dList[i];
+                }
+            }
+        }
+    },
+
+    //G_new, G_newH, G_broken, G_child, G_childH
+    colorHydrogens: function(nodeId){
+        var G_child = this.findGraph(nodeId, "2d");
+        var G_childH = this.findGraph(nodeId, "3d");
+        var parentId = G_child.parentId;
+        var G_new = this.findGraph(parentId, "2d");
+        var G_newH = this.findGraph(parentId, "3d");
+        var G_broken = this.findGraph(parentId, "broken");
+
+
         var affectedAtoms = this.findBrokenBonds(G_new, G_broken);
         var alignment = this.alignSubgraph(G_broken, G_child);
         var atomsWithH = [];    //represents atoms that had their bond broken and has Hydrogen atoms needed to color.
@@ -409,7 +433,7 @@ var MolGraph = {
             var atomWithH = atomsWithH[i];
             var brokenAtomWithH = brokenAtomsWithH[i];
             var HtoColor = this.checkHydrogenLevels(G_newH, G_childH, brokenAtomWithH, atomWithH);
-            console.log(HtoColor);
+            // console.log(HtoColor);
             Jmol.script(JSmol, "SELECT " + HtoColor + "; color orange");
         }
     },

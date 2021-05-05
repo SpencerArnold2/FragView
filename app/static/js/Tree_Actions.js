@@ -132,7 +132,6 @@ function addClickHandler(element) {
             });
         }).then(function(results) {
             return new Promise((resolve, reject) => {
-                console.log(MolDataList.getNode(index));
                 setTimeout(() => resolve(colorHydrogens(index)), 20);
             }); 
         }).then(function(results) {
@@ -145,12 +144,13 @@ function addClickHandler(element) {
 
 function colorHydrogens(nodeId){
     var node = MolDataList.getNode(nodeId);
-    MolGraph.storeMol(node.mol2d, "child");
-    MolGraph.storeMol(node.mol3d, "childH");
+    MolGraph.storeMol(node.mol2d, "2d", node.parentId, node.nodeId);
+    MolGraph.storeMol(node.mol3d, "3d", node.parentId, node.nodeId);
     var parentId = node.parentId;
-    MolGraph.storeMol(MolDataList.getNode(parentId)["mol2d"], "new");
-    MolGraph.storeMol(MolDataList.getNode(parentId)["mol3d"], "newH");
-    MolGraph.colorHydrogens(MolGraph.newMol, MolGraph.newHMol, MolGraph.brokenMol, MolGraph.childMol, MolGraph.childHMol);
+    var parentNode = MolDataList.getNode(parentId);
+    MolGraph.storeMol(parentNode.mol2d, "2d", parentNode.parentId, parentNode.nodeId);
+    MolGraph.storeMol(parentNode.mol3d, "3d", parentNode.parentId, parentNode.nodeId);
+    MolGraph.colorHydrogens(nodeId);
     // if(JSON.stringify(MolGraph.organizeMol(childMol)) != JSON.stringify(MolGraph.newMol)){
         
     // }

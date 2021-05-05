@@ -151,7 +151,7 @@ var Actions = {
 			MolDataList.molList[0].smile = smile;
 			document.getElementById("file-upload-text").innerHTML = "<p id='newTree'></p>";
 			Loader.loadSMILES(smile, fragFlag, newTreeFlag, inchiFlag);
-			setTimeout(() => {MolGraph.storeMol(MolDataList["molList"][0]["mol2d"], "new");}, 2000);
+			setTimeout(() => {MolGraph.storeMol(MolDataList["molList"][0]["mol2d"], "2d", 0, 0);}, 2000);
 			
 		}
 	},

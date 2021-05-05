@@ -734,7 +734,7 @@ var Loader = {
 			};
 		}
 		frag = JSON.stringify(fragInfo);
-		MolGraph.storeMol(Sketcher.getMOL(), "broken");
+		MolGraph.storeMol(Sketcher.getMOL(), "broken", parseInt(parentId.replace("node-", "")), parseInt(parentId.replace("node-", "")));
 		if (newTreeFlag && document.getElementById("search-smile").value.contains('.')) {
 			fragFlag = true;
 		}
