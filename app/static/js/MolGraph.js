@@ -75,12 +75,37 @@ var MolGraph = {
 
     storeMol: function (mol, state, parentId, nodeId){
         var tmpMol = this.organizeMol(mol, parentId, nodeId);
-        if(state=="broken" && tmpMol.numOfVertices > 0 && !this.molBrokenList.includes(tmpMol)){
+        if(state=="broken" && tmpMol.numOfVertices > 0 && !this.includesGraph(nodeId, "broken")){
             this.molBrokenList.push(tmpMol);
-        }else if(state == "2d" && tmpMol.numOfVertices > 0 && !this.mol2dList.includes(tmpMol)){
+        }else if(state == "2d" && tmpMol.numOfVertices > 0 && !this.includesGraph(nodeId, "2d")){
             this.mol2dList.push(tmpMol);
-        }else if(state == "3d" && tmpMol.numOfVertices > 0 && !this.mol3dList.includes(tmpMol)){
+        }else if(state == "3d" && tmpMol.numOfVertices > 0 && !this.includesGraph(nodeId, "3d")){
             this.mol3dList.push(tmpMol);
+        }
+    },
+
+    includesGraph: function (nodeId, state){
+        if(state=="broken"){
+            for(var i = 0; i<this.molBrokenList.length; i++){
+                if(this.molBrokenList[i].nodeId==nodeId){
+                    return true;
+                }
+            }
+            return false;
+        }else if(state=="2d"){
+            for(var i = 0; i<this.mol2dList.length; i++){
+                if(this.mol2dList[i].nodeId==nodeId){
+                    return true;
+                }
+            }
+            return false;
+        }else if(state=="3d"){
+            for(var i = 0; i<this.mol3dList.length; i++){
+                if(this.mol3dList[i].nodeId==nodeId){
+                    return true;
+                }
+            }
+            return false;
         }
     },
 
@@ -104,6 +129,42 @@ var MolGraph = {
             MolGraph.addEdge((splitMol[i+numOfVertices+4][0] - 1) , ((splitMol[i+numOfVertices+4][1] - 1)));
         }
         return MolGraph;
+    },
+
+    getListOfChildNodes: function (parentId){ //returns list of graphs that share the same parentId
+        var childList = [];
+        for(var i=0; i<this.mol2dList.length; i++){
+            if(this.mol2dList[i].parentId==parentId && this.mol2dList[i].nodeId != parentId){
+                childList.push(this.mol2dList[i]);
+            }
+        }
+        return childList;
+    },
+
+    alignChildNodes: function(parentId){
+        var childList = this.getListOfChildNodes(parentId);
+        var G_broken = this.findGraph(parentId, "broken");
+        childList.sort((a, b) => parseFloat(b.numOfVertices) - parseFloat(a.numOfVertices));
+        var alignmentList = [];
+        var brokenAtomsUsed = [];
+        for(var i=0; i<childList.length; i++){
+            alignmentList.push([childList[i].nodeId, this.alignSubgraph(G_broken, childList[i])]);
+            
+        }
+        for(var i=0; i<alignmentList.length; i++){
+            for(var j=0; j<alignmentList[i][1].length; j++){
+                for(var k=0; k<alignmentList[i][1][j][1].length; k++){
+                    if(brokenAtomsUsed.includes(alignmentList[i][1][j][1][k])){
+                        alignmentList[i][1][j][1].splice(k, 1);
+                    }
+                    else{
+                        brokenAtomsUsed.push(alignmentList[i][1][j][1][k]);
+                        alignmentList[i][1][j][1] = [alignmentList[i][1][j][1][k]];
+                    }
+                }
+            }
+        }
+        return alignmentList;
     },
 
     alignSubgraph: function (G_broken, G_child){
@@ -135,22 +196,6 @@ var MolGraph = {
                 }
             }
         }
-        // possibleMatches == [allVerticesInChild][possibleVerticesInBroken]
-
-        
-
-
-        
-        // var finished = true;
-        // checkIfFinished();
-        // function checkIfFinished(){
-        //     for(i = 0; i< possibleMatches.length; i++){
-        //         if(possibleMatches[i][1].length!=1){
-        //             finished = false;
-        //         }
-        //     }
-        // }
-
         function compareLayer(brokenVID, childVID){
             var brokenLayer = G_broken.checkNextLayer(brokenVID);
             var childLayer = G_child.checkNextLayer(childVID);
@@ -177,9 +222,6 @@ var MolGraph = {
             }
             return nextVertex;
         }
-
-        // // var checkListChild = new Array(G_child.numOfVertices).fill(0);
-        // // var checkListParent = new Array(G_broken.numOfVertices).fill(0);
         for(var i=0; i<possibleMatches.length; i++){
             var confirmed = [];
             for(var j=0; j<possibleMatches[i][1].length; j++){
@@ -190,20 +232,11 @@ var MolGraph = {
             possibleMatches[i][1]=confirmed;
 
 
-            // possible solution
             if(confirmed.length>1){
-                // Need to do a search through each vertex connected to each vertex in confirmed.
-                // 1. Loop through confirmed in order to validate each item
-                // 2. Do a bfs through each graph starting at the current confirmed element.
-                // 3. During the search, if any vertices do not match up, remove from confirmed.
-                // 4. 
-
                 var cVertex = i;
                 var bVertex = confirmed[0];
                 var vistitedC = [];
                 var vistitedB = [];
-                var tmpVisitedCounter = 0;
-                let cVertexAdjList, bVertexAdjList;
                 let lastVertex, lastAdjList;
                 for(var j = 0; j<confirmed.length;j++){
                     vistitedC = [];
@@ -215,7 +248,6 @@ var MolGraph = {
                         if (compareLayer(bVertex, cVertex)){
                             vistitedC.push(cVertex);
                             vistitedB.push(bVertex);
-                            // console.log(bVertex + " " + cVertex);
                             cVertex = findNextVertex(cVertex, vistitedC, G_child);
                             bVertex = findNextVertex(bVertex, vistitedB, G_broken);
                         }
@@ -243,124 +275,12 @@ var MolGraph = {
                         }
                     }
                 }
-
-
-
-
-                // var nextChildLayer = G_child.checkNextLayer(i)[0][0];
-                // var nextBrokenLayer = G_broken.checkNextLayer(confirmed[0])[0][0];
-                // var previousCLayers = [i];
-                // var currentConfirmedID = 0;
-                // var currentBLayer = G_broken.checkNextLayer(confirmed[0]);
-                // var currentCLayer = G_child.checkNextLayer(i);  
-                // for(var l=0; l<confirmed.length; l++){
-                //     previousCLayers = [i];
-                //     for(var j=0;j<G_broken.numOfVertices;j++){
-                //         if(compareLayer(nextBrokenLayer, nextChildLayer)){
-                //             currentBLayer = G_broken.checkNextLayer(nextBrokenLayer);
-                //             currentCLayer = G_child.checkNextLayer(nextChildLayer);
-                //             var cID = currentCLayer.length-1;
-                //             for(var k=0;k<currentBLayer.length;k++){
-                //                 if(previousCLayers.includes(currentCLayer[cID][0]) && cID!=0){
-                //                     cID= cID-1;
-                //                 }
-                //                 if((JSON.stringify(currentBLayer[k][1])==JSON.stringify(currentCLayer[cID][1]))){
-                //                     previousCLayers.push(nextChildLayer);
-                //                     nextChildLayer = currentCLayer[cID][0];
-                //                     nextBrokenLayer = currentBLayer[k][0];
-                //                     console.log(currentCLayer);
-                //                     console.log(currentBLayer);
-                //                     console.log(previousCLayers);
-                //                     console.log(nextChildLayer);
-                //                     console.log(nextBrokenLayer);
-                //                 }
-                //             }
-                //         }
-                //         else{
-                //             confirmed.splice(currentConfirmedID, 1);
-                //         }
-                //     }
-                //     currentConfirmedID++;
-                // }
             }
-            
             possibleMatches[i][1]=confirmed;
             confirmed=[];
-
-
-
-            // if(confirmed.length>1){
-            //     var bLayer;
-            //     var cLayer = G_child.checkNextLayer(i);
-            //     while(confirmed.length>1){
-            //         for(var j=0; j<confirmed.length; j++){
-            //             bLayer= G_broken.checkNextLayer(confirmed[j]);
-            //             for(var k = 0; k < bLayer.length; k++){
-            //                 if(JSON.stringify(bLayer[k][1])==JSON.stringify(cLayer[0][1])){
-            //                     if(compareLayer(bLayer[k][0], cLayer[0][0])){
-            //                         bLayer = G_broken.checkNextLayer(bLayer[k][0]);
-            //                         cLayer = G_child.checkNextLayer(cLayer[0][0]);
-            //                     }
-            //                     else{
-            //                         confirmed.splice(j,1);
-            //                         console.log(confirmed);
-            //                         console.log(bLayer);
-            //                         console.log(cLayer);
-            //                     }
-            //                 }
-            //             }
-
-
-            //         }
-            //     }
-                    // for(var j=0; j<confirmed.length; j++){ // for each element in confirmed
-                    //     for(var k = 0; k<G_broken.checkNextLayer(confirmed[j]).length;k++){     // for each element to look for
-                    //         if(JSON.stringify(connectionToLookFor)==JSON.stringify(G_broken.checkNextLayer(confirmed[j])[0][1])){
-                    //             currentBVID = 
-                    //             if(compareLayer())
-                    //         }
-                            
-                    //     }
-                    // }  
-                    
-
-
-
-
-                
-            
         }
 
-
-        
-        // var unconfirmed = possibleMatches;
-        // var currentChildVID = 0;
-        // var currentBrokenVID = possibleMatches[0][1][0];
-        // // return possibleMatches;
-        // while(!finished){
-        //     // console.log(currentBrokenVID + "  " + currentChildVID);
-        //     if (possibleMatches[currentChildVID][1].length>1){
-        //         for(i=0;i<possibleMatches[currentChildVID][1].length;i++){
-        //             currentBrokenVID = possibleMatches[currentChildVID][1][i];
-        //             if(compareVertices(currentBrokenVID, currentChildVID)){
-        //                 unconfirmed[currentChildVID][1].splice(i, 1);
-        //             }else{
-        //                 possibleMatches[currentChildVID][1].splice(i, 1);
-        //             }
-        //             console.log(unconfirmed);
-        //             console.log(possibleMatches[currentChildVID]);
-        //         }
-        //     }
-        //     checkIfFinished();
-        //     if(currentChildVID<possibleMatches.length-1){
-        //         currentChildVID++;
-        //     }
-        //     else{
-        //         finished=true;
-        //     }
-            
-        // }
-        
+        // console.log(possibleMatches);
         return possibleMatches;
     },
 
@@ -420,6 +340,13 @@ var MolGraph = {
 
         var affectedAtoms = this.findBrokenBonds(G_new, G_broken);
         var alignment = this.alignSubgraph(G_broken, G_child);
+        var alignmentList = this.alignChildNodes(G_broken.nodeId);
+        for(var i=0; i<alignmentList.length; i++){
+            if(alignmentList[i][0]==nodeId){
+                alignment = alignmentList[i][1];
+            }
+        }
+        // console.log(alignment);
         var atomsWithH = [];    //represents atoms that had their bond broken and has Hydrogen atoms needed to color.
         var brokenAtomsWithH = []; 
         for(var i = 0; i<alignment.length; i++){
@@ -453,7 +380,7 @@ var MolGraph = {
                 childHCounter++;
             }
         }
-        // return childHCounter - newHCounter; //returns how many hydrogens were added
+        var HtoColor = childHCounter - newHCounter; //stores how many hydrogens were added
         var HList = [];
         var cAdjList = G_childH.getAdjList(childVID);
         for(var i = 0; i<cAdjList.length; i++){
@@ -465,6 +392,7 @@ var MolGraph = {
                 HList.push(tmpH);
             }
         }
+        HList.splice(0,HList.length - HtoColor);
         return HList;
     }
 

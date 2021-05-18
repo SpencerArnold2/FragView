@@ -151,13 +151,6 @@ function colorHydrogens(nodeId){
     MolGraph.storeMol(parentNode.mol2d, "2d", parentNode.parentId, parentNode.nodeId);
     MolGraph.storeMol(parentNode.mol3d, "3d", parentNode.parentId, parentNode.nodeId);
     MolGraph.colorHydrogens(nodeId);
-    // if(JSON.stringify(MolGraph.organizeMol(childMol)) != JSON.stringify(MolGraph.newMol)){
-        
-    // }
-    
-    // for(i=0;i<affectedAtoms.length;i++){
-    //     //Jmol.script(JSmol, "SELECT connected(" + MolFollower.childMol[affectedAtoms[i]][0] + (affectedAtoms[i]+1) + ") and Hydrogen; color orange");
-    // }
 }
 
 //Every time a key is released, check to see if it is return. If it is the enter key, create new tree

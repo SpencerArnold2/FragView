@@ -735,6 +735,7 @@ var Loader = {
 		}
 		frag = JSON.stringify(fragInfo);
 		MolGraph.storeMol(Sketcher.getMOL(), "broken", parseInt(parentId.replace("node-", "")), parseInt(parentId.replace("node-", "")));
+		// console.log(MolDataList.molList);
 		if (newTreeFlag && document.getElementById("search-smile").value.contains('.')) {
 			fragFlag = true;
 		}
@@ -809,7 +810,7 @@ var Loader = {
 				//Handle everything that must be corrected for setting up new data, such as
 				// deleting old fragments for new tree
 				if (count >= smilesLength) {
-					Progress.complete();
+					Progress.complete();					
 					ajaxFinished = true;
 				}
 
@@ -832,6 +833,17 @@ var Loader = {
 						// so a setTimeout must be used
 						return new Promise((resolve, reject) => {
 							setTimeout(() => resolve(Loader.finalCallback(parentId, count, result, newTreeFlag, fragFlag)), 100)
+							if(count>1){
+								// console.log(count + " " + parentId + " " + fragFlag);
+								for(var i=0; i<MolDataList.molList.length; i++){
+									try{
+										var nodeId = parseInt(parentId.replace("node-","")) + i;
+										var node = MolDataList.getNode(nodeId);
+										MolGraph.storeMol(node.mol2d, "2d", node.parentId, node.nodeId);
+										MolGraph.storeMol(node.mol3d, "3d", node.parentId, node.nodeId);
+									}catch (TypeError){}
+								}
+							}
 						});
 					}
 				})
@@ -879,7 +891,7 @@ var Loader = {
 			Model.loadMOL(node.get3d());
 			Messages.clear();
 		}
-
+		
 		//Jmol.script(JSmol, "SELECT hydrogen; delete selected")
 		cancelUpdateAnim();
 		$("#uploadTreeDialog").hide();
