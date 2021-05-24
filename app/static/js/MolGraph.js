@@ -5,6 +5,7 @@ class Graph {
         this.vertexList = new Array(numOfVertices); // stores all vertices
         this.parentId = parentId;
         this.nodeId = nodeId;
+        this.coloredHydrogens = [];
     }
 
     addVertex (v, id){
@@ -157,10 +158,14 @@ var MolGraph = {
                     if(brokenAtomsUsed.includes(alignmentList[i][1][j][1][k])){
                         alignmentList[i][1][j][1].splice(k, 1);
                     }
-                    else{
+                    else{ // if(j==0)
                         brokenAtomsUsed.push(alignmentList[i][1][j][1][k]);
                         alignmentList[i][1][j][1] = [alignmentList[i][1][j][1][k]];
                     }
+                    // else if(G_broken.checkConnection(alignmentList[i][1][0][1][k], alignmentList[i][1][j][1][k])){
+                    //     brokenAtomsUsed.push(alignmentList[i][1][j][1][k]);
+                    //     alignmentList[i][1][j][1] = [alignmentList[i][1][j][1][k]];
+                    // }
                 }
             }
         }
@@ -328,6 +333,59 @@ var MolGraph = {
         }
     },
 
+    translateH: function(G_new, G_child, G_childH, alignment){
+        var parentHList = G_new.coloredHydrogens;
+        var childHList = [];
+
+        for(var i=0; i<parentHList.length; i++){
+            for(var j=0; j<parentHList[i][1].length; j++){
+                var tmpH = parentHList[i][1][j];
+                tmpH = tmpH.replace( /^\D+/g, '');
+                tmpH = parseInt(tmpH) - 1;
+                tmpH = "H" + tmpH;
+                parentHList[i][1][j] = tmpH;
+            }
+        }
+        
+        for(var i=0; i<alignment.length; i++){
+            for(var j=0; j<parentHList.length; j++){
+                var HCounter = 0;
+                if(alignment[i][1][0]==parentHList[j][0]){
+                    for(var k=0;k<parentHList[j][1].length;k++){
+                        HCounter++;
+                    }
+                    var HtoAdd = [alignment[i][0], HCounter];
+                    if(!JSON.stringify(childHList).includes(JSON.stringify(HtoAdd))){
+                        childHList.push(HtoAdd);
+                    }
+                }
+            }
+        }
+        for(var i = 0; i < childHList.length; i++){
+            var cAdjList = G_childH.getAdjList(childHList[i][0]);
+            var childHListTMP = [];
+            for(var j = 0; j<cAdjList.length; j++){
+                if(G_childH.getVertexElement(cAdjList[j]) == "H"){
+                    var tmpH = "H" + (cAdjList[j]);
+                    tmpH = tmpH.replace( /^\D+/g, '');
+                    tmpH = parseInt(tmpH) + 1;
+                    tmpH = "H" + tmpH;
+                    childHListTMP.push(tmpH);
+                }
+            }
+            // if(childHListTMP.length > childHList[i][1]){
+            //     while(childHListTMP.length > childHList[i][1]){
+            //         childHListTMP.splice(0, 1);
+            //     }
+            // }
+            childHList[i][1]=childHListTMP;
+        }
+        if(!JSON.stringify(G_child.coloredHydrogens).includes(JSON.stringify(childHList))){
+            G_child.coloredHydrogens = childHList;
+        }
+        
+    },
+
     //G_new, G_newH, G_broken, G_child, G_childH
     colorHydrogens: function(nodeId){
         var G_child = this.findGraph(nodeId, "2d");
@@ -356,12 +414,27 @@ var MolGraph = {
             }
         }
         // return atomsWithH;
+
+        this.translateH(G_new, G_child, G_childH, alignment);
+        
         for(var i=0;i<atomsWithH.length;i++){
+            var HtoAdd = [atomsWithH[i], []];
             var atomWithH = atomsWithH[i];
             var brokenAtomWithH = brokenAtomsWithH[i];
             var HtoColor = this.checkHydrogenLevels(G_newH, G_childH, brokenAtomWithH, atomWithH);
-            // console.log(HtoColor);
-            Jmol.script(JSmol, "SELECT " + HtoColor + "; color orange");
+            for(var j=0;j<HtoColor.length;j++){
+                HtoAdd[1].push(HtoColor[j]);
+            }
+            if(!JSON.stringify(G_child.coloredHydrogens).includes(JSON.stringify(HtoAdd))){
+                G_child.coloredHydrogens.push(HtoAdd);
+            }
+            // Jmol.script(JSmol, "SELECT " + HtoColor + "; color orange");
+        }
+
+        for(var i=0; i<G_child.coloredHydrogens.length; i++){
+            if(G_child.coloredHydrogens[i][1].length > 0){
+                Jmol.script(JSmol, "SELECT " + G_child.coloredHydrogens[i][1] + "; color orange");
+            }
         }
     },
 
