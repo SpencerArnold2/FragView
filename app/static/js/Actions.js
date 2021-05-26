@@ -97,6 +97,7 @@ var Actions = {
 		Jmol.script(JSmol, "color hbonds TYPE");
 	},
 
+	
 	toggle_hydrogens: function () {
 		var setting = document.getElementById("action-models-toggle-hydrogens");
 		if (setting.classList.contains("checked")) {
@@ -108,6 +109,7 @@ var Actions = {
 			setting.classList.add("checked");
 		}
 	},
+	
 
 	updateTree: function () {
 		Sketcher.center();
@@ -149,6 +151,8 @@ var Actions = {
 			MolDataList.molList[0].smile = smile;
 			document.getElementById("file-upload-text").innerHTML = "<p id='newTree'></p>";
 			Loader.loadSMILES(smile, fragFlag, newTreeFlag, inchiFlag);
+			setTimeout(() => {MolGraph.storeMol(MolDataList["molList"][0]["mol2d"], "2d", 0, 0);}, 2000);
+			
 		}
 	},
 	treeSmileCont: function (ajaxData, mol3d, mol2d) {
@@ -549,7 +553,7 @@ var Actions = {
 							Model.loadMOL(node.get3d());
 						}
 
-						Jmol.script(JSmol, "SELECT hydrogen; delete selected")
+						//Jmol.script(JSmol, "SELECT hydrogen; delete selected")
 
 						$("#uploadTreeDialog").hide();
 						$("#loadModelAnim").hide();

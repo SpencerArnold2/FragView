@@ -128,18 +128,29 @@ function addClickHandler(element) {
             })
         }).then(function(results) {
             return new Promise((resolve, reject) => {
-                setTimeout(() => resolve(Sketcher.loadMOL(node.get2d())), 20);
+                setTimeout(() => resolve(Sketcher.loadMOL(node.get2d())), 20);                
             });
         }).then(function(results) {
             return new Promise((resolve, reject) => {
-                setTimeout(() => resolve(Jmol.script(JSmol, "SELECT hydrogen; delete selected")), 10);
-            });
+                setTimeout(() => resolve(colorHydrogens(index)), 20);
+            }); 
         }).then(function(results) {
             return new Promise((resolve, reject) => {
                 setTimeout(() => resolve(cancelUpdateAnim()), 20);
             });
         })
     });
+}
+
+function colorHydrogens(nodeId){
+    var node = MolDataList.getNode(nodeId);
+    MolGraph.storeMol(node.mol2d, "2d", node.parentId, node.nodeId);
+    MolGraph.storeMol(node.mol3d, "3d", node.parentId, node.nodeId);
+    var parentId = node.parentId;
+    var parentNode = MolDataList.getNode(parentId);
+    MolGraph.storeMol(parentNode.mol2d, "2d", parentNode.parentId, parentNode.nodeId);
+    MolGraph.storeMol(parentNode.mol3d, "3d", parentNode.parentId, parentNode.nodeId);
+    MolGraph.colorHydrogens(nodeId);
 }
 
 //Every time a key is released, check to see if it is return. If it is the enter key, create new tree
