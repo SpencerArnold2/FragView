@@ -374,6 +374,8 @@ var Actions = {
 		var setting = document.getElementById("action-molecular-orbital-sp");
 		var affectedSetting = document.getElementById("action-model-line");
 		var affectedSetting1 = document.getElementById("action-model-balls");
+		var affectedSetting2 = document.getElementById("action-molecular-orbital-sp2");
+		var affectedSetting3 = document.getElementById("action-molecular-orbital-sp3");
 		if (setting.classList.contains("checked")) {
 			Jmol.script(JSmol, "lcaoCartoon DELETE;");
 			Model.setRepresentation("balls");
@@ -388,6 +390,8 @@ var Actions = {
 			setting.classList.add("checked");
 			affectedSetting.classList.add("checked");
 			affectedSetting1.classList.remove("checked");
+			affectedSetting2.classList.remove("checked");
+			affectedSetting3.classList.remove("checked");
 		}
 	},
 
@@ -398,6 +402,8 @@ var Actions = {
 		var setting = document.getElementById("action-molecular-orbital-sp2");
 		var affectedSetting = document.getElementById("action-model-line");
 		var affectedSetting1 = document.getElementById("action-model-balls");
+		var affectedSetting2 = document.getElementById("action-molecular-orbital-sp");
+		var affectedSetting3 = document.getElementById("action-molecular-orbital-sp3");
 		if (setting.classList.contains("checked")) {
 			Jmol.script(JSmol, "lcaoCartoon DELETE;");
 			Model.setRepresentation("balls");
@@ -412,6 +418,8 @@ var Actions = {
 			setting.classList.add("checked");
 			affectedSetting.classList.add("checked");
 			affectedSetting1.classList.remove("checked");
+			affectedSetting2.classList.remove("checked");
+			affectedSetting3.classList.remove("checked");
 		}
 	},
 
@@ -422,6 +430,8 @@ var Actions = {
 		var setting = document.getElementById("action-molecular-orbital-sp3");
 		var affectedSetting = document.getElementById("action-model-line");
 		var affectedSetting1 = document.getElementById("action-model-balls");
+		var affectedSetting2 = document.getElementById("action-molecular-orbital-sp2");
+		var affectedSetting3 = document.getElementById("action-molecular-orbital-sp");
 		if (setting.classList.contains("checked")) {
 			Jmol.script(JSmol, "lcaoCartoon DELETE;");
 			Model.setRepresentation("balls");
@@ -436,6 +446,8 @@ var Actions = {
 			setting.classList.add("checked");
 			affectedSetting.classList.add("checked");
 			affectedSetting1.classList.remove("checked");
+			affectedSetting2.classList.remove("checked");
+			affectedSetting3.classList.remove("checked");
 		}
 	},
 
