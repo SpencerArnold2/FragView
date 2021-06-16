@@ -21,7 +21,7 @@ class Graph {
         return this.adjMatrix[v1ID][v2ID] == 1; // Checks if two vertices are connected
     }
 
-    checkNumOfConnections(vID){
+    checkNumOfConnections(vID){ // returns number of vertices connected to a vertex
         var connectionCounter = 0;
         for(i=0;i<this.numOfVertices;i++){
             if(this.adjMatrix[vID][i]==1){
@@ -30,7 +30,7 @@ class Graph {
         }
         return connectionCounter;
     }
-    getListOfElementsConnected(vID){
+    getListOfElementsConnected(vID){ // returns a list of elements connected to a vertex
         var a = this.adjMatrix[vID];
         var connectedElements = [];
         for(var l = 0; l < a.length; l++){
@@ -53,7 +53,7 @@ class Graph {
     getVertexElement(vID){
         return this.vertexList[vID][0];
     }
-    checkNextLayer(vID){
+    checkNextLayer(vID){ // returns the connections of the vertices connected to the indicated vertex
         var connections = [];
         for(var i=0; i<this.adjMatrix[vID].length;i++){
             if(this.adjMatrix[vID][i]==1 && this.getVertexElement(i) != "H"){
@@ -66,7 +66,7 @@ class Graph {
         }
         return elementList.sort();
     }
-    getAdjList(vID){
+    getAdjList(vID){ // returns the adjacency list
         var adjList = [];
         for(var i=0;i<this.adjMatrix[vID].length;i++){
             if(this.adjMatrix[vID][i]==1){
@@ -83,7 +83,7 @@ var MolGraph = {
     mol2dList: [],
     mol3dList: [],
 
-    storeMol: function (mol, state, parentId, nodeId){
+    storeMol: function (mol, state, parentId, nodeId){ // stores the graph into the correct array for the given state 
         var tmpMol = this.organizeMol(mol, parentId, nodeId);
         if(state=="broken" && tmpMol.numOfVertices > 0 && !this.includesGraph(nodeId, "broken")){
             this.molBrokenList.push(tmpMol);
@@ -94,7 +94,7 @@ var MolGraph = {
         }
     },
 
-    includesGraph: function (nodeId, state){
+    includesGraph: function (nodeId, state){ // checks if the state array contains a graph with the given nodeId
         if(state=="broken"){
             for(var i = 0; i<this.molBrokenList.length; i++){
                 if(this.molBrokenList[i].nodeId==nodeId){
@@ -119,7 +119,7 @@ var MolGraph = {
         }
     },
 
-    organizeMol: function (mol, parentId, nodeId){
+    organizeMol: function (mol, parentId, nodeId){ // converts mol to graph
         var lines = mol.split("\n");
         var splitMol = [];
         for (i = 0; i < lines.length; i++){ // After loop, splitMol = array with all lines with all emptiness filtered
@@ -151,7 +151,7 @@ var MolGraph = {
         return childList;
     },
 
-    alignChildNodes: function(parentId){
+    alignChildNodes: function(parentId){ // expands the alignment to include neighboring child nodes
         var childList = this.getListOfChildNodes(parentId);
         var G_broken = this.findGraph(parentId, "broken");
         childList.sort((a, b) => parseFloat(b.numOfVertices) - parseFloat(a.numOfVertices));
@@ -167,7 +167,7 @@ var MolGraph = {
                     if(brokenAtomsUsed.includes(alignmentList[i][1][j][1][k])){
                         alignmentList[i][1][j][1].splice(k, 1);
                     }
-                    else{ // if(j==0)
+                    else{ //if(j==0)
                         brokenAtomsUsed.push(alignmentList[i][1][j][1][k]);
                         alignmentList[i][1][j][1] = [alignmentList[i][1][j][1][k]];
                     }
@@ -178,6 +178,7 @@ var MolGraph = {
                 }
             }
         }
+        // console.log(alignmentList);
         return alignmentList;
     },
 
@@ -405,7 +406,7 @@ var MolGraph = {
         return affectedAtoms.sort();
     },
 
-    findGraph: function(nodeId, state){
+    findGraph: function(nodeId, state){ // finds a graph in the given state array with the given nodeId
         if(state=="broken"){
             for(var i = 0; i<this.molBrokenList.length; i++){
                 if(this.molBrokenList[i].nodeId == nodeId){
@@ -427,11 +428,11 @@ var MolGraph = {
         }
     },
 
-    translateH: function(G_new, G_child, G_childH, alignment){
+    translateH: function(G_new, G_child, G_childH, alignment){ // translates the Hydrogen reference from the parent node to the child
         var parentHList = G_new.coloredHydrogens;
         var childHList = [];
 
-        for(var i=0; i<parentHList.length; i++){
+        for(var i=0; i<parentHList.length; i++){ // makes the hydrogen references index-0 based
             for(var j=0; j<parentHList[i][1].length; j++){
                 var tmpH = parentHList[i][1][j];
                 tmpH = tmpH.replace( /^\D+/g, '');
@@ -441,7 +442,7 @@ var MolGraph = {
             }
         }
         
-        for(var i=0; i<alignment.length; i++){
+        for(var i=0; i<alignment.length; i++){ // creates a list of how many hydrogens are colored connected to each vertex
             for(var j=0; j<parentHList.length; j++){
                 var HCounter = 0;
                 if(alignment[i][1][0]==parentHList[j][0]){
@@ -455,11 +456,12 @@ var MolGraph = {
                 }
             }
         }
+        var a = 0;
         for(var i = 0; i < childHList.length; i++){
             var cAdjList = G_childH.getAdjList(childHList[i][0]);
             var childHListTMP = [];
             for(var j = 0; j<cAdjList.length; j++){
-                if(G_childH.getVertexElement(cAdjList[j]) == "H"){
+                if(G_childH.getVertexElement(cAdjList[j]) == "H"){ //gets a list of Hydrogens connected to each vertex
                     var tmpH = "H" + (cAdjList[j]);
                     tmpH = tmpH.replace( /^\D+/g, '');
                     tmpH = parseInt(tmpH) + 1;
@@ -467,9 +469,9 @@ var MolGraph = {
                     childHListTMP.push(tmpH);
                 }
             }
-            // if(childHListTMP.length > childHList[i][1]){
+            // if(childHListTMP.length > childHList[i][1]){ // removes Hydrogens by how many Hydrogens do not need to be colored
             //     while(childHListTMP.length > childHList[i][1]){
-            //         childHListTMP.splice(0, 1);
+            //         childHListTMP.splice(childHListTMP.length-1, 1);
             //     }
             // }
             childHList[i][1]=childHListTMP;
@@ -481,7 +483,7 @@ var MolGraph = {
     },
 
     //G_new, G_newH, G_broken, G_child, G_childH
-    colorHydrogens: function(nodeId){
+    colorHydrogens: function(nodeId){ // main function called in Tree_Actions that pulls entire MolGraph together
         var G_child = this.findGraph(nodeId, "2d");
         var G_childH = this.findGraph(nodeId, "3d");
         var parentId = G_child.parentId;
@@ -567,6 +569,12 @@ var MolGraph = {
         }
         HList.splice(0,HList.length - HtoColor);
         return HList;
+    },
+
+    clear: function(){ // clears all arrays of Graphs
+        this.mol2dList = [];
+        this.mol3dList = [];
+        this.molBrokenList = [];
     }
 
 
@@ -574,3 +582,4 @@ var MolGraph = {
 
 
 }
+

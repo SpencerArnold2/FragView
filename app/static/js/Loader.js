@@ -711,6 +711,7 @@ var Loader = {
 				return i.length - o.length;
 			})
 			sortedSmiles.unshift(originalSmile);
+			MolGraph.clear(); // clears the stored graphs
 		}
 		else {
 			sortedSmiles = start.sort(function (i, o) {
