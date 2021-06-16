@@ -617,6 +617,10 @@ var Loader = {
 			}
 			else {
 				Loader._resolve(smiles);
+				let index = document.getElementsByClassName("active")[0].id;
+				index = index.replace("node-", "");
+				index = parseInt(index, 10);
+				MolGraph.storeMol(Sketcher.getMOL(), "broken", index, index); // If the mol doesnt split
 				return;
 			}
 			if (frags.length === 2) {

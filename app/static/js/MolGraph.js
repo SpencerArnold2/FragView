@@ -33,27 +33,36 @@ class Graph {
     getListOfElementsConnected(vID){ // returns a list of elements connected to a vertex
         var a = this.adjMatrix[vID];
         var connectedElements = [];
-        var l = 0;
-        for(l = 0; l < a.length; l++){
+        for(var l = 0; l < a.length; l++){
             if(a[l]==1){
                 connectedElements.push(this.vertexList[l][0])
             }
         }
         return connectedElements.sort();
     }
-    getVertexElement(vID){ // returns the element of the indicated vertex
+    getListOfElementsConnectedIgnoringH(vID){
+        var a = this.adjMatrix[vID];
+        var connectedElements = [];
+        for(var l = 0; l < a.length; l++){
+            if(a[l]==1 && this.getVertexElement(l)!="H"){
+                connectedElements.push(this.vertexList[l][0])
+            }
+        }
+        return connectedElements.sort();
+    }
+    getVertexElement(vID){
         return this.vertexList[vID][0];
     }
     checkNextLayer(vID){ // returns the connections of the vertices connected to the indicated vertex
         var connections = [];
         for(var i=0; i<this.adjMatrix[vID].length;i++){
-            if(this.adjMatrix[vID][i]==1){
+            if(this.adjMatrix[vID][i]==1 && this.getVertexElement(i) != "H"){
                 connections.push(i);
             }
         }
         var elementList = [];
         for(var i=0; i < connections.length; i++){
-            elementList.push([connections[i], this.getListOfElementsConnected(connections[i])]);
+            elementList.push([connections[i], this.getListOfElementsConnectedIgnoringH(connections[i])]);
         }
         return elementList.sort();
     }
@@ -173,12 +182,17 @@ var MolGraph = {
         return alignmentList;
     },
 
-    alignSubgraph: function (G_broken, G_child){ // matches the child vertices to the parent's vertices
-
+    alignSubgraph: function (G_broken, G_child){
+        //when used between 2d and 3d graphs, G_broken indicates 3d and G_child indicates 2d
         
         function compareVertices(brokenVID, childVID){ //compares the two vertices' connections at one level
             var brokenConnections = G_broken.getListOfElementsConnected(brokenVID);
             var childConnections = G_child.getListOfElementsConnected(childVID);
+            for(var i = 0; i<brokenConnections.length; i++){ // ignores Hydrogen atoms within the list of elements connected
+                if(brokenConnections[i]=="H"){
+                    brokenConnections.splice(i, 1);
+                }
+            }
             var brokenVElement = G_broken.getVertexElement(brokenVID);
             var childVElement = G_child.getVertexElement(childVID); 
             if(JSON.stringify(brokenConnections) == JSON.stringify(childConnections) && brokenVElement==childVElement){
@@ -222,7 +236,7 @@ var MolGraph = {
             var adjList = graph.getAdjList(vID);
             var nextVertex = vID;
             for(var i = 0; i< adjList.length; i++){
-                if(!visited.includes(adjList[i])){
+                if(!visited.includes(adjList[i]) && graph.getVertexElement(adjList[i]) != "H"){
                     nextVertex = adjList[i];
                 }
             }
@@ -290,7 +304,87 @@ var MolGraph = {
         return possibleMatches;
     },
 
-    findBrokenBonds: function (G_new, G_broken){ // returns where the bonds were broken in the Sketcher 
+    align3d: function (G_child, G_childH){ // child = 2d, childH = 3d // Role of function is to ensure that 2d references are the same as 3d graph
+        console.log(G_child);
+        console.log(G_childH);
+
+        var aVertexList = G_child.vertexList; //2d
+        var bVertexList = G_childH.vertexList; //3d
+        var isAligned = true;
+        
+        for(var i =0; i < aVertexList.length; i++){ //ensures that 2d and 3d are not already aligned.
+            if(aVertexList[i] != bVertexList[i]){
+                isAligned = false;
+                break;
+            }
+            var aConnection = JSON.stringify(G_child.getListOfElementsConnectedIgnoringH(i));
+            var bConnection = JSON.stringify(G_childH.getListOfElementsConnectedIgnoringH(i));
+            if(aConnection!=bConnection){
+                isAligned = false;
+                break;
+            }
+        }
+
+        var alignment = new Array(G_child.numOfVertices);
+        for(var i=0; i<alignment.length; i++){ //creates the alignment array
+            alignment[i] = [i, []];
+        }
+
+
+        if(isAligned){
+            for(var i=0; i<alignment.length; i++){
+                alignment[i][1][0] = i;
+            }
+            return alignment;
+        }
+
+        console.log(aVertexList);
+        console.log(bVertexList);
+        console.log(alignment);
+
+        function compareLayer(aVID, bVID){
+            var aLayer = G_child.checkNextLayer(aVID);
+            var bLayer = G_childH.checkNextLayer(bVID);
+            var aConnections = [];
+            for(var i=0; i<aLayer.length;i++){
+                aConnections.push(aLayer[i][1]);
+            }
+            var bConnections = [];
+            for(var i=0; i<bLayer.length;i++){
+                bConnections.push(bLayer[i][1]);
+            }
+            aConnections.sort();
+            bConnections.sort();
+            return JSON.stringify(bConnections) == JSON.stringify(aConnections);
+        }
+
+        for(var i=0; i<aVertexList.length; i++){
+            for(var j=0; j< bVertexList.length; j++){
+                if(G_child.getVertexElement(i)==G_childH.getVertexElement(j) && compareLayer(i, j)){
+                    alignment[i][1].push(j);
+                }
+            }
+        }
+
+        for(var i=0; i<alignment.length; i++){
+            if(alignment[i][1].length > 1){
+                var aLayerID = G_child.checkNextLayer(i)[0][0];
+                for(var j=0; j< alignment[i][1].length; j++){
+                    var bLayerID = G_childH.checkNextLayer(alignment[i][1][j])[0][0];
+                    if(!compareLayer(aLayerID, bLayerID)){
+                        alignment[i][1].splice(j, 1);
+                    }
+                } 
+            }
+        }
+
+        return alignment;
+
+
+
+    },
+
+    findBrokenBonds: function (G_new, G_broken){
         var newAdjMatrix = G_new.adjMatrix;
         var brokenAdjMatrix = G_broken.adjMatrix;
         var affectedAtoms = [];
@@ -401,6 +495,8 @@ var MolGraph = {
         var affectedAtoms = this.findBrokenBonds(G_new, G_broken);
         var alignment = this.alignSubgraph(G_broken, G_child);
         var alignmentList = this.alignChildNodes(G_broken.nodeId);
+        var dimensionAlignment = this.align3d(G_child, G_childH);
+        console.log(dimensionAlignment);
         for(var i=0; i<alignmentList.length; i++){
             if(alignmentList[i][0]==nodeId){
                 alignment = alignmentList[i][1];
@@ -423,7 +519,10 @@ var MolGraph = {
             var HtoAdd = [atomsWithH[i], []];
             var atomWithH = atomsWithH[i];
             var brokenAtomWithH = brokenAtomsWithH[i];
-            var HtoColor = this.checkHydrogenLevels(G_newH, G_childH, brokenAtomWithH, atomWithH);
+            // console.log(brokenAtomWithH);
+            // console.log(atomWithH);
+            var HtoColor = this.checkHydrogenLevels(G_newH, G_childH, brokenAtomWithH, atomWithH, dimensionAlignment);
+            // console.log(HtoColor);
             for(var j=0;j<HtoColor.length;j++){
                 HtoAdd[1].push(HtoColor[j]);
             }
@@ -440,8 +539,8 @@ var MolGraph = {
         }
     },
 
-    checkHydrogenLevels: function(G_newH, G_childH, brokenVID, childVID){ 
-        // finds how many hydrogens were added between a child vertex and parent vertex and returns a list of Hydrogens that were added
+    checkHydrogenLevels: function(G_newH, G_childH, brokenVID, childVID, dimensionAlignment){
+        childVID = dimensionAlignment[childVID][1][0];
         var originalElements = G_newH.getListOfElementsConnected(brokenVID);
         var newHCounter = 0;
         var childHCounter = 0;
