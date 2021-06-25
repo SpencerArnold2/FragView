@@ -397,7 +397,7 @@ var Actions = {
 			affectedSetting.classList.add("checked");
 			affectedSetting1.classList.remove("checked");
 		}
-		else if(!(affectedSetting2.classList.contains("checked") && (affectedSetting3.classList.contains("checked")))){
+		else if(!(affectedSetting2.classList.contains("checked")) && (affectedSetting3.classList.contains("checked"))){
 			Jmol.script(
 				JSmol, 'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp (carbon and connected(2)) or (nitrogen and connected(1));select ~sp; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create MOLECULAR "spa" "spb";lcaoCartoon COLOR pink pink; lcaoCartoon TRANSLUCENT;lcaoCartoon create MOLECULAR "px" "py";bind "double" "javascript pTog()";javascript echo(1);define ~sp3 (carbon and connected(4)) or (oxygen and connected(2)) or (nitrogen and connected(3));select ~sp3; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create "sp3a" "sp3b" "sp3c" "sp3d";bind "double" "javascript pTog()";javascript echo(1)'
 			);
@@ -405,7 +405,7 @@ var Actions = {
 			affectedSetting.classList.add("checked");
 			affectedSetting1.classList.remove("checked");
 		}
-		else if((affectedSetting2.classList.contains("checked") && (affectedSetting3.classList.contains("checked")))){
+		else if((affectedSetting2.classList.contains("checked")) && (affectedSetting3.classList.contains("checked"))){
 			Jmol.script(
 				JSmol, 'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp (carbon and connected(2)) or (nitrogen and connected(1));select ~sp; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create MOLECULAR "spa" "spb";lcaoCartoon COLOR pink pink; lcaoCartoon TRANSLUCENT;lcaoCartoon create MOLECULAR "px" "py";bind "double" "javascript pTog()";javascript echo(1); define ~sp3 (carbon and connected(4)) or (oxygen and connected(2)) or (nitrogen and connected(3));select ~sp3; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create "sp3a" "sp3b" "sp3c" "sp3d";bind "double" "javascript pTog()";javascript echo(1); define ~sp2 (carbon and connected(3)) or (oxygen and connected(1)) or (nitrogen and connected(2)); select ~sp2; lcaoCartoon COLOR cyan TRANSLUCENT; lcaoCartoon delete create MOLECULAR "sp2a" "sp2b" "sp2c"; lcaoCartoon COLOR pink pink TRANSLUCENT; lcaoCartoon create MOLECULAR "pz";bind "double" "javascript pTog()";javascript echo(1)'
 			);
@@ -455,7 +455,7 @@ var Actions = {
 			affectedSetting.classList.add("checked");
 			affectedSetting1.classList.remove("checked");
 		}
-		else if(!(affectedSetting2.classList.contains("checked") && (affectedSetting3.classList.contains("checked")))){
+		else if(!(affectedSetting2.classList.contains("checked")) && (affectedSetting3.classList.contains("checked"))){
 			Jmol.script(
 				JSmol, 'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp2 (carbon and connected(3)) or (oxygen and connected(1)) or (nitrogen and connected(2)); select ~sp2; lcaoCartoon COLOR cyan TRANSLUCENT; lcaoCartoon delete create MOLECULAR "sp2a" "sp2b" "sp2c"; lcaoCartoon COLOR pink pink TRANSLUCENT; lcaoCartoon create MOLECULAR "pz";bind "double" "javascript pTog()";javascript echo(1);define ~sp3 (carbon and connected(4)) or (oxygen and connected(2)) or (nitrogen and connected(3));select ~sp3; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create "sp3a" "sp3b" "sp3c" "sp3d";bind "double" "javascript pTog()";javascript echo(1)' 
 			);
@@ -513,7 +513,7 @@ var Actions = {
 			affectedSetting.classList.add("checked");
 			affectedSetting1.classList.remove("checked");
 		}
-		else if(!(affectedSetting2.classList.contains("checked") && (affectedSetting3.classList.contains("checked")))){
+		else if(!(affectedSetting2.classList.contains("checked")) && (affectedSetting3.classList.contains("checked"))){
 			Jmol.script(
 				JSmol, 'lcaoCartoon DELETE; select *; wireframe 0.03; spacefill 1%; boundbox {*}; centerat boundbox; zoom 100;define ~sp (carbon and connected(2)) or (nitrogen and connected(1));select ~sp; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create MOLECULAR "spa" "spb";lcaoCartoon COLOR pink pink; lcaoCartoon TRANSLUCENT;lcaoCartoon create MOLECULAR "px" "py";bind "double" "javascript pTog()";javascript echo(1); define ~sp3 (carbon and connected(4)) or (oxygen and connected(2)) or (nitrogen and connected(3));select ~sp3; lcaoCartoon COLOR cyan; lcaoCartoon TRANSLUCENT; lcaoCartoon delete create "sp3a" "sp3b" "sp3c" "sp3d";bind "double" "javascript pTog()";javascript echo(1)'
 			);
