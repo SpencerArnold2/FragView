@@ -305,8 +305,8 @@ var MolGraph = {
     },
 
     align3d: function (G_child, G_childH){ // child = 2d, childH = 3d // Role of function is to ensure that 2d references are the same as 3d graph
-        console.log(G_child);
-        console.log(G_childH);
+        // console.log(G_child);
+        // console.log(G_childH);
 
         var aVertexList = G_child.vertexList; //2d
         var bVertexList = G_childH.vertexList; //3d
@@ -338,9 +338,9 @@ var MolGraph = {
             return alignment;
         }
 
-        console.log(aVertexList);
-        console.log(bVertexList);
-        console.log(alignment);
+        // console.log(aVertexList);
+        // console.log(bVertexList);
+        // console.log(alignment);
 
         function compareLayer(aVID, bVID){
             var aLayer = G_child.checkNextLayer(aVID);
@@ -496,7 +496,7 @@ var MolGraph = {
         var alignment = this.alignSubgraph(G_broken, G_child);
         var alignmentList = this.alignChildNodes(G_broken.nodeId);
         var dimensionAlignment = this.align3d(G_child, G_childH);
-        console.log(dimensionAlignment);
+        // console.log(dimensionAlignment);
         for(var i=0; i<alignmentList.length; i++){
             if(alignmentList[i][0]==nodeId){
                 alignment = alignmentList[i][1];
