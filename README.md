@@ -76,7 +76,7 @@ The following YouTube link will show you how to efficiently use the application 
 features that are offered along with limitations of the application. The video WILL NOT show how to properly
 install and setup the application.
 
-YouTube video link: https://youtu.be/qjx0hUg68Uk
+YouTube video link: https://youtu.be/03r9s8lQO9Y
 
 Run the Application on a Different Port Locally
 
