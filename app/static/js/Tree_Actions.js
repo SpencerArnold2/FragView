@@ -150,7 +150,7 @@ function colorHydrogens(nodeId){
     var parentNode = MolDataList.getNode(parentId);
     MolGraph.storeMol(parentNode.mol2d, "2d", parentNode.parentId, parentNode.nodeId);
     MolGraph.storeMol(parentNode.mol3d, "3d", parentNode.parentId, parentNode.nodeId);
-    MolGraph.colorHydrogens(nodeId);
+    if(nodeId!=parentId) MolGraph.colorHydrogens(nodeId);
 }
 
 //Every time a key is released, check to see if it is return. If it is the enter key, create new tree
