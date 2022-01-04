@@ -547,8 +547,8 @@ var MolGraph = {
 
     checkHydrogenLevels: function(G_newH, G_childH, brokenVID, childVID, dimensionAlignment){
         childVID = dimensionAlignment[childVID][1][0];
-        console.log(dimensionAlignment);
-        console.log(childVID);
+        // console.log(dimensionAlignment);
+        // console.log(childVID);
         var originalElements = G_newH.getListOfElementsConnected(brokenVID);
         var newHCounter = 0;
         var childHCounter = 0;
