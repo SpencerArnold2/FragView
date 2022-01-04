@@ -500,6 +500,7 @@ var MolGraph = {
 
         var affectedAtoms = this.findBrokenBonds(G_new, G_broken);
         var alignment = this.alignSubgraph(G_broken, G_child);
+        // console.log(alignment);
         var alignmentList = this.alignChildNodes(G_broken.nodeId);
         var dimensionAlignment = this.align3d(G_child, G_childH);
         for(var i=0; i<alignmentList.length; i++){
@@ -518,6 +519,7 @@ var MolGraph = {
         // return atomsWithH;
 
         this.translateH(G_new, G_child, G_childH, alignment);
+
         
         for(var i=0;i<atomsWithH.length;i++){
             var HtoAdd = [atomsWithH[i], []];
@@ -545,17 +547,19 @@ var MolGraph = {
 
     checkHydrogenLevels: function(G_newH, G_childH, brokenVID, childVID, dimensionAlignment){
         childVID = dimensionAlignment[childVID][1][0];
+        console.log(dimensionAlignment);
+        console.log(childVID);
         var originalElements = G_newH.getListOfElementsConnected(brokenVID);
         var newHCounter = 0;
         var childHCounter = 0;
         var childElements = G_childH.getListOfElementsConnected(childVID);
         for(var i = 0; i<originalElements.length; i++){
-            if(originalElements[i] == "H"){
+            if(originalElements[i][0] == "H"){
                 newHCounter++;
             }
         }
         for(var i = 0; i<childElements.length; i++){
-            if(childElements[i] == "H"){
+            if(childElements[i][0] == "H"){
                 childHCounter++;
             }
         }
