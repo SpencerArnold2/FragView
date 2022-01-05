@@ -1,11 +1,12 @@
 class Graph {
-    constructor(numOfVertices, parentId, nodeId){
+    constructor(numOfVertices, parentId, nodeId, brokenId){
         this.numOfVertices = numOfVertices; // stores number of vertices
         this.adjMatrix = new Array(numOfVertices).fill(0).map(() => new Array(numOfVertices).fill(0)); //creates empty adjMatrix
         this.vertexList = new Array(numOfVertices); // stores all vertices
         this.parentId = parentId;
         this.nodeId = nodeId;
         this.coloredHydrogens = [];
+        this.brokenId = brokenId; // represents which broken graph is parent.
     }
 
     addVertex (v, id){
@@ -88,7 +89,7 @@ var MolGraph = {
 
     storeMol: function (mol, state, parentId, nodeId){ // stores the graph into the correct array for the given state 
         var tmpMol = this.organizeMol(mol, parentId, nodeId);
-        if(state=="broken" && tmpMol.numOfVertices > 0 && !this.includesGraph(nodeId, "broken")){
+        if(state=="broken" && tmpMol.numOfVertices > 0){
             this.molBrokenList.push(tmpMol);
         }else if(state == "2d" && tmpMol.numOfVertices > 0 && !this.includesGraph(nodeId, "2d")){
             this.mol2dList.push(tmpMol);
@@ -132,7 +133,7 @@ var MolGraph = {
         var numOfVertices = parseInt(splitMol[3][0]);
         var numOfEdges = parseInt(splitMol[3][1]);
 
-        var MolGraph = new Graph(numOfVertices, parentId, nodeId);
+        var MolGraph = new Graph(numOfVertices, parentId, nodeId, this.molBrokenList.length);
         for(i=0; i<numOfVertices;i++){
             var v = splitMol[i+4][3];
             v = v + i;
@@ -144,19 +145,19 @@ var MolGraph = {
         return MolGraph;
     },
 
-    getListOfChildNodes: function (parentId){ //returns list of graphs that share the same parentId
+    getListOfChildNodes: function (parentId, brokenId){ //returns list of graphs that share the same parentId
         var childList = [];
         for(var i=0; i<this.mol2dList.length; i++){
-            if(this.mol2dList[i].parentId==parentId && this.mol2dList[i].nodeId != parentId){
+            if(this.mol2dList[i].parentId==parentId && this.mol2dList[i].brokenId==brokenId && this.mol2dList[i].nodeId != parentId){
                 childList.push(this.mol2dList[i]);
             }
         }
         return childList;
     },
 
-    alignChildNodes: function(parentId){ // expands the alignment to include neighboring child nodes
-        var childList = this.getListOfChildNodes(parentId);
-        var G_broken = this.findGraph(parentId, "broken");
+    alignChildNodes: function(parentId, brokenId){ // expands the alignment to include neighboring child nodes
+        var childList = this.getListOfChildNodes(parentId, brokenId);
+        var G_broken = this.molBrokenList[brokenId-1];
         childList.sort((a, b) => parseFloat(b.numOfVertices) - parseFloat(a.numOfVertices));
         var alignmentList = [];
         var brokenAtomsUsed = [];
@@ -488,6 +489,13 @@ var MolGraph = {
         
     },
 
+
+    findBroken: function(G_child){
+        
+
+    },
+
+
     //G_new, G_newH, G_broken, G_child, G_childH
     colorHydrogens: function(nodeId){ // main function called in Tree_Actions that pulls entire MolGraph together
         var G_child = this.findGraph(nodeId, "2d");
@@ -495,13 +503,13 @@ var MolGraph = {
         var parentId = G_child.parentId;
         var G_new = this.findGraph(parentId, "2d");
         var G_newH = this.findGraph(parentId, "3d");
-        var G_broken = this.findGraph(parentId, "broken");
+        var G_broken = this.molBrokenList[G_child.brokenId-1];
 
 
         var affectedAtoms = this.findBrokenBonds(G_new, G_broken);
         var alignment = this.alignSubgraph(G_broken, G_child);
         // console.log(alignment);
-        var alignmentList = this.alignChildNodes(G_broken.nodeId);
+        var alignmentList = this.alignChildNodes(G_broken.nodeId, G_child.brokenId);
         var dimensionAlignment = this.align3d(G_child, G_childH);
         for(var i=0; i<alignmentList.length; i++){
             if(alignmentList[i][0]==nodeId){
