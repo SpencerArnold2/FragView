@@ -510,6 +510,7 @@ var MolGraph = {
         }
         var atomsWithH = [];    //represents atoms that had their bond broken and has Hydrogen atoms needed to color.
         var brokenAtomsWithH = []; 
+        // console.log(alignment);
         for(var i = 0; i<alignment.length; i++){
             if(affectedAtoms.includes(alignment[i][1][0])){
                 atomsWithH.push(i);
@@ -520,14 +521,14 @@ var MolGraph = {
 
         this.translateH(G_new, G_child, G_childH, alignment);
 
-        
+        // console.log(atomsWithH);
+        // console.log(brokenAtomsWithH);
+        var newDAlignment = this.align3d(G_new, G_newH);
         for(var i=0;i<atomsWithH.length;i++){
             var HtoAdd = [atomsWithH[i], []];
             var atomWithH = atomsWithH[i];
             var brokenAtomWithH = brokenAtomsWithH[i];
-            // console.log(brokenAtomWithH);
-            // console.log(atomWithH);
-            var HtoColor = this.checkHydrogenLevels(G_newH, G_childH, brokenAtomWithH, atomWithH, dimensionAlignment);
+            var HtoColor = this.checkHydrogenLevels(G_newH, G_childH, brokenAtomWithH, atomWithH, dimensionAlignment, newDAlignment);
             // console.log(HtoColor);
             for(var j=0;j<HtoColor.length;j++){
                 HtoAdd[1].push(HtoColor[j]);
@@ -545,14 +546,17 @@ var MolGraph = {
         }
     },
 
-    checkHydrogenLevels: function(G_newH, G_childH, brokenVID, childVID, dimensionAlignment){
+    checkHydrogenLevels: function(G_newH, G_childH, brokenVID, childVID, dimensionAlignment, newDAlignment){
         childVID = dimensionAlignment[childVID][1][0];
         // console.log(dimensionAlignment);
         // console.log(childVID);
+        brokenVID = newDAlignment[brokenVID][1][0];
         var originalElements = G_newH.getListOfElementsConnected(brokenVID);
         var newHCounter = 0;
         var childHCounter = 0;
         var childElements = G_childH.getListOfElementsConnected(childVID);
+        // console.log(originalElements);
+        // console.log(childElements);
         for(var i = 0; i<originalElements.length; i++){
             if(originalElements[i][0] == "H"){
                 newHCounter++;
