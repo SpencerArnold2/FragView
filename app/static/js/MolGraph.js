@@ -186,6 +186,75 @@ var MolGraph = {
         return alignmentList;
     },
 
+    narrowAlignment: function(alignmentList){ // removes atoms that are duplicates in the alignment
+        var duplicateAlignments = [];
+        for(var i=0; i<alignmentList.length; i++){
+            for(var j=0; j<alignmentList[i][1].length; j++){
+                if(alignmentList[i][1][j][1].length>1){
+                    duplicateAlignments.push([alignmentList[i][0], alignmentList[i][1][j][1], alignmentList[i][1][j][0]]);
+                }
+            }
+        }
+        // if(duplicateAlignments.length>0){
+        //     for(var i=0; i<duplicateAlignments.length; i++){
+        //         for(var j=0; j<duplicateAlignments.length; j++){
+        //             if(duplicateAlignments[i][0]==duplicateAlignments[j][0] && i!=j){
+        //                 if(duplicateAlignments[i][1].toString()==duplicateAlignments[j][1].toString()){
+        //                     duplicateAlignments[i][1].splice(0, 1);
+        //                     duplicateAlignments[j][1].splice(1, 1);
+        //                     var nodeToChange = duplicateAlignments[i][0];
+        //                     var iAlignments = duplicateAlignments[i][1];
+        //                     var jAlignments = duplicateAlignments[j][1];
+        //                     var iLocation = duplicateAlignments[i][2];
+        //                     var jLocation = duplicateAlignments[j][2];
+        //                     console.log(nodeToChange, iAlignments, jAlignments, iLocation, jLocation);
+        //                     alignmentList[nodeToChange][1][iLocation][1] = iAlignments;
+        //                     alignmentList[nodeToChange][1][jLocation][1] = jAlignments;
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
+
+        if(duplicateAlignments.length>0){
+            var nodeToCompare = duplicateAlignments[0][0];
+            var alignmentWithLocation = [];
+            var availableAtoms = [];
+            for(var i=0; i<duplicateAlignments.length; i++){
+                if(duplicateAlignments[i][0]==nodeToCompare){
+                    alignmentWithLocation.push([duplicateAlignments[i][2],duplicateAlignments[i][1]]);
+                    // check if availableAtoms contains duplicate
+                    for(var j=0; j<duplicateAlignments[i][1].length; j++){
+                        if(!availableAtoms.includes(duplicateAlignments[i][1][j])){
+                            availableAtoms.push(duplicateAlignments[i][1][j]);
+                        }
+                    }
+                }
+            }
+            // console.log(alignmentWithLocation);
+            var usedAtoms = [];
+            alignmentWithLocation[0][1].length = 1;
+            usedAtoms.push(alignmentWithLocation[0][1][0]);
+            for(var i=1; i<alignmentWithLocation.length; i++){
+                // console.log(usedAtoms);
+                for(var j=0; j<alignmentWithLocation[i][1].length; j++){
+                    if(usedAtoms.includes(alignmentWithLocation[i][1][j])){
+                        alignmentWithLocation[i][1].splice(j, 1);
+                        j--;
+                    }
+                }
+                if(alignmentWithLocation[i][1].length>1){
+                    alignmentWithLocation[i][1].length = 1;
+                    usedAtoms.push(alignmentWithLocation[i][1][0]);
+                }
+                else if(alignmentWithLocation[i][1].length==1){
+                    usedAtoms.push(alignmentWithLocation[i][1][0]);
+                }
+            }
+        }
+        // console.log(alignmentWithLocation);
+    },
+
     alignSubgraph: function (G_broken, G_child){
         //when used between 2d and 3d graphs, G_broken indicates 3d and G_child indicates 2d
         
@@ -510,6 +579,9 @@ var MolGraph = {
         var alignment = this.alignSubgraph(G_broken, G_child);
         // console.log(alignment);
         var alignmentList = this.alignChildNodes(G_broken.nodeId, G_child.brokenId);
+        // console.log(alignmentList);
+        var narrowedAlignmentList = this.narrowAlignment(alignmentList);
+        // console.log(narrowedAlignmentList);
         var dimensionAlignment = this.align3d(G_child, G_childH);
         for(var i=0; i<alignmentList.length; i++){
             if(alignmentList[i][0]==nodeId){
