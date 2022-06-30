@@ -1,11 +1,21 @@
 class Graph {
+    
+    /**
+     * Represents a graph.
+     * @constructor
+     * @param {Number} numOfVertices 
+     * @param {Number} parentId 
+     * @param {Number} nodeId 
+     * @param {Number} brokenId 
+     */
     constructor(numOfVertices, parentId, nodeId, brokenId){
         this.numOfVertices = numOfVertices; // stores number of vertices
         this.adjMatrix = new Array(numOfVertices).fill(0).map(() => new Array(numOfVertices).fill(0)); //creates empty adjMatrix
         this.vertexList = new Array(numOfVertices); // stores all vertices
-        this.parentId = parentId;
-        this.nodeId = nodeId;
-        this.coloredHydrogens = [];
+        this.parentId = parentId; // stores the id of the parent element
+        this.nodeId = nodeId; // stores the id of the node element
+        this.coloredHydrogens = []; // stores the hydrogens that are colored
+        this.vertexListWithHydrogens = []; // stores the vertices with hydrogen connections
         this.brokenId = brokenId; // represents which broken graph is parent.
     }
 
@@ -15,7 +25,7 @@ class Graph {
 
     addEdge (v1ID, v2ID, bondNum){
         this.adjMatrix[v1ID][v2ID] = parseInt(bondNum,10); // indicates the connection in both places on the adjmatrix
-        this.adjMatrix[v2ID][v1ID] = parseInt(bondNum,10);
+        this.adjMatrix[v2ID][v1ID] = parseInt(bondNum,10); 
     }
 
     checkConnection(v1ID, v2ID){
@@ -44,7 +54,7 @@ class Graph {
     getListOfElementsConnectedIgnoringH(vID){ // Returns a list of elements and how many bonds for each connection. [C1,N2,N1]
         var a = this.adjMatrix[vID];
         var connectedElements = [];
-        for(var i = 0; i < a.length; i++){
+        for(var i = 0; i < a.length; i++){ // loops through the adjacency matrix
             if(this.getVertexElement(i)!="H"){
                 if(a[i]!=0){
                     connectedElements.push(this.vertexList[i][0] + a[i]);
@@ -53,13 +63,26 @@ class Graph {
         }
         return connectedElements.sort();
     }
+    getH(vID){ // returns how many Hydrogens are connected to a vertex
+        var h = 0;
+        var a = this.adjMatrix[vID];
+        for(var i = 0; i < a.length; i++){ // loops through the adjacency matrix
+            if(a[i]!=0){
+                if(this.getVertexElement(i)=="H"){
+                    h++;
+                }
+               
+            }
+        }
+        return h;
+    }
     getVertexElement(vID){
         return this.vertexList[vID][0];
     }
     checkNextLayer(vID){ // returns the connections of the vertices connected to the indicated vertex
         var connections = [];
-        for(var i=0; i<this.adjMatrix[vID].length;i++){
-            if(this.adjMatrix[vID][i]!=0 && this.getVertexElement(i) != "H"){
+        for(var i=0; i<this.adjMatrix[vID].length;i++){ // loops through the adjacency matrix of a vertex
+            if(this.adjMatrix[vID][i]!=0 && this.getVertexElement(i) != "H"){ // checks if the vertex is connected and if it is not a hydrogen
                 connections.push(i);
             }
         }
@@ -195,27 +218,6 @@ var MolGraph = {
                 }
             }
         }
-        // if(duplicateAlignments.length>0){
-        //     for(var i=0; i<duplicateAlignments.length; i++){
-        //         for(var j=0; j<duplicateAlignments.length; j++){
-        //             if(duplicateAlignments[i][0]==duplicateAlignments[j][0] && i!=j){
-        //                 if(duplicateAlignments[i][1].toString()==duplicateAlignments[j][1].toString()){
-        //                     duplicateAlignments[i][1].splice(0, 1);
-        //                     duplicateAlignments[j][1].splice(1, 1);
-        //                     var nodeToChange = duplicateAlignments[i][0];
-        //                     var iAlignments = duplicateAlignments[i][1];
-        //                     var jAlignments = duplicateAlignments[j][1];
-        //                     var iLocation = duplicateAlignments[i][2];
-        //                     var jLocation = duplicateAlignments[j][2];
-        //                     console.log(nodeToChange, iAlignments, jAlignments, iLocation, jLocation);
-        //                     alignmentList[nodeToChange][1][iLocation][1] = iAlignments;
-        //                     alignmentList[nodeToChange][1][jLocation][1] = jAlignments;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
         if(duplicateAlignments.length>0){
             var nodeToCompare = duplicateAlignments[0][0];
             var alignmentWithLocation = [];
@@ -460,6 +462,12 @@ var MolGraph = {
 
     },
 
+    /**
+     * Find which vertices have bond connections differing from the given graph.
+     * @param {Graph} G_new 
+     * @param {Graph} G_broken 
+     * @returns {[]} Array of vertices with differing bond connections. 
+     */
     findBrokenBonds: function (G_new, G_broken){
         var newAdjMatrix = G_new.adjMatrix;
         var brokenAdjMatrix = G_broken.adjMatrix;
@@ -482,7 +490,13 @@ var MolGraph = {
         return affectedAtoms.sort();
     },
 
-    findGraph: function(nodeId, state){ // finds a graph in the given state array with the given nodeId
+    /**
+     * Finds a graph in the given state array with the given nodeId
+     * @param {Number} nodeId 
+     * @param {String} state
+     * @returns {Graph} Graph with the given nodeId in the given state.
+     */
+    findGraph: function(nodeId, state){
         if(state=="broken"){
             for(var i = 0; i<this.molBrokenList.length; i++){
                 if(this.molBrokenList[i].nodeId == nodeId){
@@ -504,8 +518,20 @@ var MolGraph = {
         }
     },
 
-    translateH: function(G_new, G_child, G_childH, alignment){ // translates the Hydrogen reference from the parent node to the child
+    /**
+     * Translates the Hydrogen reference from the parent node to the child
+     * @param {Graph} G_new
+     * @param {Graph} G_child
+     * @param {Graph} G_childH
+     * @param {Array} alignment
+     * 
+     */
+    translateH: function(G_new, G_child, G_childH, alignment){
+        // if(G_child.visited=true){
+        //     return;
+        // }else G_child.visited=true;
         var parentHList = G_new.coloredHydrogens;
+        // console.log(parentHList);
         var childHList = [];
 
         for(var i=0; i<parentHList.length; i++){ // makes the hydrogen references index-0 based
@@ -545,28 +571,48 @@ var MolGraph = {
                     childHListTMP.push(tmpH);
                 }
             }
-            // if(childHListTMP.length > childHList[i][1]){ // removes Hydrogens by how many Hydrogens do not need to be colored
-            //     while(childHListTMP.length > childHList[i][1]){
-            //         childHListTMP.splice(childHListTMP.length-1, 1);
-            //     }
-            // }
+            if(childHListTMP.length > childHList[i][1]){ // removes Hydrogens by how many Hydrogens do not need to be colored
+                while(childHListTMP.length > childHList[i][1]){
+                    childHListTMP.splice(childHListTMP.length-1, 1);
+                }
+            }
             childHList[i][1]=childHListTMP;
         }
         if(!JSON.stringify(G_child.coloredHydrogens).includes(JSON.stringify(childHList))){
             G_child.coloredHydrogens = childHList;
+            // console.log(childHList);
         }
         
     },
+    // compareHydrogens: function(G_childH){
+    //     if(G_childH.parentId == G_childH.nodeId){ //fill in vertexListWithHydrogens if original graph
+    //        for(var i = 0; i<G_childH.vertexList.length; i++){
+    //             G_childH.vertexListWithHydrogens.push([G_childH.vertexList[i], G_childH.getH(i), 0]);
+    //         }
+    //     }
+    //     else{
+    //         var originalGraph = this.findOriginalGraph(G_childH.nodeId);
+    //         for(var i = 0; i<G_child.vertexList.length; i++){
+    //             G_childH.vertexListWithHydrogens.push([originalGraph.vertexList[i], originalGraph.getH(0), 0]);
+    //         }
+    //     }
+    // },
 
-
-    findBroken: function(G_child){
-        
+    findOriginalGraph: function(nodeId){ //returns original graph (3d)
+        var node = this.findGraph(nodeId, "3d");
+        var parentId = node.parentId;
+        while(parentId!=nodeId){
+            node = this.findGraph(parentId, "3d");
+            parentId = node.parentId;
+            nodeId = node.nodeId;
+        }
+        return this.findGraph(nodeId, "3d");
 
     },
 
-
     //G_new, G_newH, G_broken, G_child, G_childH
     colorHydrogens: function(nodeId){ // main function called in Tree_Actions that pulls entire MolGraph together
+        // Initialize the MolGraphs
         var G_child = this.findGraph(nodeId, "2d");
         var G_childH = this.findGraph(nodeId, "3d");
         var parentId = G_child.parentId;
@@ -575,7 +621,7 @@ var MolGraph = {
         var G_broken = this.molBrokenList[G_child.brokenId-1];
 
 
-        var affectedAtoms = this.findBrokenBonds(G_new, G_broken);
+        var affectedAtoms = this.findBrokenBonds(G_new, G_broken); // finds the affected atoms
         var alignment = this.alignSubgraph(G_broken, G_child);
         // console.log(alignment);
         var alignmentList = this.alignChildNodes(G_broken.nodeId, G_child.brokenId);
@@ -615,6 +661,7 @@ var MolGraph = {
             }
             if(!JSON.stringify(G_child.coloredHydrogens).includes(JSON.stringify(HtoAdd))){
                 G_child.coloredHydrogens.push(HtoAdd);
+                G_child.visited = true;
             }
             // Jmol.script(JSmol, "SELECT " + HtoColor + "; color orange");
         }
