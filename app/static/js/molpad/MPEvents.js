@@ -386,7 +386,7 @@ MolPad.prototype.hoverHandler = {
 		var p = new MPPoint().fromRelativePointer(e, mp);
 
 		mp.handleEvent(p, "hover", function (obj) {
-			console.log(obj);
+			handleBond(obj);
 			mp.setCursor("pointer");
 		});
 	}

@@ -1,3 +1,4 @@
+import json
 from flask import Flask, render_template, request, send_from_directory, redirect, url_for, jsonify
 from flask_cors import CORS, cross_origin
 import os
@@ -119,6 +120,28 @@ def two_dimensionalMol():
         i += 1
     #Return a JSONified object, not a list
     return(jsonify(mol2D=molFiles), 200, {'Content-Type': 'text/plain'})
+
+@app.route(homeRoute+'/bond', methods=["POST"])
+def getBond():
+    content = request.get_json()
+    index = content["index"]
+    mol = Chem.MolFromSmiles(content["smile"])
+    bonds = Chem.rdchem.Mol.GetBonds(mol)
+    output = {}
+    # Loop through bonds
+    for bond in bonds:
+        # If the bond is the one we are looking for
+        if bond.GetIdx() == index:
+            # Update output with bond info
+            output["bondType"] = bond.GetBondType().name
+            output["aromatic"] = bond.GetIsAromatic()
+            output["conjugated"] = bond.GetIsConjugated()
+            output["beginAtom"] = bond.GetBeginAtomIdx()
+            output["endAtom"] = bond.GetEndAtomIdx()
+
+
+    return jsonify({"output": output})
+
 
 @app.route(homeRoute+'/licenses')
 def loadLicense():

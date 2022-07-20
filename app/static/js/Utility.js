@@ -300,3 +300,29 @@ function similar_text(first, second, percent) {
 		return (sum * 200) / (firstLength + secondLength);
 	}
 }
+var lastBond;
+function handleBond(obj){
+	if(obj.hasOwnProperty('element')) return;
+	if(lastBond!=obj){
+		lastBond = obj;
+	}else return;
+	var a = {
+		"index" : obj["index"],
+		"from" : obj["from"],
+		"to" : obj["to"],
+		"smile" : MolDataList.molList[0]["smile"]
+	}
+	a = JSON.stringify(a);
+	$.ajax({
+		type: 'POST',
+		url: "/fragview/bond",
+		data: a,
+		dataType: "json",
+		crossDomain: true,
+		contentType: "application/json; charset=utf-8",
+		success: function(response)
+				{
+					console.log(response["output"]);
+				}
+	})
+}
