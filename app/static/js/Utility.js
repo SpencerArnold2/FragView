@@ -322,7 +322,21 @@ function handleBond(obj){
 		contentType: "application/json; charset=utf-8",
 		success: function(response)
 				{
-					console.log(response["output"]);
+					var bond = response["output"];
+					console.log(bond);
+					// Create a new div element that will contain the response
+					// The div is created inside the div with the id "content"
+					var newDiv = document.getElementById("bond-info");
+					newDiv.innerHTML = "Bond Type: "+ bond["bondType"];
+					newDiv.innerHTML += "<br>Aromatic: "+ bond["aromatic"];
+					newDiv.innerHTML += "<br>Conjugated: "+ bond["conjugated"];
+					newDiv.innerHTML += "<br>From: "+ bond["beginAtom"];
+					newDiv.innerHTML += "<br>To: "+ bond["endAtom"];
+					newDiv.style.display = "block";
+					newDiv.style.position = "absolute";
+
+					
+
 				}
 	})
 }
