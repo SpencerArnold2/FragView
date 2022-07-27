@@ -221,7 +221,7 @@ function AJAX(obj) {
 	}
 
 	if(["/2d", "/2dSingle", "/2dInchi", "2dMol"].includes(obj.url)) {
-		obj.url = "/fragview"+obj.url;
+		obj.url = "/fragview-internal"+obj.url;
 	}
 	
 	if (obj.primary) {
@@ -315,7 +315,7 @@ function handleBond(obj){
 	a = JSON.stringify(a);
 	$.ajax({
 		type: 'POST',
-		url: "/fragview/bond",
+		url: "/fragview-internal/bond",
 		data: a,
 		dataType: "json",
 		crossDomain: true,

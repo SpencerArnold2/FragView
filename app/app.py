@@ -8,7 +8,7 @@ app = Flask(__name__, static_url_path='/static')
 CORS(app, resources={r"/*": {"origins": "*"}})
 from rdkit import Chem
 
-homeRoute = "/fragview"
+homeRoute = "/fragview-internal"
 
 @app.route(homeRoute+'/', methods=['GET'])
 #@cross_origin()
