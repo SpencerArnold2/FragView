@@ -2,7 +2,7 @@ import json
 from flask import Flask, render_template, request, send_from_directory, redirect, url_for, jsonify
 from flask_cors import CORS, cross_origin
 import os
-app = Flask(__name__, static_url_path='/static')
+app = Flask(__name__, static_url_path='/static', static_folder='internal-static')
 #app.config["CORS_HEADERS"] = "Content-Type"
 #pip install -U flask-cors and use to allow AJAX cross-origin request support
 CORS(app, resources={r"/*": {"origins": "*"}})
@@ -125,7 +125,11 @@ def two_dimensionalMol():
 def getBond():
     content = request.get_json()
     index = content["index"]
-    mol = Chem.MolFromSmiles(content["smile"])
+    # If content["smile"] starts with "InChI", it is an InChI
+    if(content["smile"].startswith("InChI")):
+        mol = Chem.MolFromInchi(content["smile"])
+    else:
+        mol = Chem.MolFromSmiles(content["smile"])
     bonds = Chem.rdchem.Mol.GetBonds(mol)
     output = {}
     # Loop through bonds
